@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burger Shot — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #CC1A1A;
+    --red-dark: #8B0000;
+    --red-glow: #FF2222;
+    --gold: #F5A623;
+    --gold-light: #FFD166;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --white: #F5F0E8;
+    --gray: #888;
+    --fire1: #FF4500;
+    --fire2: #FF8C00;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: default;
+  }
+  /* ── FIRE PARTICLES ── */
+  .fire-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .ember {
+    position: absolute;
+    bottom: -10px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    animation: rise linear infinite;
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.8; }
+    50% { transform: translateY(-40vh) translateX(20px) scale(0.7); opacity: 0.5; }
+    100% { transform: translateY(-90vh) translateX(-10px) scale(0); opacity: 0; }
+  }
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px;
+    height: 72px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 100%);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(204,26,26,0.3);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 44px; height: 44px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 0 16px rgba(204,26,26,0.6);
+    animation: pulse-logo 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-logo {
+    0%,100% { box-shadow: 0 0 16px rgba(204,26,26,0.6); }
+    50% { box-shadow: 0 0 28px rgba(255,34,34,0.9); }
+  }
+  .nav-logo span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .nav-logo span em { color: var(--red); font-style: normal; }
+  .nav-links {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    align-items: center;
+  }
+  .nav-links a, .nav-links span {
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .nav-links span:hover, .nav-links a:hover { color: var(--gold); }
+  .nav-btn {
+    background: var(--red);
+    color: #fff !important;
+    padding: 8px 20px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-btn:hover { background: var(--red-glow); transform: translateY(-1px); }
+  /* Main Content */
+  main {
+    padding-top: 100px;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  .admin-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .admin-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--red);
+    letter-spacing: 3px;
+  }
+  .tab-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 12px 30px;
+    background: var(--dark2);
+    border: 2px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .tab-btn.active {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(204,26,26,0.5);
+  }
+  /* Forms & Tables */
+  .card {
+    background: var(--dark2);
+    border: 1px solid rgba(204,26,26,0.3);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 40px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  input, select, textarea, button {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    border-radius: 6px;
+    font-family: 'Barlow', sans-serif;
+  }
+  button {
+    background: var(--red);
+    color: white;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  button:hover {
+    background: var(--red-glow);
+    transform: translateY(-2px);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--dark3);
+  }
+  th, td {
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  th {
+    background: var(--dark2);
+    color: var(--gold);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+  }
+  .delete-btn {
+    background: #ef4444;
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  .toast {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--dark3);
+    border-left: 5px solid var(--gold);
+    padding: 15px 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+</style>
+</head>
+<body>
+<div class="fire-bg" id="fireBg"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🍔</div>
+    <span>ADMIN <em>PANEL</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Accueil Public</a></li>
+    <li onclick="switchTab(0)">👥 Utilisateurs</li>
+    <li onclick="switchTab(1)">🍔 Aliments</li>
+    <li><a href="auth.html" style="color:#ef4444;">Déconnexion</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="admin-header">
+    <h1 class="admin-title">BURGER SHOT — ADMIN</h1>
+    <p style="color:var(--gold); font-size:18px;">Gestion complète du système</p>
+  </div>
+
+  <!-- Tab Buttons -->
+  <div class="tab-buttons">
+    <button class="tab-btn active" onclick="switchTab(0)">Gestion des Utilisateurs</button>
+    <button class="tab-btn" onclick="switchTab(1)">Gestion des Aliments</button>
+  </div>
+
+  <!-- ==================== TAB UTILISATEURS ==================== -->
+  <div id="tab-0">
+    <div class="card">
+      <h2 style="margin-bottom:20px; color:var(--red);">Créer un nouveau compte</h2>
+      <form id="userForm" class="form-grid">
+        <input type="text" id="username" placeholder="Username (ex: john42)" required>
+        <input type="text" id="discord_username" placeholder="Discord Username (exact)" required>
+        <input type="text" id="discord_user_id" placeholder="Discord User ID" required>
+        <input type="password" id="password" placeholder="Mot de passe" required>
+        <select id="permission">
+          <option value="">Civil (aucune permission)</option>
+          <option value="it">IT</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button type="submit">Créer le compte</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-bottom:20px; color:var(--red);">Liste des utilisateurs</h2>
+      <table id="usersTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Discord</th>
+            <th>Permission</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== TAB ALIMENTS ==================== -->
+  <div id="tab-1" style="display:none;">
+    <div class="card">
+      <h2 style="margin-bottom:20px; color:var(--red);">Ajouter un aliment</h2>
+      <form id="alimentForm" class="form-grid">
+        <input type="text" id="a_name" placeholder="Nom de l'aliment" required>
+        <textarea id="a_description" rows="3" placeholder="Description de l'aliment" required></textarea>
+        <input type="number" id="a_price" placeholder="Prix en DA" required>
+        <select id="a_category" required>
+          <option value="">Choisir catégorie</option>
+          <option value="Burgers">Burgers</option>
+          <option value="Brochettes">Brochettes</option>
+          <option value="Menus">Menus</option>
+          <option value="Accompagnements">Accompagnements</option>
+          <option value="Boissons">Boissons</option>
+        </select>
+        <button type="submit">Ajouter à la carte</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-bottom:20px; color:var(--red);">Liste des aliments</h2>
+      <table id="alimentsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Catégorie</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+// CONFIG
+const API_BASE = window.location.origin.includes('localhost') 
+  ? 'http://localhost:3000' 
+  : 'https://bot-burgershot-3amh.onrender.com';
+
+let currentUser = null;
+
+// Vérification simple (à améliorer avec token plus tard)
+async function checkAuth() {
+  currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
+  if (!currentUser || !['admin','it'].includes(currentUser.permission || '')) {
+    alert("Accès refusé : Vous devez être Admin ou IT");
+    window.location.href = "auth.html";
+  }
+}
+
+// ====================== UTILISATEURS ======================
+async function loadUsers() {
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/users`);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error);
+
+    const tbody = document.querySelector('#usersTable tbody');
+    tbody.innerHTML = data.users.map(u => `
+      <tr>
+        <td>${u.id}</td>
+        <td>${u.username}</td>
+        <td>${u.discord_username}</td>
+        <td>${u.permission || 'Civil'}</td>
+        <td>
+          ${u.permission !== 'admin' ? 
+            `<button class="delete-btn" onclick="deleteUser(${u.id})">Supprimer</button>` : 
+            `<span style="color:#888;">Protégé</span>`}
+        </td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function deleteUser(id) {
+  if (!confirm("Supprimer cet utilisateur ?")) return;
+  await fetch(`${API_BASE}/api/admin/users/${id}`, { method: 'DELETE' });
+  loadUsers();
+}
+
+document.getElementById('userForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = {
+    username: document.getElementById('username').value.trim(),
+    discord_username: document.getElementById('discord_username').value.trim(),
+    discord_user_id: document.getElementById('discord_user_id').value.trim(),
+    password: document.getElementById('password').value,
+    permission: document.getElementById('permission').value
+  };
+
+  const res = await fetch(`${API_BASE}/api/admin/register`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(formData)
+  });
+
+  const data = await res.json();
+  alert(data.success ? 'Compte créé avec succès !' : 'Erreur : ' + data.error);
+  if (data.success) {
+    e.target.reset();
+    loadUsers();
+  }
+});
+
+// ====================== ALIMENTS ======================
+async function loadAliments() {
+  try {
+    const res = await fetch(`${API_BASE}/api/aliments`);
+    const aliments = await res.json();
+
+    const tbody = document.querySelector('#alimentsTable tbody');
+    tbody.innerHTML = aliments.map(a => `
+      <tr>
+        <td>${a.id}</td>
+        <td>${a.name}</td>
+        <td>${Number(a.price).toLocaleString('fr-FR')} DA</td>
+        <td>${a.category}</td>
+        <td><button class="delete-btn" onclick="deleteAliment(${a.id})">Supprimer</button></td>
+      </tr>
+    `).join('');
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function deleteAliment(id) {
+  if (!confirm("Supprimer cet aliment ?")) return;
+  await fetch(`${API_BASE}/api/admin/aliments/${id}`, { method: 'DELETE' });
+  loadAliments();
+}
+
+document.getElementById('alimentForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = {
+    name: document.getElementById('a_name').value.trim(),
+    description: document.getElementById('a_description').value.trim(),
+    price: parseInt(document.getElementById('a_price').value),
+    category: document.getElementById('a_category').value
+  };
+
+  const res = await fetch(`${API_BASE}/api/admin/aliments`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(formData)
+  });
+
+  const data = await res.json();
+  alert(data.success ? 'Aliment ajouté avec succès !' : 'Erreur : ' + data.error);
+  if (data.success) {
+    e.target.reset();
+    loadAliments();
+  }
+});
+
+// Tab Switch
+function switchTab(tab) {
+  document.querySelectorAll('#tab-0, #tab-1').forEach(el => el.style.display = 'none');
+  document.getElementById(`tab-${tab}`).style.display = 'block';
+  
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-buttons button')[tab].classList.add('active');
+}
+
+// Embers
+(function spawnEmbers() {
+  const bg = document.getElementById('fireBg');
+  const colors = ['#FF4500','#FF6200','#FF8C00','#FF2200','#FFB300'];
+  setInterval(() => {
+    const e = document.createElement('div');
+    e.className = 'ember';
+    e.style.left = Math.random() * 100 + 'vw';
+    e.style.width = e.style.height = (Math.random() * 5 + 2) + 'px';
+    e.style.background = colors[Math.floor(Math.random() * colors.length)];
+    e.style.animationDuration = (Math.random() * 4 + 3) + 's';
+    bg.appendChild(e);
+    setTimeout(() => e.remove(), 8000);
+  }, 120);
+})();
+
+// Init
+window.addEventListener('load', async () => {
+  await checkAuth();
+  loadUsers();
+  loadAliments();
+});
+</script>
+</body>
+</html>
