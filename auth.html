@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burger Shot — Espace Commande</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #CC1A1A;
+    --red-dark: #8B0000;
+    --red-glow: #FF2222;
+    --gold: #F5A623;
+    --gold-light: #FFD166;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --white: #F5F0E8;
+    --gray: #888;
+    --green: #22c55e;
+    --red-err: #ef4444;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  /* EMBERS */
+  .fire-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .ember {
+    position: absolute; bottom: -10px;
+    width: 4px; height: 4px; border-radius: 50%;
+    animation: rise linear infinite;
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) scale(1); opacity: 0.8; }
+    50% { transform: translateY(-45vh) translateX(15px) scale(0.6); opacity: 0.4; }
+    100% { transform: translateY(-95vh) translateX(-10px) scale(0); opacity: 0; }
+  }
+
+  /* WRAPPER */
+  .auth-wrapper {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 480px;
+    padding: 24px 16px;
+  }
+
+  /* LOGO */
+  .logo {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .logo-icon {
+    width: 72px; height: 72px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px;
+    margin: 0 auto 14px;
+    box-shadow: 0 0 32px rgba(204,26,26,0.7);
+    animation: pulseLogo 2.5s ease-in-out infinite;
+  }
+  @keyframes pulseLogo {
+    0%,100% { box-shadow: 0 0 24px rgba(204,26,26,0.6); }
+    50% { box-shadow: 0 0 48px rgba(255,34,34,0.9); }
+  }
+  .logo h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px; letter-spacing: 4px; color: var(--white);
+  }
+  .logo h1 em { color: var(--red); font-style: normal; }
+  .logo p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-top: 4px;
+  }
+
+  /* CARD */
+  .auth-card {
+    background: var(--dark2);
+    border: 1px solid rgba(204,26,26,0.25);
+    border-radius: 16px;
+    padding: 40px 36px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.7);
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex; gap: 4px;
+    background: var(--dark3);
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 32px;
+  }
+  .tab {
+    flex: 1; text-align: center;
+    padding: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px; letter-spacing: 2px;
+    cursor: pointer; border-radius: 6px;
+    transition: all 0.25s;
+    color: rgba(255,255,255,0.4);
+    border: none; background: transparent;
+  }
+  .tab.active {
+    background: var(--red);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(204,26,26,0.5);
+  }
+
+  /* FORM */
+  .form { display: none; }
+  .form.active { display: block; }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+  }
+
+  .input-wrap { position: relative; }
+  .input-wrap input {
+    width: 100%;
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .input-wrap input:focus {
+    border-color: rgba(204,26,26,0.6);
+    box-shadow: 0 0 0 3px rgba(204,26,26,0.15);
+  }
+  .input-wrap input.error { border-color: var(--red-err); }
+  .input-wrap input.success { border-color: var(--green); }
+
+  /* Discord check indicator */
+  .discord-check {
+    position: absolute; right: 12px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    display: none;
+  }
+
+  /* Feedback line */
+  .feedback {
+    font-size: 12px;
+    margin-top: 6px;
+    min-height: 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.5px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { color: var(--green); }
+  .feedback.err { color: var(--red-err); }
+  .feedback.loading { color: var(--gold); }
+
+  /* Submit btn */
+  .submit-btn {
+    width: 100%;
+    background: var(--red);
+    color: #fff; border: none;
+    padding: 15px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 3px;
+    border-radius: 8px; cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(204,26,26,0.4);
+    position: relative; overflow: hidden;
+  }
+  .submit-btn:disabled { background: #333; cursor: not-allowed; box-shadow: none; }
+  .submit-btn:not(:disabled):hover {
+    background: var(--red-glow);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(204,26,26,0.6);
+  }
+
+  /* Loader inside button */
+  .btn-loader { display: none; }
+  .submit-btn.loading .btn-text { display: none; }
+  .submit-btn.loading .btn-loader { display: inline; }
+
+  /* Global error/success banner */
+  .banner {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .banner.show { display: block; }
+  .banner.ok { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
+  .banner.err { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: var(--red-err); }
+
+  /* Forgot */
+  .forgot-link {
+    display: block; text-align: center; margin-top: 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.35);
+    cursor: pointer; transition: color 0.2s;
+    text-decoration: none;
+  }
+  .forgot-link:hover { color: var(--gold); }
+
+  /* Forgot modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 500;
+    display: none;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--dark2);
+    border: 1px solid rgba(204,26,26,0.3);
+    border-radius: 16px;
+    padding: 40px 32px;
+    max-width: 420px; width: 90%;
+    text-align: center;
+  }
+  .modal h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; letter-spacing: 2px; color: var(--red);
+    margin-bottom: 12px;
+  }
+  .modal p { color: rgba(255,255,255,0.55); font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+  .modal input {
+    width: 100%; background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--white); padding: 12px 16px;
+    border-radius: 8px; font-family: 'Barlow', sans-serif;
+    font-size: 15px; outline: none; margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .modal input:focus { border-color: rgba(204,26,26,0.5); }
+  .modal-btns { display: flex; gap: 10px; }
+  .modal-btns button {
+    flex: 1; padding: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px; letter-spacing: 2px;
+    border-radius: 6px; cursor: pointer; border: none;
+    transition: all 0.2s;
+  }
+  .modal-btns .btn-confirm { background: var(--red); color: #fff; }
+  .modal-btns .btn-confirm:hover { background: var(--red-glow); }
+  .modal-btns .btn-cancel { background: var(--dark3); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
+  .modal-feedback { font-size: 13px; min-height: 18px; margin-bottom: 12px; font-family: 'Barlow Condensed', sans-serif; }
+  .modal-feedback.ok { color: var(--green); }
+  .modal-feedback.err { color: var(--red-err); }
+
+  /* Already account note on register */
+  .hint { text-align: center; margin-top: 18px; font-size: 13px; color: rgba(255,255,255,0.3); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+
+<div class="fire-bg" id="fireBg"></div>
+
+<div class="auth-wrapper">
+  <div class="logo">
+    <div class="logo-icon">🍔</div>
+    <h1>BURGER<em>SHOT</em></h1>
+    <p>Espace Commande</p>
+  </div>
+
+  <div class="auth-card">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('register')">Créer un compte</button>
+      <button class="tab" onclick="switchTab('login')">Se connecter</button>
+    </div>
+
+    <!-- ─── INSCRIPTION ─── -->
+    <div class="form active" id="form-register">
+      <div class="banner" id="reg-banner"></div>
+
+      <div class="form-group">
+        <label>Ton Username (affiché sur le site)</label>
+        <div class="input-wrap">
+          <input type="text" id="reg-username" placeholder="ex: jeandupont" autocomplete="off">
+        </div>
+        <div class="feedback" id="fb-username"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Ton Username Discord</label>
+        <div class="input-wrap">
+          <input type="text" id="reg-discord" placeholder="ex: jean.dupont" autocomplete="off">
+          <span class="discord-check" id="discord-check-icon"></span>
+        </div>
+        <div class="feedback" id="fb-discord"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <div class="input-wrap">
+          <input type="password" id="reg-password" placeholder="Minimum 6 caractères">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Confirmer le mot de passe</label>
+        <div class="input-wrap">
+          <input type="password" id="reg-password2" placeholder="Répéter le mot de passe">
+        </div>
+        <div class="feedback" id="fb-password2"></div>
+      </div>
+
+      <button class="submit-btn" id="reg-btn" onclick="doRegister()">
+        <span class="btn-text">Créer mon compte 🔥</span>
+        <span class="btn-loader">⏳ Création...</span>
+      </button>
+      <div class="hint">Tu as déjà un compte ? <span style="color:var(--gold);cursor:pointer" onclick="switchTab('login')">Connecte-toi →</span></div>
+    </div>
+
+    <!-- ─── CONNEXION ─── -->
+    <div class="form" id="form-login">
+      <div class="banner" id="login-banner"></div>
+
+      <div class="form-group">
+        <label>Ton Username</label>
+        <div class="input-wrap">
+          <input type="text" id="login-username" placeholder="ex: jeandupont" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <div class="input-wrap">
+          <input type="password" id="login-password" placeholder="Mot de passe">
+        </div>
+      </div>
+
+      <button class="submit-btn" id="login-btn" onclick="doLogin()">
+        <span class="btn-text">Se connecter →</span>
+        <span class="btn-loader">⏳ Connexion...</span>
+      </button>
+      <a class="forgot-link" onclick="openForgot()">Mot de passe oublié / Username oublié ?</a>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT MODAL -->
+<div class="modal-overlay" id="forgotModal">
+  <div class="modal">
+    <h3>🔑 Compte oublié ?</h3>
+    <p>Entre ton username Discord. Nous t'enverrons tes identifiants en message privé Discord.</p>
+    <input type="text" id="forgot-discord" placeholder="Ton username Discord">
+    <div class="modal-feedback" id="forgot-feedback"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeForgot()">Annuler</button>
+      <button class="btn-confirm" onclick="doForgot()">Envoyer →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── CONFIG ───────────────────────────────────
+  // REMPLACE PAR L'URL DE TON BOT SUR RENDER
+  const API_BASE = window.location.origin.includes('localhost')
+    ? 'http://localhost:3000'
+    : 'https://TON-BOT.onrender.com'; // ← MODIFIER ICI
+
+  // ─── TABS ─────────────────────────────────────
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+    const idx = tab === 'register' ? 0 : 1;
+    document.querySelectorAll('.tab')[idx].classList.add('active');
+    document.getElementById(`form-${tab}`).classList.add('active');
+  }
+
+  // ─── VÉRIF DISCORD (debounce 800ms) ──────────
+  let discordTimer = null;
+  let discordValid = false;
+  let discordUserId = null;
+
+  document.getElementById('reg-discord').addEventListener('input', function() {
+    clearTimeout(discordTimer);
+    const val = this.value.trim();
+    const icon = document.getElementById('discord-check-icon');
+    const fb = document.getElementById('fb-discord');
+    icon.style.display = 'none';
+    hideFb(fb);
+    discordValid = false; discordUserId = null;
+
+    if (!val) return;
+
+    showFb(fb, '🔍 Vérification sur le serveur Discord...', 'loading');
+    this.classList.remove('error', 'success');
+
+    discordTimer = setTimeout(async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/verify-discord`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ discord_username: val }),
+        });
+        const data = await res.json();
+
+        if (data.found) {
+          discordValid = true;
+          discordUserId = data.user_id;
+          document.getElementById('reg-discord').classList.add('success');
+          icon.textContent = '✅'; icon.style.display = 'block';
+          showFb(fb, `✅ Trouvé : ${data.tag}`, 'ok');
+        } else {
+          discordValid = false;
+          document.getElementById('reg-discord').classList.add('error');
+          icon.textContent = '❌'; icon.style.display = 'block';
+          showFb(fb, '❌ Introuvable sur le serveur Discord. Vérifie l\'orthographe.', 'err');
+        }
+      } catch (e) {
+        showFb(fb, '⚠️ Erreur de connexion au bot. Réessaie.', 'err');
+      }
+    }, 800);
+  });
+
+  // Confirm password check
+  document.getElementById('reg-password2').addEventListener('input', function() {
+    const p1 = document.getElementById('reg-password').value;
+    const fb = document.getElementById('fb-password2');
+    if (!this.value) return hideFb(fb);
+    if (this.value === p1) {
+      showFb(fb, '✅ Mots de passe identiques', 'ok');
+      this.classList.remove('error'); this.classList.add('success');
+    } else {
+      showFb(fb, '❌ Les mots de passe ne correspondent pas', 'err');
+      this.classList.remove('success'); this.classList.add('error');
+    }
+  });
+
+  // ─── INSCRIPTION ──────────────────────────────
+  async function doRegister() {
+    const username = document.getElementById('reg-username').value.trim();
+    const discord  = document.getElementById('reg-discord').value.trim();
+    const pwd      = document.getElementById('reg-password').value;
+    const pwd2     = document.getElementById('reg-password2').value;
+    const banner   = document.getElementById('reg-banner');
+    const btn      = document.getElementById('reg-btn');
+
+    hideBanner(banner);
+
+    if (!username || !discord || !pwd || !pwd2) return showBanner(banner, '⚠️ Tous les champs sont obligatoires.', 'err');
+    if (!discordValid || !discordUserId) return showBanner(banner, '❌ Valide d\'abord ton username Discord.', 'err');
+    if (pwd !== pwd2) return showBanner(banner, '❌ Les mots de passe ne correspondent pas.', 'err');
+    if (pwd.length < 6) return showBanner(banner, '❌ Mot de passe trop court (6 caractères minimum).', 'err');
+
+    setBtnLoading(btn, true);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          discord_username: discord,
+          discord_user_id: discordUserId,
+          password: pwd,
+        }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        showBanner(banner, '🎉 Compte créé ! Vérifie tes DMs Discord. Redirection...', 'ok');
+        // Sauvegarde session
+        sessionStorage.setItem('bs_user', JSON.stringify(data.user));
+        setTimeout(() => window.location.href = 'menu.html', 2200);
+      } else if (data.error === 'username_taken') {
+        showBanner(banner, '❌ Ce username est déjà pris. Choisis-en un autre.', 'err');
+      } else if (data.error === 'discord_taken') {
+        showBanner(banner, '❌ Un compte existe déjà avec ce Discord. Connecte-toi !', 'err');
+      } else {
+        showBanner(banner, `❌ Erreur : ${data.error}`, 'err');
+      }
+    } catch (e) {
+      showBanner(banner, '⚠️ Impossible de contacter le serveur. Réessaie.', 'err');
+    }
+
+    setBtnLoading(btn, false);
+  }
+
+  // ─── CONNEXION ────────────────────────────────
+  async function doLogin() {
+    const username = document.getElementById('login-username').value.trim();
+    const pwd      = document.getElementById('login-password').value;
+    const banner   = document.getElementById('login-banner');
+    const btn      = document.getElementById('login-btn');
+
+    hideBanner(banner);
+
+    if (!username || !pwd) return showBanner(banner, '⚠️ Remplis tous les champs.', 'err');
+
+    setBtnLoading(btn, true);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password: pwd }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        sessionStorage.setItem('bs_user', JSON.stringify(data.user));
+        showBanner(banner, '✅ Connexion réussie ! Redirection...', 'ok');
+        setTimeout(() => window.location.href = 'menu.html', 1200);
+      } else {
+        showBanner(banner, `❌ ${data.error}`, 'err');
+      }
+    } catch (e) {
+      showBanner(banner, '⚠️ Impossible de contacter le serveur.', 'err');
+    }
+
+    setBtnLoading(btn, false);
+  }
+
+  // ─── FORGOT ──────────────────────────────────
+  function openForgot() { document.getElementById('forgotModal').classList.add('open'); }
+  function closeForgot() { document.getElementById('forgotModal').classList.remove('open'); document.getElementById('forgot-feedback').className = 'modal-feedback'; document.getElementById('forgot-feedback').textContent = ''; }
+
+  async function doForgot() {
+    const discord = document.getElementById('forgot-discord').value.trim();
+    const fb = document.getElementById('forgot-feedback');
+    if (!discord) return;
+
+    fb.className = 'modal-feedback loading'; fb.style.color = 'var(--gold)';
+    fb.textContent = '⏳ Recherche en cours...';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/forgot`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discord_username: discord }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        fb.className = 'modal-feedback ok'; fb.textContent = `✅ Tes identifiants ont été envoyés en DM Discord ! Ton username : ${data.username}`;
+      } else {
+        fb.className = 'modal-feedback err'; fb.textContent = `❌ ${data.error}`;
+      }
+    } catch (e) {
+      fb.className = 'modal-feedback err'; fb.textContent = '⚠️ Erreur de connexion.';
+    }
+  }
+
+  // ─── HELPERS ─────────────────────────────────
+  function showFb(el, msg, type) { el.textContent = msg; el.className = `feedback ${type} show`; }
+  function hideFb(el) { el.className = 'feedback'; el.textContent = ''; }
+  function showBanner(el, msg, type) { el.textContent = msg; el.className = `banner ${type} show`; }
+  function hideBanner(el) { el.className = 'banner'; el.textContent = ''; }
+  function setBtnLoading(btn, loading) {
+    btn.classList.toggle('loading', loading);
+    btn.disabled = loading;
+  }
+
+  // ─── EMBERS ──────────────────────────────────
+  (function() {
+    const bg = document.getElementById('fireBg');
+    const colors = ['#FF4500','#FF6200','#FF8C00','#FF2200','#FFB300'];
+    setInterval(() => {
+      const e = document.createElement('div');
+      e.className = 'ember';
+      e.style.left = Math.random() * 100 + 'vw';
+      e.style.width = e.style.height = (Math.random() * 4 + 2) + 'px';
+      e.style.background = colors[Math.floor(Math.random() * colors.length)];
+      e.style.boxShadow = `0 0 6px ${colors[0]}`;
+      e.style.animationDuration = (Math.random() * 4 + 3) + 's';
+      e.style.animationDelay = Math.random() * 2 + 's';
+      bg.appendChild(e);
+      setTimeout(() => e.remove(), 8000);
+    }, 120);
+  })();
+</script>
+</body>
+</html>

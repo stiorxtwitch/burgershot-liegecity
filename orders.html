@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burger Shot — Mes commandes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --red:#CC1A1A;--red-glow:#FF2222;--gold:#F5A623;--black:#0A0A0A;--dark2:#1A1A1A;--dark3:#222222;--white:#F5F0E8;--green:#22c55e;--red-err:#ef4444;--blue:#4f7af8; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Barlow',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden}
+  .fire-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .ember{position:absolute;bottom:-10px;width:4px;height:4px;border-radius:50%;animation:rise linear infinite}
+  @keyframes rise{0%{transform:translateY(0) scale(1);opacity:.8}100%{transform:translateY(-95vh) scale(0);opacity:0}}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:72px;background:linear-gradient(180deg,rgba(0,0,0,.95),rgba(0,0,0,.7));backdrop-filter:blur(12px);border-bottom:1px solid rgba(204,26,26,.3)}
+  .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .nav-logo-icon{width:44px;height:44px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;animation:pulseLogo 2.5s infinite}
+  @keyframes pulseLogo{0%,100%{box-shadow:0 0 16px rgba(204,26,26,.6)}50%{box-shadow:0 0 28px rgba(255,34,34,.9)}}
+  .nav-logo span{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px}
+  .nav-logo span em{color:var(--red);font-style:normal}
+  .nav-right{display:flex;align-items:center;gap:16px}
+  .nav-btn{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px;color:rgba(255,255,255,.5);text-decoration:none;padding:7px 14px;border:1px solid rgba(255,255,255,.1);border-radius:4px;transition:all .2s;background:transparent;cursor:pointer}
+  .nav-btn:hover{border-color:var(--gold);color:var(--gold)}
+  .nav-btn.red{background:var(--red);border-color:var(--red);color:#fff}.nav-btn.red:hover{background:var(--red-glow)}
+  main{padding:100px 24px 60px;max-width:860px;margin:0 auto;position:relative;z-index:2}
+  h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,8vw,72px);letter-spacing:4px;margin-bottom:8px}
+  h1 em{color:var(--red);font-style:normal}
+  .subtitle{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;color:rgba(255,255,255,.35);margin-bottom:40px}
+  .loading{text-align:center;padding:60px;color:rgba(255,255,255,.3);font-style:italic}
+  .spinner{display:inline-block;width:40px;height:40px;border:3px solid rgba(204,26,26,.2);border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .empty-state{text-align:center;padding:80px 20px}
+  .empty-state .ei{font-size:64px;margin-bottom:20px}
+  .empty-state p{color:rgba(255,255,255,.4);font-size:15px;margin-bottom:24px}
+  .order-item{background:var(--dark2);border:1px solid rgba(204,26,26,.15);border-radius:12px;padding:24px 28px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:20px;transition:all .25s;cursor:pointer;text-decoration:none;color:inherit;position:relative;overflow:hidden}
+  .order-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--red),var(--gold));opacity:0;transition:opacity .3s}
+  .order-item:hover{background:var(--dark3);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .order-item:hover::before{opacity:1}
+  .oi-left{}
+  .oi-id{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--white)}
+  .oi-id span{color:var(--red)}
+  .oi-info{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.35);margin-top:4px}
+  .oi-center{text-align:center}
+  .oi-total{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold)}
+  .oi-items{font-size:12px;color:rgba(255,255,255,.35);margin-top:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px}
+  .oi-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+  .status-badge{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:100px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1.5px}
+  .status-en_attente{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6)}
+  .status-acceptee{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:var(--green)}
+  .status-recue{background:rgba(79,122,248,.15);border:1px solid rgba(79,122,248,.3);color:var(--blue)}
+  .status-preparation{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);color:var(--gold)}
+  .status-finalisation{background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);color:var(--gold)}
+  .status-termine{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);color:var(--green)}
+  .status-livraison{background:rgba(79,122,248,.2);border:1px solid rgba(79,122,248,.4);color:var(--blue)}
+  .status-reglee{background:rgba(34,197,94,.25);border:1px solid rgba(34,197,94,.5);color:var(--green)}
+  .status-refusee{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:var(--red-err)}
+  .voir-link{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.3)}
+  @media(max-width:600px){nav{padding:0 16px}main{padding:90px 16px 40px}.order-item{flex-direction:column;align-items:flex-start}.oi-right{align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="fire-bg" id="fireBg"></div>
+<nav>
+  <a href="menu.html" class="nav-logo">
+    <div class="nav-logo-icon">🍔</div>
+    <span>BURGER<em>SHOT</em></span>
+  </a>
+  <div class="nav-right">
+    <a href="menu.html" class="nav-btn red">🍔 Commander</a>
+    <button class="nav-btn" onclick="logout()">Déconnexion</button>
+  </div>
+</nav>
+<main>
+  <h1>MES <em>COMMANDES</em></h1>
+  <p class="subtitle">Historique et suivi de tes commandes</p>
+
+  <div id="loading" class="loading"><div class="spinner"></div><div>Chargement...</div></div>
+  <div id="empty" class="empty-state" style="display:none">
+    <div class="ei">🛒</div>
+    <p>Tu n'as encore passé aucune commande.</p>
+    <a href="menu.html" class="nav-btn red" style="display:inline-block;text-decoration:none;padding:12px 28px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;border-radius:6px;">Commander maintenant →</a>
+  </div>
+  <div id="orders-list"></div>
+</main>
+
+<script>
+  const API_BASE = window.location.origin.includes('localhost')
+    ? 'http://localhost:3000'
+    : 'https://TON-BOT.onrender.com'; // ← MODIFIER ICI
+
+  const STATUS_LABELS = {
+    en_attente:'⏳ En attente', acceptee:'✅ Acceptée', refusee:'❌ Refusée',
+    recue:'📥 Reçue', preparation:'🍳 Préparation', finalisation:'🔍 Finalisation',
+    termine:'✅ Terminée', livraison:'🚴 En livraison', reglee:'💰 Réglée',
+  };
+
+  const currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
+  if (!currentUser) window.location.href = 'auth.html';
+
+  function logout() { sessionStorage.removeItem('bs_user'); window.location.href = 'auth.html'; }
+
+  async function loadOrders() {
+    try {
+      // On appelle un endpoint dédié — à ajouter dans bot.js si besoin
+      // Pour l'instant on passe par l'endpoint orders en filtrant par user
+      const res = await fetch(`${API_BASE}/api/orders?user_id=${currentUser.id}`);
+      const data = await res.json();
+      document.getElementById('loading').style.display = 'none';
+
+      if (!data.success || !data.orders?.length) {
+        document.getElementById('empty').style.display = 'block';
+        return;
+      }
+
+      const list = document.getElementById('orders-list');
+      list.innerHTML = data.orders.map(order => {
+        const items = Array.isArray(order.items) ? order.items : JSON.parse(order.items || '[]');
+        const itemsSummary = items.slice(0, 2).map(i => i.name).join(', ') + (items.length > 2 ? ` +${items.length - 2}` : '');
+        return `
+          <a class="order-item" href="suivi.html?id=${order.id}">
+            <div class="oi-left">
+              <div class="oi-id">Commande <span>#${order.id}</span></div>
+              <div class="oi-info">${new Date(order.created_at).toLocaleString('fr-FR')} · ${order.delivery_type === 'livraison' ? '🚴 Livraison' : '🏪 Sur place'}</div>
+            </div>
+            <div class="oi-center">
+              <div class="oi-total">${Number(order.total).toLocaleString('fr-FR')} DA</div>
+              <div class="oi-items">${itemsSummary}</div>
+            </div>
+            <div class="oi-right">
+              <span class="status-badge status-${order.status}">${STATUS_LABELS[order.status] || order.status}</span>
+              <span class="voir-link">Voir le suivi →</span>
+            </div>
+          </a>
+        `;
+      }).join('');
+    } catch (e) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('empty').style.display = 'block';
+    }
+  }
+
+  loadOrders();
+
+  // Embers
+  (function(){const bg=document.getElementById('fireBg');const c=['#FF4500','#FF6200','#FF8C00'];setInterval(()=>{const e=document.createElement('div');e.className='ember';e.style.left=Math.random()*100+'vw';e.style.width=e.style.height=(Math.random()*4+2)+'px';e.style.background=c[Math.floor(Math.random()*c.length)];e.style.animationDuration=(Math.random()*4+3)+'s';e.style.animationDelay=Math.random()*2+'s';bg.appendChild(e);setTimeout(()=>e.remove(),8000)},150)})();
+</script>
+</body>
+</html>

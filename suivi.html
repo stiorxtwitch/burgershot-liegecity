@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burger Shot — Suivi de commande</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #CC1A1A; --red-dark: #8B0000; --red-glow: #FF2222;
+    --gold: #F5A623; --black: #0A0A0A; --dark: #111111;
+    --dark2: #1A1A1A; --dark3: #222222; --white: #F5F0E8;
+    --green: #22c55e; --red-err: #ef4444; --blue: #4f7af8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Barlow', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; overflow-x: hidden; }
+
+  .fire-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .ember { position: absolute; bottom: -10px; width: 4px; height: 4px; border-radius: 50%; animation: rise linear infinite; }
+  @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-95vh) scale(0); opacity: 0; } }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 72px; background: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.7)); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(204,26,26,0.3); }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo-icon { width: 44px; height: 44px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; animation: pulseLogo 2.5s infinite; }
+  @keyframes pulseLogo { 0%,100% { box-shadow: 0 0 16px rgba(204,26,26,0.6); } 50% { box-shadow: 0 0 28px rgba(255,34,34,0.9); } }
+  .nav-logo span { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; }
+  .nav-logo span em { color: var(--red); font-style: normal; }
+  .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 1px; color: rgba(255,255,255,0.5); text-decoration: none; padding: 7px 14px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; transition: all 0.2s; }
+  .nav-links a:hover { border-color: var(--gold); color: var(--gold); }
+
+  main { padding: 100px 24px 60px; max-width: 720px; margin: 0 auto; position: relative; z-index: 2; }
+
+  .page-header { text-align: center; margin-bottom: 48px; }
+  .page-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 8vw, 72px); letter-spacing: 4px; color: var(--white); }
+  .page-header h1 em { color: var(--red); font-style: normal; }
+  .page-header p { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 2px; color: rgba(255,255,255,0.35); margin-top: 8px; }
+
+  /* LOADING */
+  .loading-state { text-align: center; padding: 60px; color: rgba(255,255,255,0.3); font-size: 15px; font-style: italic; }
+  .spinner { display: inline-block; width: 40px; height: 40px; border: 3px solid rgba(204,26,26,0.2); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-state { text-align: center; padding: 60px; }
+  .error-state .err-icon { font-size: 56px; margin-bottom: 16px; }
+  .error-state p { color: rgba(255,255,255,0.4); font-size: 15px; }
+
+  /* ORDER CARD */
+  .order-card { background: var(--dark2); border: 1px solid rgba(204,26,26,0.2); border-radius: 16px; padding: 36px; margin-bottom: 24px; }
+  .order-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+  .order-id { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 3px; color: var(--white); }
+  .order-id span { color: var(--red); }
+  .order-date { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-top: 4px; }
+
+  /* STATUS BADGE */
+  .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 100px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; }
+  .status-en_attente  { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); }
+  .status-acceptee    { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
+  .status-recue       { background: rgba(79,122,248,0.15); border: 1px solid rgba(79,122,248,0.3); color: var(--blue); }
+  .status-preparation { background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.3); color: var(--gold); }
+  .status-finalisation { background: rgba(245,166,35,0.2); border: 1px solid rgba(245,166,35,0.4); color: var(--gold); }
+  .status-termine     { background: rgba(34,197,94,0.2); border: 1px solid rgba(34,197,94,0.4); color: var(--green); }
+  .status-livraison   { background: rgba(79,122,248,0.2); border: 1px solid rgba(79,122,248,0.4); color: var(--blue); }
+  .status-reglee      { background: rgba(34,197,94,0.25); border: 1px solid rgba(34,197,94,0.5); color: var(--green); }
+  .status-refusee     { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: var(--red-err); }
+
+  /* PROGRESS BAR */
+  .progress-bar { margin-bottom: 32px; }
+  .progress-steps { display: flex; align-items: center; justify-content: space-between; position: relative; }
+  .progress-steps::before { content: ''; position: absolute; top: 16px; left: 8px; right: 8px; height: 2px; background: rgba(255,255,255,0.1); z-index: 0; }
+  .progress-fill { position: absolute; top: 16px; left: 8px; height: 2px; background: linear-gradient(90deg, var(--red), var(--gold)); transition: width 0.6s ease; z-index: 1; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 2; }
+  .step-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--dark3); border: 2px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.4s; }
+  .step-dot.done { background: var(--red); border-color: var(--red); box-shadow: 0 0 12px rgba(204,26,26,0.5); }
+  .step-dot.current { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 12px rgba(245,166,35,0.6); animation: pulseStep 1.5s infinite; }
+  @keyframes pulseStep { 0%,100% { box-shadow: 0 0 12px rgba(245,166,35,0.6); } 50% { box-shadow: 0 0 24px rgba(245,166,35,0.9); } }
+  .step-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.3); text-align: center; max-width: 60px; }
+  .step-label.active { color: var(--gold); }
+
+  /* DETAILS */
+  .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .detail-item { background: var(--dark3); border-radius: 8px; padding: 16px; }
+  .detail-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .detail-value { font-size: 15px; color: var(--white); line-height: 1.5; }
+
+  /* ITEMS LIST */
+  .items-section { background: var(--dark3); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+  .items-section h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 14px; }
+  .item-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; }
+  .item-row:last-child { border-bottom: none; }
+  .item-row .item-n { color: rgba(255,255,255,0.7); }
+  .item-row .item-p { color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 16px; }
+  .total-row { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .total-row span:first-child { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .total-row span:last-child { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--gold); }
+
+  /* REFUSAL */
+  .refusal-box { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+  .refusal-box strong { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--red-err); margin-bottom: 6px; }
+  .refusal-box p { font-size: 14px; color: rgba(255,255,255,0.6); }
+
+  /* MESSAGES */
+  .messages-card { background: var(--dark2); border: 1px solid rgba(79,122,248,0.2); border-radius: 16px; padding: 28px; }
+  .messages-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; margin-bottom: 20px; color: var(--blue); }
+  .no-messages { color: rgba(255,255,255,0.3); font-size: 14px; font-style: italic; text-align: center; padding: 20px 0; }
+  .message-item { background: var(--dark3); border-left: 3px solid var(--blue); border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 12px; }
+  .message-meta { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-bottom: 6px; }
+  .message-content { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.6; }
+
+  /* REFRESH */
+  .refresh-row { display: flex; justify-content: center; margin-top: 28px; }
+  .refresh-btn { background: transparent; border: 1px solid rgba(204,26,26,0.3); color: rgba(255,255,255,0.4); padding: 10px 24px; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
+  .refresh-btn:hover { border-color: var(--red); color: var(--white); }
+
+  .back-link { display: inline-flex; align-items: center; gap: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 1px; color: rgba(255,255,255,0.35); text-decoration: none; margin-bottom: 32px; transition: color 0.2s; }
+  .back-link:hover { color: var(--gold); }
+
+  @media (max-width: 600px) { nav { padding: 0 16px; } main { padding: 90px 16px 40px; } .details-grid { grid-template-columns: 1fr; } .order-card { padding: 24px 18px; } .step-label { font-size: 9px; max-width: 50px; } }
+</style>
+</head>
+<body>
+
+<div class="fire-bg" id="fireBg"></div>
+
+<nav>
+  <a href="menu.html" class="nav-logo">
+    <div class="nav-logo-icon">🍔</div>
+    <span>BURGER<em>SHOT</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="menu.html">← Retour au menu</a>
+  </div>
+</nav>
+
+<main>
+  <a href="orders.html" class="back-link">← Toutes mes commandes</a>
+  <div class="page-header">
+    <h1>SUIVI DE <em>COMMANDE</em></h1>
+    <p>Mise à jour en temps réel</p>
+  </div>
+
+  <div id="loading-state" class="loading-state">
+    <div class="spinner"></div>
+    <div>Chargement de ta commande...</div>
+  </div>
+
+  <div id="error-state" class="error-state" style="display:none">
+    <div class="err-icon">😕</div>
+    <p>Commande introuvable ou ID incorrect.</p>
+  </div>
+
+  <div id="order-content" style="display:none">
+    <div class="order-card">
+      <div class="order-top">
+        <div>
+          <div class="order-id" id="oc-id">Commande <span>#—</span></div>
+          <div class="order-date" id="oc-date">—</div>
+        </div>
+        <div class="status-badge" id="oc-status-badge">—</div>
+      </div>
+
+      <!-- PROGRESS -->
+      <div class="progress-bar" id="progress-bar-wrap">
+        <div class="progress-steps" id="progress-steps">
+          <!-- injecté en JS -->
+        </div>
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+
+      <!-- REFUSAL -->
+      <div class="refusal-box" id="refusal-box" style="display:none">
+        <strong>❌ Motif du refus</strong>
+        <p id="refusal-reason">—</p>
+      </div>
+
+      <!-- DETAILS -->
+      <div class="details-grid">
+        <div class="detail-item"><div class="detail-label">👤 Client</div><div class="detail-value" id="oc-name">—</div></div>
+        <div class="detail-item"><div class="detail-label">📞 Téléphone</div><div class="detail-value" id="oc-phone">—</div></div>
+        <div class="detail-item"><div class="detail-label">📦 Mode</div><div class="detail-value" id="oc-delivery">—</div></div>
+        <div class="detail-item"><div class="detail-label" id="oc-addr-label">📍 Adresse</div><div class="detail-value" id="oc-addr">—</div></div>
+      </div>
+
+      <!-- ITEMS -->
+      <div class="items-section">
+        <h4>🛒 Articles commandés</h4>
+        <div id="oc-items">—</div>
+        <div class="total-row">
+          <span>Total</span>
+          <span id="oc-total">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="messages-card">
+      <h3>💬 Messages de l'équipe</h3>
+      <div id="oc-messages"><div class="no-messages">Aucun message pour l'instant.</div></div>
+    </div>
+
+    <div class="refresh-row">
+      <button class="refresh-btn" onclick="loadOrder()">🔄 Actualiser</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  const API_BASE = window.location.origin.includes('localhost')
+    ? 'http://localhost:3000'
+    : 'https://TON-BOT.onrender.com'; // ← MODIFIER ICI
+
+  const STATUS_LABELS = {
+    en_attente: '⏳ En attente', acceptee: '✅ Acceptée', refusee: '❌ Refusée',
+    recue: '📥 Reçue', preparation: '🍳 En préparation', finalisation: '🔍 Finalisation',
+    termine: '✅ Terminée', livraison: '🚴 En livraison', reglee: '💰 Réglée',
+  };
+
+  // Steps pour la barre de progression (hors refusee)
+  const STEPS = [
+    { key: 'en_attente', label: 'Reçue', icon: '📥' },
+    { key: 'acceptee',   label: 'Acceptée', icon: '✅' },
+    { key: 'preparation',label: 'Prépa', icon: '🍳' },
+    { key: 'finalisation',label: 'Final', icon: '🔍' },
+    { key: 'termine',    label: 'Prête', icon: '🏁' },
+  ];
+
+  const STEP_ORDER = ['en_attente','acceptee','recue','preparation','finalisation','livraison','termine','reglee'];
+
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get('id');
+
+  async function loadOrder() {
+    if (!orderId) { showError(); return; }
+
+    document.getElementById('loading-state').style.display = 'block';
+    document.getElementById('order-content').style.display = 'none';
+    document.getElementById('error-state').style.display = 'none';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/order/${orderId}`);
+      const data = await res.json();
+
+      if (!data.success || !data.order) { showError(); return; }
+
+      renderOrder(data.order, data.messages || []);
+    } catch (e) {
+      showError();
+    }
+
+    document.getElementById('loading-state').style.display = 'none';
+  }
+
+  function showError() {
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('error-state').style.display = 'block';
+  }
+
+  function renderOrder(order, messages) {
+    document.getElementById('order-content').style.display = 'block';
+
+    // ID & date
+    document.getElementById('oc-id').innerHTML = `Commande <span>#${order.id}</span>`;
+    document.getElementById('oc-date').textContent = new Date(order.created_at).toLocaleString('fr-FR');
+
+    // Status badge
+    const badge = document.getElementById('oc-status-badge');
+    badge.textContent = STATUS_LABELS[order.status] || order.status;
+    badge.className = `status-badge status-${order.status}`;
+
+    // Refusal
+    if (order.status === 'refusee' && order.refusal_reason) {
+      document.getElementById('refusal-box').style.display = 'block';
+      document.getElementById('refusal-reason').textContent = order.refusal_reason;
+    } else {
+      document.getElementById('refusal-box').style.display = 'none';
+    }
+
+    // Progress
+    renderProgress(order.status, order.delivery_type);
+
+    // Details
+    document.getElementById('oc-name').textContent = `${order.first_name} ${order.last_name}`;
+    document.getElementById('oc-phone').textContent = order.phone || '—';
+    document.getElementById('oc-delivery').textContent = order.delivery_type === 'livraison' ? '🚴 Livraison' : '🏪 Sur place';
+
+    if (order.delivery_type === 'livraison') {
+      document.getElementById('oc-addr-label').textContent = '📍 Adresse';
+      document.getElementById('oc-addr').textContent = `${order.address || '—'} (ZIP: ${order.zip_code || '—'})`;
+    } else {
+      document.getElementById('oc-addr-label').textContent = '📍 Mode';
+      document.getElementById('oc-addr').textContent = 'Sur place au restaurant';
+    }
+
+    // Items
+    const items = Array.isArray(order.items) ? order.items : JSON.parse(order.items || '[]');
+    document.getElementById('oc-items').innerHTML = items.map(i => `
+      <div class="item-row">
+        <span class="item-n">${i.name} <span style="color:rgba(255,255,255,0.35)">×${i.qty}</span></span>
+        <span class="item-p">${(i.price * i.qty).toLocaleString('fr-FR')} DA</span>
+      </div>
+    `).join('');
+    document.getElementById('oc-total').textContent = Number(order.total).toLocaleString('fr-FR') + ' DA';
+
+    // Messages
+    const msgEl = document.getElementById('oc-messages');
+    if (messages.length === 0) {
+      msgEl.innerHTML = '<div class="no-messages">Aucun message pour l\'instant.</div>';
+    } else {
+      msgEl.innerHTML = messages.map(m => `
+        <div class="message-item">
+          <div class="message-meta">🧑‍🍳 Burger Shot — ${new Date(m.created_at).toLocaleString('fr-FR')}</div>
+          <div class="message-content">${m.content}</div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function renderProgress(currentStatus, deliveryType) {
+    let steps = [...STEPS];
+    if (deliveryType === 'livraison') {
+      // Insère livraison avant termine
+      steps.splice(4, 0, { key: 'livraison', label: 'Livraison', icon: '🚴' });
+    }
+
+    const currentIdx = steps.findIndex(s => s.key === currentStatus);
+
+    const stepsEl = document.getElementById('progress-steps');
+    stepsEl.innerHTML = steps.map((s, i) => {
+      let dotClass = '';
+      if (i < currentIdx) dotClass = 'done';
+      else if (i === currentIdx) dotClass = 'current';
+      return `
+        <div class="step">
+          <div class="step-dot ${dotClass}">${s.icon}</div>
+          <div class="step-label ${i <= currentIdx ? 'active' : ''}">${s.label}</div>
+        </div>
+      `;
+    }).join('');
+
+    // Fill width
+    const pct = steps.length <= 1 ? 0 : Math.min((currentIdx / (steps.length - 1)) * 100, 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  // Auto-refresh toutes les 20s
+  loadOrder();
+  setInterval(loadOrder, 20000);
+
+  // Embers
+  (function() {
+    const bg = document.getElementById('fireBg');
+    const colors = ['#FF4500','#FF6200','#FF8C00'];
+    setInterval(() => {
+      const e = document.createElement('div'); e.className = 'ember';
+      e.style.left = Math.random() * 100 + 'vw';
+      e.style.width = e.style.height = (Math.random() * 4 + 2) + 'px';
+      e.style.background = colors[Math.floor(Math.random() * colors.length)];
+      e.style.animationDuration = (Math.random() * 5 + 4) + 's';
+      e.style.animationDelay = Math.random() * 2 + 's';
+      bg.appendChild(e); setTimeout(() => e.remove(), 10000);
+    }, 150);
+  })();
+</script>
+</body>
+</html>
