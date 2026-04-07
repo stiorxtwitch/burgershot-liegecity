@@ -252,7 +252,7 @@
   if (!currentUser) { 
     window.location.href = 'auth.html'; 
   } else { 
-    document.getElementById('nav-username').textContent = currentUser.username || currentUser.discord_username || '—'; 
+    document.getElementById('nav-username').textContent = currentUser.username || '—'; 
   }
 
   function logout() { 
@@ -412,18 +412,24 @@
     const btn = document.getElementById('confirm-order-btn');
 
     banner.className = 'modal-banner';
+
     if (!firstname || !lastname || !phone) 
       return showModalBanner(banner, '⚠️ Prénom, Nom et Téléphone obligatoires.', 'err');
     if (delivery === 'livraison' && (!address || !zip)) 
       return showModalBanner(banner, '⚠️ Adresse et ZIP requis pour la livraison.', 'err');
 
+    // ====================== CORRECTION PRINCIPALE ======================
+    const discordUsername = currentUser.discord_username;
+
+    if (!discordUsername) {
+      return showModalBanner(banner, '❌ Erreur : discord_username manquant. Reconnecte-toi.', 'err');
+    }
+    // ===================================================================
+
+    console.log("[DEBUG] discord_username envoyé :", discordUsername);
+
     const items = Object.entries(cart).map(([name, v]) => ({ name, price: v.price, qty: v.qty }));
     const total = items.reduce((s, i) => s + i.price * i.qty, 0);
-
-    // CORRECTION ICI : valeur de secours pour éviter null dans discord_username
-    const discordUsername = currentUser.discord_username || currentUser.username || "utilisateur_discord";
-
-    console.log("[DEBUG] discord_username envoyé :", discordUsername); // ← pour debug (peut être supprimé plus tard)
 
     btn.disabled = true;
     btn.querySelector('.btn-text').style.display = 'none';
@@ -435,7 +441,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           user_id: currentUser.id,
-          discord_username: discordUsername,           // ← valeur corrigée
+          discord_username: discordUsername,        // ← Utilise uniquement le vrai discord_username
           discord_user_id: currentUser.discord_user_id,
           first_name: firstname,
           last_name: lastname,
@@ -457,7 +463,7 @@
         document.getElementById('suiviBtn').href = `suivi.html?id=${data.order_id}`;
         document.getElementById('successOverlay').classList.add('open');
       } else {
-        showModalBanner(banner, `❌ Erreur : ${data.error}`, 'err');
+        showModalBanner(banner, `❌ Erreur : ${data.error || 'Erreur inconnue'}`, 'err');
       }
     } catch (e) {
       showModalBanner(banner, '⚠️ Impossible de contacter le serveur.', 'err');
