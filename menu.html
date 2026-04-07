@@ -102,7 +102,6 @@
   .modal-overlay.open { display: flex; }
   .modal { background: var(--dark2); border: 1px solid rgba(204,26,26,0.3); border-radius: 16px; padding: 40px 36px; max-width: 520px; width: 92%; margin: auto; }
   .modal h2 { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: var(--red); margin-bottom: 24px; text-align: center; }
-  /* Form inside modal */
   .modal .form-group { margin-bottom: 16px; }
   .modal .form-group label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 7px; }
   .modal .form-group input, .modal .form-group select { width: 100%; background: var(--dark3); border: 1px solid rgba(255,255,255,0.1); color: var(--white); padding: 11px 14px; border-radius: 7px; font-family: 'Barlow', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
@@ -146,6 +145,7 @@
 </head>
 <body>
 <div class="fire-bg" id="fireBg"></div>
+
 <!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">
@@ -158,6 +158,7 @@
     <button class="nav-logout" onclick="logout()">Déconnexion</button>
   </div>
 </nav>
+
 <main>
   <section id="menu">
     <div class="section-header">
@@ -172,17 +173,60 @@
       <button class="tab-btn" onclick="switchTab('accompagnements', this)">🍟 Accompagnements</button>
       <button class="tab-btn" onclick="switchTab('boissons', this)">🥤 Boissons</button>
     </div>
-    <div id="tab-burgers" class="menu-section active"><div class="cat-heading"><div class="cat-heading-line"></div><h3>BURGERS</h3><div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div></div><div class="items-grid" id="grid-burgers"></div></div>
-    <div id="tab-brochettes" class="menu-section"><div class="cat-heading"><div class="cat-heading-line"></div><h3>BROCHETTES</h3><div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div></div><div class="items-grid" id="grid-brochettes"></div></div>
-    <div id="tab-menus" class="menu-section"><div class="cat-heading"><div class="cat-heading-line"></div><h3>MENUS COMPLETS</h3><div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div></div><div class="items-grid" id="grid-menus"></div></div>
-    <div id="tab-accompagnements" class="menu-section"><div class="cat-heading"><div class="cat-heading-line"></div><h3>ACCOMPAGNEMENTS</h3><div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div></div><div class="items-grid" id="grid-accompagnements"></div></div>
-    <div id="tab-boissons" class="menu-section">
-      <div class="cat-heading"><div class="cat-heading-line"></div><h3>BOISSONS</h3><div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div></div><div class="items-grid" id="grid-boissons"></div>
-      <div class="cat-heading" style="margin-top:16px"><div class="cat-heading-line"></div><h3>BOISSONS ALCOOLISÉES</h3><div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div></div><div class="items-grid" id="grid-alcool"></div>
+
+    <div id="tab-burgers" class="menu-section active">
+      <div class="cat-heading">
+        <div class="cat-heading-line"></div>
+        <h3>BURGERS</h3>
+        <div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div>
+      </div>
+      <div class="items-grid" id="grid-burgers"></div>
     </div>
-    <div id="tab-desserts" class="menu-section"><div class="cat-heading"><div class="cat-heading-line"></div><h3>DESSERTS</h3><div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div></div><div class="items-grid" id="grid-desserts"></div></div>
+
+    <div id="tab-brochettes" class="menu-section">
+      <div class="cat-heading">
+        <div class="cat-heading-line"></div>
+        <h3>BROCHETTES</h3>
+        <div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div>
+      </div>
+      <div class="items-grid" id="grid-brochettes"></div>
+    </div>
+
+    <div id="tab-menus" class="menu-section">
+      <div class="cat-heading">
+        <div class="cat-heading-line"></div>
+        <h3>MENUS COMPLETS</h3>
+        <div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div>
+      </div>
+      <div class="items-grid" id="grid-menus"></div>
+    </div>
+
+    <div id="tab-accompagnements" class="menu-section">
+      <div class="cat-heading">
+        <div class="cat-heading-line"></div>
+        <h3>ACCOMPAGNEMENTS</h3>
+        <div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div>
+      </div>
+      <div class="items-grid" id="grid-accompagnements"></div>
+    </div>
+
+    <div id="tab-boissons" class="menu-section">
+      <div class="cat-heading">
+        <div class="cat-heading-line"></div>
+        <h3>BOISSONS</h3>
+        <div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div>
+      </div>
+      <div class="items-grid" id="grid-boissons"></div>
+      <div class="cat-heading" style="margin-top:16px">
+        <div class="cat-heading-line"></div>
+        <h3>BOISSONS ALCOOLISÉES</h3>
+        <div class="cat-heading-line" style="background:linear-gradient(90deg,transparent,var(--red))"></div>
+      </div>
+      <div class="items-grid" id="grid-alcool"></div>
+    </div>
   </section>
 </main>
+
 <!-- CART -->
 <div class="cart-container">
   <div class="cart-panel" id="cartPanel">
@@ -195,6 +239,7 @@
   </div>
   <button class="cart-btn" onclick="toggleCart()">🛒<span class="cart-count" id="cartCount">0</span></button>
 </div>
+
 <!-- ORDER MODAL -->
 <div class="modal-overlay" id="orderModal">
   <div class="modal">
@@ -226,6 +271,7 @@
     </div>
   </div>
 </div>
+
 <!-- SUCCESS OVERLAY -->
 <div class="success-overlay" id="successOverlay">
   <div class="success-box">
@@ -241,270 +287,239 @@
 </div>
 
 <script>
-  // ─── CONFIG ───────────────────────────────────
-  const API_BASE = window.location.origin.includes('localhost')
-    ? 'http://localhost:3000'
-    : 'https://bot-burgershot-3amh.onrender.com';
+// ─── CONFIG ───────────────────────────────────
+const API_BASE = window.location.origin.includes('localhost')
+  ? 'http://localhost:3000'
+  : 'https://bot-burgershot-3amh.onrender.com';
 
-  // ─── AUTH CHECK ──────────────────────────────
-  const currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
-  if (!currentUser) { 
-    window.location.href = 'auth.html'; 
-  } else { 
-    document.getElementById('nav-username').textContent = currentUser.username || '—'; 
+// ─── AUTH CHECK ──────────────────────────────
+const currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
+if (!currentUser) {
+  window.location.href = 'auth.html';
+} else {
+  document.getElementById('nav-username').textContent = currentUser.username || '—';
+}
+
+function logout() {
+  sessionStorage.removeItem('bs_user');
+  window.location.href = 'auth.html';
+}
+
+// ─── CHARGEMENT DYNAMIQUE DES ALIMENTS ──────────────────────────────
+async function loadAliments() {
+  try {
+    const res = await fetch(`${API_BASE}/api/aliments`);
+    if (!res.ok) throw new Error('Erreur de chargement');
+    const aliments = await res.json();
+
+    const grouped = aliments.reduce((acc, item) => {
+      const cat = item.category || 'Autres';
+      if (!acc[cat]) acc[cat] = [];
+      acc[cat].push(item);
+      return acc;
+    }, {});
+
+    buildGrid('grid-burgers', grouped['Burgers'] || []);
+    buildGrid('grid-brochettes', grouped['Brochettes'] || []);
+    buildGrid('grid-menus', grouped['Menus'] || []);
+    buildGrid('grid-accompagnements', grouped['Accompagnements'] || []);
+    buildGrid('grid-boissons', grouped['Boissons'] || []);
+    buildGrid('grid-alcool', []); // tu peux ajuster si tu veux séparer l'alcool
+  } catch (e) {
+    console.error("Erreur chargement aliments :", e);
   }
+}
 
-  function logout() { 
-    sessionStorage.removeItem('bs_user'); 
-    window.location.href = 'auth.html'; 
-  }
+function buildGrid(gridId, items) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
 
-  // ─── MENU DATA ────────────────────────────────
-  const menuData = {
-    burgers: [
-      { name: 'Burger Simple', price: 100, desc: 'Steak haché, pain brioche, salade, tomate' },
-      { name: 'Burger Normal', price: 150, desc: 'Steak haché double, oignons caramélisés, cornichons' },
-      { name: 'Burger Cheese', price: 350, desc: 'Double fromage fondu, bacon croustillant, sauce spéciale' },
-      { name: 'Burger Ultime', price: 500, desc: 'Triple steak, cheddar, bacon, oignons, jalapeños, sauce shot' },
-      { name: 'Burger Triples', price: 750, desc: 'Trois steaks, triple fromage, sauce maison, légumes croquants' },
-    ],
-    brochettes: [
-      { name: 'Brochette Poulet', price: 200, desc: 'Poulet mariné aux herbes, grillé à la flamme' },
-      { name: 'Brochette Bœuf', price: 250, desc: 'Bœuf tendre assaisonné, oignons et poivrons grillés' },
-      { name: 'Brochette Mixte', price: 300, desc: 'Mix poulet & bœuf, légumes rôtis, sauce chimichurri' },
-      { name: 'Brochette Spicy', price: 280, desc: 'Viande marinée au piment, poivrons colorés, sauce harissa' },
-      { name: 'Brochette Kefta', price: 220, desc: 'Kefta maison aux épices orientales, persil frais' },
-    ],
-    menus: [
-      { name: 'Menu Simple', price: 250, desc: 'Burger Simple + Frites + Boisson' },
-      { name: 'Menu Normal', price: 350, desc: 'Burger Normal + Frites + Boisson' },
-      { name: 'Menu Cheese', price: 550, desc: 'Burger Cheese + Frites + Boisson' },
-      { name: 'Menu Ultime', price: 750, desc: 'Burger Ultime + Frites + Boisson' },
-      { name: 'Menu Triples', price: 950, desc: 'Burger Triples + Frites + Boisson' },
-    ],
-    accompagnements: [
-      { name: 'Frites', price: 50, desc: 'Frites dorées croustillantes, sel et paprika' },
-      { name: 'Frites Cheese', price: 90, desc: 'Frites nappées de cheddar fondu et herbes' },
-      { name: 'Onion Rings', price: 80, desc: "Rondelles d'oignon croustillantes, sauce ranch" },
-      { name: 'Coleslaw', price: 60, desc: 'Salade de chou crémeuse maison' },
-    ],
-    boissons: [
-      { name: 'Eau', price: 100, desc: 'Eau minérale fraîche' },
-      { name: 'Café', price: 150, desc: 'Café expresso ou allongé' },
-      { name: 'Soda', price: 150, desc: 'Cola, Limonade ou Orange — au choix' },
-      { name: 'Thé Glacé', price: 100, desc: 'Thé glacé citron ou pêche, fait maison' },
-      { name: 'Cacao Chaud', price: 100, desc: 'Chocolat chaud onctueux, garni de chantilly' },
-    ],
-    alcool: [
-      { name: 'Jupiler 33cl', price: 200, desc: 'Bière blonde belge fraîche — 5.2°' },
-      { name: 'Jupiler Pack de 6', price: 280, desc: 'Grande Jupiler bien fraîche — 5.2°' },
-      { name: 'Jupiler Casier', price: 350, desc: 'Jupiler à la pression, bien froide — 5.2°' },
-    ],
-    desserts: [
-      { name: "Pomme d'Amour", price: 150, desc: "Pomme caramélisée au sucre rouge, cœur fondant" },
-      { name: 'Éclair au Chocolat', price: 150, desc: 'Pâte à choux, crème chocolat noir, glaçage brillant' },
-      { name: 'Pain au Chocolat', price: 150, desc: 'Feuilleté croustillant, deux barres de chocolat' },
-      { name: 'Crème Brûlée', price: 150, desc: 'Crème vanille onctueuse, caramel craquant caramélisé' },
-    ],
-  };
+  grid.innerHTML = items.map(item => `
+    <div class="menu-card">
+      <div class="card-info">
+        <div class="card-name">${item.name}</div>
+        <div class="card-desc">${item.description || 'Aucune description'}</div>
+      </div>
+      <div class="card-right">
+        <div class="card-price">${Number(item.price).toLocaleString('fr-FR')}<br><span>DA</span></div>
+        <button class="add-btn" onclick="addToCart('${item.name.replace(/'/g,"\\'")}', ${item.price})">+</button>
+      </div>
+    </div>
+  `).join('');
+}
 
-  function buildGrid(gridId, items) {
-    const grid = document.getElementById(gridId);
-    if (!grid) return;
-    grid.innerHTML = items.map(item => `
-      <div class="menu-card">
-        <div class="card-info">
-          <div class="card-name">${item.name}</div>
-          <div class="card-desc">${item.desc}</div>
-        </div>
-        <div class="card-right">
-          <div class="card-price">${item.price.toLocaleString('fr-FR')}<br><span>DA</span></div>
-          <button class="add-btn" onclick="addToCart('${item.name.replace(/'/g,"\\'")}', ${item.price})">+</button>
-        </div>
+// ─── CART ─────────────────────────────────────
+let cart = {};
+let cartOpen = false;
+
+function toggleCart() {
+  cartOpen = !cartOpen;
+  document.getElementById('cartPanel').classList.toggle('open', cartOpen);
+}
+
+function addToCart(name, price) {
+  if (!cart[name]) cart[name] = { price, qty: 0 };
+  cart[name].qty++;
+  updateCartUI();
+  showToast(`✅ ${name} ajouté !`);
+}
+
+function removeFromCart(name) {
+  delete cart[name];
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const items = Object.entries(cart);
+  const total = items.reduce((s, [, v]) => s + v.price * v.qty, 0);
+  const count = items.reduce((s, [, v]) => s + v.qty, 0);
+
+  const countEl = document.getElementById('cartCount');
+  countEl.textContent = count;
+  countEl.style.display = count > 0 ? 'flex' : 'none';
+
+  const itemsEl = document.getElementById('cartItems');
+  itemsEl.innerHTML = items.length === 0
+    ? '<div class="cart-empty">Ton panier est vide…</div>'
+    : items.map(([name, v]) => `
+      <div class="cart-item">
+        <div class="ci-info"><div class="ci-name">${name}</div><div class="ci-qty">× ${v.qty}</div></div>
+        <div class="ci-price">${(v.price * v.qty).toLocaleString('fr-FR')} DA</div>
+        <button class="ci-remove" onclick="removeFromCart('${name.replace(/'/g,"\\'")}')">✕</button>
       </div>
     `).join('');
+
+  document.getElementById('cartTotal').textContent = total.toLocaleString('fr-FR') + ' DA';
+  document.getElementById('orderBtn').disabled = items.length === 0;
+}
+
+// ─── ORDER MODAL ──────────────────────────────
+function openOrderModal() {
+  const items = Object.entries(cart);
+  const total = items.reduce((s, [, v]) => s + v.price * v.qty, 0);
+  const summary = items.map(([name, v]) => `• ${name} ×${v.qty} — ${(v.price * v.qty).toLocaleString('fr-FR')} DA`).join('\n');
+  document.getElementById('order-summary').innerHTML =
+    `<div style="white-space:pre-line;margin-bottom:8px;">${summary}</div>` +
+    `<strong>TOTAL : ${total.toLocaleString('fr-FR')} DA</strong>`;
+  document.getElementById('orderModal').classList.add('open');
+  document.getElementById('order-banner').className = 'modal-banner';
+}
+
+function closeOrderModal() {
+  document.getElementById('orderModal').classList.remove('open');
+}
+
+function toggleDelivery() {
+  const v = document.getElementById('o-delivery').value;
+  document.getElementById('delivery-fields').classList.toggle('show', v === 'livraison');
+}
+
+// Place Order (avec correction discord_username)
+async function placeOrder() {
+  const firstname = document.getElementById('o-firstname').value.trim();
+  const lastname = document.getElementById('o-lastname').value.trim();
+  const phone = document.getElementById('o-phone').value.trim();
+  const delivery = document.getElementById('o-delivery').value;
+  const address = document.getElementById('o-address').value.trim();
+  const zip = document.getElementById('o-zip').value.trim();
+  const banner = document.getElementById('order-banner');
+  const btn = document.getElementById('confirm-order-btn');
+
+  banner.className = 'modal-banner';
+
+  if (!firstname || !lastname || !phone)
+    return showModalBanner(banner, '⚠️ Prénom, Nom et Téléphone obligatoires.', 'err');
+  if (delivery === 'livraison' && (!address || !zip))
+    return showModalBanner(banner, '⚠️ Adresse et ZIP requis pour la livraison.', 'err');
+
+  const discordUsername = currentUser.discord_username;
+  if (!discordUsername) {
+    return showModalBanner(banner, '❌ Erreur : discord_username manquant. Reconnecte-toi.', 'err');
   }
 
-  Object.entries(menuData).forEach(([key, items]) => buildGrid(`grid-${key}`, items));
+  console.log("[DEBUG] discord_username envoyé :", discordUsername);
 
-  function switchTab(tab, btn) {
-    document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + tab).classList.add('active');
-    btn.classList.add('active');
-  }
+  const items = Object.entries(cart).map(([name, v]) => ({ name, price: v.price, qty: v.qty }));
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
 
-  // ─── CART ─────────────────────────────────────
-  let cart = {};
-  let cartOpen = false;
+  btn.disabled = true;
+  btn.querySelector('.btn-text').style.display = 'none';
+  btn.querySelector('.btn-loader').style.display = 'inline';
 
-  function toggleCart() { 
-    cartOpen = !cartOpen; 
-    document.getElementById('cartPanel').classList.toggle('open', cartOpen); 
-  }
+  try {
+    const res = await fetch(`${API_BASE}/api/order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: currentUser.id,
+        discord_username: discordUsername,
+        discord_user_id: currentUser.discord_user_id,
+        first_name: firstname,
+        last_name: lastname,
+        phone,
+        delivery_type: delivery,
+        address: delivery === 'livraison' ? address : null,
+        zip_code: delivery === 'livraison' ? zip : null,
+        items,
+        total,
+      }),
+    });
 
-  function addToCart(name, price) {
-    if (!cart[name]) cart[name] = { price, qty: 0 };
-    cart[name].qty++;
-    updateCartUI();
-    showToast(`✅ ${name} ajouté !`);
-  }
-
-  function removeFromCart(name) { 
-    delete cart[name]; 
-    updateCartUI(); 
-  }
-
-  function updateCartUI() {
-    const items = Object.entries(cart);
-    const total = items.reduce((s, [, v]) => s + v.price * v.qty, 0);
-    const count = items.reduce((s, [, v]) => s + v.qty, 0);
-
-    const countEl = document.getElementById('cartCount');
-    countEl.textContent = count;
-    countEl.style.display = count > 0 ? 'flex' : 'none';
-
-    const itemsEl = document.getElementById('cartItems');
-    itemsEl.innerHTML = items.length === 0
-      ? '<div class="cart-empty">Ton panier est vide…</div>'
-      : items.map(([name, v]) => `
-        <div class="cart-item">
-          <div class="ci-info"><div class="ci-name">${name}</div><div class="ci-qty">× ${v.qty}</div></div>
-          <div class="ci-price">${(v.price * v.qty).toLocaleString('fr-FR')} DA</div>
-          <button class="ci-remove" onclick="removeFromCart('${name.replace(/'/g,"\\'")}')">✕</button>
-        </div>
-      `).join('');
-
-    document.getElementById('cartTotal').textContent = total.toLocaleString('fr-FR') + ' DA';
-    document.getElementById('orderBtn').disabled = items.length === 0;
-  }
-
-  // ─── ORDER MODAL ──────────────────────────────
-  function openOrderModal() {
-    const items = Object.entries(cart);
-    const total = items.reduce((s, [, v]) => s + v.price * v.qty, 0);
-    const summary = items.map(([name, v]) => `• ${name} ×${v.qty} — ${(v.price * v.qty).toLocaleString('fr-FR')} DA`).join('\n');
-    document.getElementById('order-summary').innerHTML =
-      `<div style="white-space:pre-line;margin-bottom:8px;">${summary}</div>` +
-      `<strong>TOTAL : ${total.toLocaleString('fr-FR')} DA</strong>`;
-    document.getElementById('orderModal').classList.add('open');
-    document.getElementById('order-banner').className = 'modal-banner';
-  }
-
-  function closeOrderModal() { 
-    document.getElementById('orderModal').classList.remove('open'); 
-  }
-
-  function toggleDelivery() {
-    const v = document.getElementById('o-delivery').value;
-    document.getElementById('delivery-fields').classList.toggle('show', v === 'livraison');
-  }
-
-  async function placeOrder() {
-    const firstname = document.getElementById('o-firstname').value.trim();
-    const lastname = document.getElementById('o-lastname').value.trim();
-    const phone = document.getElementById('o-phone').value.trim();
-    const delivery = document.getElementById('o-delivery').value;
-    const address = document.getElementById('o-address').value.trim();
-    const zip = document.getElementById('o-zip').value.trim();
-    const banner = document.getElementById('order-banner');
-    const btn = document.getElementById('confirm-order-btn');
-
-    banner.className = 'modal-banner';
-
-    if (!firstname || !lastname || !phone) 
-      return showModalBanner(banner, '⚠️ Prénom, Nom et Téléphone obligatoires.', 'err');
-    if (delivery === 'livraison' && (!address || !zip)) 
-      return showModalBanner(banner, '⚠️ Adresse et ZIP requis pour la livraison.', 'err');
-
-    // ====================== CORRECTION PRINCIPALE ======================
-    const discordUsername = currentUser.discord_username;
-
-    if (!discordUsername) {
-      return showModalBanner(banner, '❌ Erreur : discord_username manquant. Reconnecte-toi.', 'err');
+    const data = await res.json();
+    if (data.success) {
+      cart = {};
+      updateCartUI();
+      closeOrderModal();
+      document.getElementById('successOrderId').textContent = `Commande #${data.order_id}`;
+      document.getElementById('suiviBtn').href = `suivi.html?id=${data.order_id}`;
+      document.getElementById('successOverlay').classList.add('open');
+    } else {
+      showModalBanner(banner, `❌ Erreur : ${data.error || 'Erreur inconnue'}`, 'err');
     }
-    // ===================================================================
-
-    console.log("[DEBUG] discord_username envoyé :", discordUsername);
-
-    const items = Object.entries(cart).map(([name, v]) => ({ name, price: v.price, qty: v.qty }));
-    const total = items.reduce((s, i) => s + i.price * i.qty, 0);
-
-    btn.disabled = true;
-    btn.querySelector('.btn-text').style.display = 'none';
-    btn.querySelector('.btn-loader').style.display = 'inline';
-
-    try {
-      const res = await fetch(`${API_BASE}/api/order`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: currentUser.id,
-          discord_username: discordUsername,        // ← Utilise uniquement le vrai discord_username
-          discord_user_id: currentUser.discord_user_id,
-          first_name: firstname,
-          last_name: lastname,
-          phone,
-          delivery_type: delivery,
-          address: delivery === 'livraison' ? address : null,
-          zip_code: delivery === 'livraison' ? zip : null,
-          items,
-          total,
-        }),
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        cart = {};
-        updateCartUI();
-        closeOrderModal();
-        document.getElementById('successOrderId').textContent = `Commande #${data.order_id}`;
-        document.getElementById('suiviBtn').href = `suivi.html?id=${data.order_id}`;
-        document.getElementById('successOverlay').classList.add('open');
-      } else {
-        showModalBanner(banner, `❌ Erreur : ${data.error || 'Erreur inconnue'}`, 'err');
-      }
-    } catch (e) {
-      showModalBanner(banner, '⚠️ Impossible de contacter le serveur.', 'err');
-    }
-
-    btn.disabled = false;
-    btn.querySelector('.btn-text').style.display = 'inline';
-    btn.querySelector('.btn-loader').style.display = 'none';
+  } catch (e) {
+    showModalBanner(banner, '⚠️ Impossible de contacter le serveur.', 'err');
   }
 
-  function showModalBanner(el, msg, type) { 
-    el.textContent = msg; 
-    el.className = `modal-banner ${type} show`; 
-  }
+  btn.disabled = false;
+  btn.querySelector('.btn-text').style.display = 'inline';
+  btn.querySelector('.btn-loader').style.display = 'none';
+}
 
-  // ─── TOAST ────────────────────────────────────
-  function showToast(msg) {
-    const ex = document.querySelector('.toast');
-    if (ex) ex.remove();
-    const t = document.createElement('div');
-    t.className = 'toast'; 
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2100);
-  }
+function showModalBanner(el, msg, type) {
+  el.textContent = msg;
+  el.className = `modal-banner ${type} show`;
+}
 
-  // ─── EMBERS ──────────────────────────────────
-  (function() {
-    const bg = document.getElementById('fireBg');
-    const colors = ['#FF4500','#FF6200','#FF8C00','#FF2200','#FFB300'];
-    setInterval(() => {
-      const e = document.createElement('div'); 
-      e.className = 'ember';
-      e.style.left = Math.random() * 100 + 'vw';
-      e.style.width = e.style.height = (Math.random() * 4 + 2) + 'px';
-      e.style.background = colors[Math.floor(Math.random() * colors.length)];
-      e.style.animationDuration = (Math.random() * 4 + 3) + 's';
-      e.style.animationDelay = Math.random() * 2 + 's';
-      bg.appendChild(e); 
-      setTimeout(() => e.remove(), 8000);
-    }, 120);
-  })();
+// ─── TOAST ────────────────────────────────────
+function showToast(msg) {
+  const ex = document.querySelector('.toast');
+  if (ex) ex.remove();
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2100);
+}
+
+// ─── EMBERS ──────────────────────────────────
+(function() {
+  const bg = document.getElementById('fireBg');
+  const colors = ['#FF4500','#FF6200','#FF8C00','#FF2200','#FFB300'];
+  setInterval(() => {
+    const e = document.createElement('div');
+    e.className = 'ember';
+    e.style.left = Math.random() * 100 + 'vw';
+    e.style.width = e.style.height = (Math.random() * 4 + 2) + 'px';
+    e.style.background = colors[Math.floor(Math.random() * colors.length)];
+    e.style.animationDuration = (Math.random() * 4 + 3) + 's';
+    e.style.animationDelay = Math.random() * 2 + 's';
+    bg.appendChild(e);
+    setTimeout(() => e.remove(), 8000);
+  }, 120);
+})();
+
+// ─── INIT ────────────────────────────────────
+window.addEventListener('load', loadAliments);
 </script>
 </body>
 </html>
