@@ -86,10 +86,10 @@
     color: var(--white);
   }
   .nav-logo span em { color: var(--red); font-style: normal; }
-  .nav-links {
-    display: flex;
-    gap: 36px;
-    list-style: none;
+  .nav-links { 
+    display: flex; 
+    gap: 36px; 
+    list-style: none; 
     align-items: center;
   }
   .nav-links a {
@@ -733,12 +733,12 @@
 </footer>
 
 <script>
-// CONFIG
-const API_BASE = window.location.origin.includes('localhost') 
-  ? 'http://localhost:3000' 
+// ─── CONFIG ───────────────────────────────────
+const API_BASE = window.location.origin.includes('localhost')
+  ? 'http://localhost:3000'
   : 'https://bot-burgershot-3amh.onrender.com';
 
-// CHARGEMENT DYNAMIQUE DES ALIMENTS DEPUIS LA BASE DE DONNÉES
+// ─── CHARGEMENT DYNAMIQUE DES ALIMENTS ──────────────────────────────
 async function loadAliments() {
   try {
     const res = await fetch(`${API_BASE}/api/aliments`);
@@ -746,7 +746,6 @@ async function loadAliments() {
     
     const aliments = await res.json();
 
-    // Regrouper par catégorie
     const grouped = aliments.reduce((acc, item) => {
       const cat = item.category || 'Autres';
       if (!acc[cat]) acc[cat] = [];
@@ -754,28 +753,20 @@ async function loadAliments() {
       return acc;
     }, {});
 
-    // Affichage dans les grids
     buildGrid('grid-burgers', grouped['Burgers'] || []);
     buildGrid('grid-brochettes', grouped['Brochettes'] || []);
     buildGrid('grid-menus', grouped['Menus'] || []);
     buildGrid('grid-accompagnements', grouped['Accompagnements'] || []);
     buildGrid('grid-boissons', grouped['Boissons'] || []);
-    buildGrid('grid-alcool', []); // alcool inclus dans Boissons pour l'instant
+    buildGrid('grid-alcool', []);
   } catch (e) {
-    console.error("Impossible de charger les aliments :", e);
-    // Affichage de secours en cas d'erreur
-    document.getElementById('grid-burgers').innerHTML = '<p style="color:#ef4444; grid-column:1/-1; text-align:center;">Erreur de chargement des aliments</p>';
+    console.error("Erreur chargement aliments :", e);
   }
 }
 
 function buildGrid(gridId, items) {
   const grid = document.getElementById(gridId);
   if (!grid) return;
-  
-  if (items.length === 0) {
-    grid.innerHTML = '<p style="color:rgba(255,255,255,0.4); grid-column:1/-1; text-align:center; padding:40px;">Aucun aliment dans cette catégorie pour le moment.</p>';
-    return;
-  }
 
   grid.innerHTML = items.map(item => `
     <div class="menu-card">
@@ -790,7 +781,7 @@ function buildGrid(gridId, items) {
   `).join('');
 }
 
-// Tabs
+// ─── TABS ─────────────────────────────────────
 function switchTab(tab, btn) {
   document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -798,7 +789,7 @@ function switchTab(tab, btn) {
   btn.classList.add('active');
 }
 
-// Embers
+// ─── EMBERS ───────────────────────────────────
 (function spawnEmbers() {
   const bg = document.getElementById('fireBg');
   const colors = ['#FF4500','#FF6200','#FF8C00','#FF2200','#FFB300'];
@@ -816,7 +807,7 @@ function switchTab(tab, btn) {
   }, 120);
 })();
 
-// Lancement au chargement
+// Lancement
 window.addEventListener('load', loadAliments);
 </script>
 </body>
