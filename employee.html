@@ -485,8 +485,9 @@ function renderCard(o) {
         <div class="oc-total">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
       </div>
       <div class="oc-footer">
-        <span class="status-badge status-${status}">${STATUS_LABELS[status]||status}</span>
-        <span class="oc-chat-hint">💬 Discussion</span>
+          <span class="status-badge status-${status}">${STATUS_LABELS[status]||status}</span>
+          ${o.accepted_by ? `<small style="opacity:0.65; margin-left:8px;">✓ ${escHtml(o.accepted_by)}</small>` : ''}
+          <span class="oc-chat-hint">💬 Discussion</span>
       </div>
     </div>`;
 }
@@ -505,7 +506,7 @@ async function openModal(orderId) {
   const status = currentOrder.status || 'en_attente';
 
   document.getElementById('modalOrderId').innerHTML = `Commande <span>#${currentOrder.id}</span>`;
-  document.getElementById('modalBody').innerHTML = `
+    document.getElementById('modalBody').innerHTML = `
     <div class="modal-section">
       <div class="ms-title">Client</div>
       <div class="ms-info">
@@ -514,13 +515,29 @@ async function openModal(orderId) {
         ${currentOrder.discord_username ? `🎮 ${currentOrder.discord_username}` : ''}
       </div>
     </div>
+
     <div class="modal-section">
       <div class="ms-title">Récupération</div>
       <div class="ms-info">${currentOrder.delivery_type==='livraison'?'🚴 Livraison à domicile':'🏪 Sur place'}</div>
       ${currentOrder.address ? `<div class="ms-info" style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.5)">📍 ${escHtml(currentOrder.address)}${currentOrder.zip_code?', '+currentOrder.zip_code:''}</div>` : ''}
-      <div class="ms-title" style="margin-top:14px">Statut</div>
-      <span class="status-badge status-${status}">${STATUS_LABELS[status]||status}</span>
     </div>
+
+    <!-- NOUVELLE SECTION : Qui a accepté / modifié -->
+    <div class="modal-section">
+      <div class="ms-title">Actions & Responsable</div>
+      <div class="ms-info" style="line-height:1.7">
+        ${currentOrder.accepted_by ? 
+          `✅ <strong>Acceptée par ${escHtml(currentOrder.accepted_by)}</strong><br>` : 
+          `<span style="opacity:0.5">Pas encore acceptée</span><br>`}
+        
+        ${currentOrder.accepted_at ? 
+          `🕒 ${new Date(currentOrder.accepted_at).toLocaleString('fr-FR')}<br><br>` : ''}
+
+        ${currentOrder.updated_by && currentOrder.updated_by !== currentOrder.accepted_by ? 
+          `✏️ Dernière modification par <strong>${escHtml(currentOrder.updated_by)}</strong>` : ''}
+      </div>
+    </div>
+
     <div class="modal-section full">
       <div class="ms-title">Articles</div>
       <table class="items-table">
@@ -576,10 +593,25 @@ function switchModalTab(tab, btn) {
 }
 
 // ====================== ACTIONS ======================
-async function doUpdate(id, status) {
+async function doUpdate(id, newStatus) {
   try {
-    await sbPatch(id, { status });
-    showToast(`✅ Statut → ${STATUS_LABELS[status]}`);
+    const payload = { 
+      status: newStatus,
+      updated_by: currentUser.username || 'Équipe',
+      updated_at: new Date().toISOString()
+    };
+
+    // Si c'est l'acceptation de la commande, on enregistre qui l'a acceptée
+    if (newStatus === 'acceptee') {
+      payload.accepted_by = currentUser.username || 'Équipe';
+      payload.accepted_at = new Date().toISOString();
+    }
+
+    await sbPatch(id, payload);
+
+    const actionName = STATUS_LABELS[newStatus] || newStatus;
+    showToast(`✅ Statut → ${actionName} par ${currentUser.username || 'Équipe'}`);
+
     closeModal();
     await loadAll();
   } catch(e) {
