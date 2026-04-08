@@ -378,12 +378,24 @@ async function loadUsers() {
   }
 }
 // ====================== MODIFIER PERMISSION DIRECTEMENT DANS SUPABASE ======================
+
+// Initialisation Supabase (une seule fois)
 const supabaseUrl = 'https://gktawbaposndfxijkxdk.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdGF3YmFwb3NuZGZ4aWpreGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwNzUyNDUsImV4cCI6MjA3OTY1MTI0NX0.tY-CHuyb2zr9s6hlGkwmrdTvg920VVNghI9S45CjwKk';
 
-const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
+let supabase; // Déclaration sans initialisation immédiate
 
+// Initialiser Supabase une seule fois
+function initSupabase() {
+  if (!supabase) {
+    supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
+  }
+}
+
+// ====================== MODIFIER PERMISSION ======================
 async function editUser(userId, currentPermission) {
+  initSupabase(); // Initialise si ce n'est pas déjà fait
+
   const newPermission = prompt(
     "Modifier la permission de l'utilisateur :\n\n" +
     "Valeurs possibles :\n" +
@@ -406,7 +418,7 @@ async function editUser(userId, currentPermission) {
 
   try {
     const { error } = await supabase
-      .from('users_burgershot')           // Nom de ta table
+      .from('users_burgershot')
       .update({ permission: newPermission })
       .eq('id', userId);
 
@@ -533,6 +545,7 @@ function switchTab(tab) {
 // Init
 window.addEventListener('load', async () => {
   await checkAuth();
+  initSupabase();
   loadUsers();
   loadAliments();
 });
