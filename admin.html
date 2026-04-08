@@ -222,6 +222,7 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.6);
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="fire-bg" id="fireBg"></div>
@@ -343,13 +344,15 @@ async function checkAuth() {
 }
 
 // ====================== UTILISATEURS ======================
+// ====================== CHARGER LES UTILISATEURS ======================
 async function loadUsers() {
   try {
     const res = await fetch(`${API_BASE}/api/admin/users`);
     const data = await res.json();
-    if (!data.success) throw new Error(data.error);
+    if (!data.success) throw new Error(data.error || "Erreur lors du chargement");
 
     const tbody = document.querySelector('#usersTable tbody');
+
     tbody.innerHTML = data.users.map(u => `
       <tr>
         <td>${u.id}</td>
@@ -361,13 +364,63 @@ async function loadUsers() {
             ? `<span style="color:#888;">Protégé</span>`
             : `
               <button class="delete-btn" onclick="deleteUser(${u.id})" style="margin-right:6px;">Supprimer</button>
-              <button onclick="editUser(${u.id}, '${u.permission || "user"}')" style="background:#F5A623; padding:6px 12px; font-size:13px;">Modifier</button>
+              <button onclick="editUser(${u.id}, '${u.permission || "user"}')" 
+                      style="background:#F5A623; color:#000; padding:6px 12px; font-size:13px; border:none; border-radius:4px; cursor:pointer;">
+                Modifier
+              </button>
             `}
         </td>
       </tr>
     `).join('');
   } catch (e) {
     console.error(e);
+    alert("Erreur lors du chargement des utilisateurs");
+  }
+}
+// ====================== MODIFIER PERMISSION DIRECTEMENT DANS SUPABASE ======================
+const supabaseUrl = 'https://gktawbaposndfxijkxdk.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdGF3YmFwb3NuZGZ4aWpreGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwNzUyNDUsImV4cCI6MjA3OTY1MTI0NX0.tY-CHuyb2zr9s6hlGkwmrdTvg920VVNghI9S45CjwKk';
+
+const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+async function editUser(userId, currentPermission) {
+  const newPermission = prompt(
+    "Modifier la permission de l'utilisateur :\n\n" +
+    "Valeurs possibles :\n" +
+    "→ user\n" +
+    "→ employee\n" +
+    "→ admin\n\n" +
+    "Permission actuelle : " + (currentPermission || "user"),
+    currentPermission || "user"
+  );
+
+  if (newPermission === null) return; // Annulé
+
+  const validPermissions = ["user", "employee", "admin"];
+  if (!validPermissions.includes(newPermission)) {
+    alert("Permission invalide !\nUtilise uniquement : user, employee ou admin");
+    return;
+  }
+
+  if (!confirm(`Changer la permission en "${newPermission}" ?`)) return;
+
+  try {
+    const { error } = await supabase
+      .from('users_burgershot')           // Nom de ta table
+      .update({ permission: newPermission })
+      .eq('id', userId);
+
+    if (error) {
+      console.error(error);
+      alert("Erreur Supabase : " + error.message);
+      return;
+    }
+
+    alert(`✅ Permission mise à jour avec succès ! → ${newPermission}`);
+    loadUsers();   // Rafraîchit le tableau
+  } catch (err) {
+    console.error(err);
+    alert("Erreur de connexion à Supabase");
   }
 }
 
