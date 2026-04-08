@@ -329,10 +329,10 @@
     document.getElementById('oc-items').innerHTML = items.map(i => `
       <div class="item-row">
         <span class="item-n">${i.name} <span style="color:rgba(255,255,255,0.35)">×${i.qty}</span></span>
-        <span class="item-p">${(i.price * i.qty).toLocaleString('fr-FR')} DA</span>
+        <span class="item-p">${(i.price * i.qty).toLocaleString('fr-FR')} €</span>
       </div>
     `).join('');
-    document.getElementById('oc-total').textContent = Number(order.total).toLocaleString('fr-FR') + ' DA';
+    document.getElementById('oc-total').textContent = Number(order.total).toLocaleString('fr-FR') + ' €';
 
     // Chat
     const currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
