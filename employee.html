@@ -187,6 +187,14 @@
   <div class="sidebar-item" onclick="showView('all')" id="sideAll">
     📋 Toutes les commandes <span class="sidebar-count gold" id="sideCountAll">0</span>
   </div>
+  
+  <!-- NOUVELLE SECTION : Visible seulement pour owner/IT -->
+  <div id="refusValidationSection" style="display:none">
+    <div class="sidebar-title">Validation</div>
+    <div class="sidebar-item" onclick="showView('refus-validation')" id="sideRefusValidation">
+      ⛔ Validation des refus <span class="sidebar-count" id="sideCountRefus">0</span>
+    </div>
+  </div>
 </div>
 
 <div class="main-content">
@@ -291,6 +299,8 @@ async function init() {
   spawnEmbers();
   await loadAll();
   setInterval(loadAll, 12000);
+  const canValidateRefus = ['owner', 'it'].includes(currentUser.permission);
+  document.getElementById('refusValidationSection').style.display = canValidateRefus ? 'block' : 'none';
 }
 
 // ====================== LOAD ORDERS ======================
@@ -303,6 +313,7 @@ async function loadAll() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     allOrders = await res.json();
     renderCurrentView();
+    renderRefusValidation(); // pour mettre à jour le compteur même si on est pas sur la vue
   } catch(e) {
     showToast(`Erreur Supabase : ${e.message}`, 'error');
     document.getElementById('list-active').innerHTML =
@@ -466,6 +477,10 @@ function renderCurrentView() {
   document.getElementById('list-all').innerHTML = allOrders.length
     ? `<div class="orders-grid">${allOrders.map(renderCard).join('')}</div>`
     : `<div class="empty-state">Aucune commande dans la base</div>`;
+    // Mise à jour de la vue validation refus
+  if (document.getElementById('view-refus-validation').style.display !== 'none') {
+    renderRefusValidation();
+  }
 }
 
 function renderCard(o) {
@@ -620,24 +635,75 @@ async function doUpdate(id, newStatus) {
 }
 
 async function doRefuse(id) {
-  const reason = prompt('Motif du refus :');
+  const reason = prompt('Motif du refus (cela sera soumis aux owners/IT pour validation) :');
   if (!reason?.trim()) return;
+
   try {
-    await sbPatch(id, { status: 'refusee', refus_motif: reason });
-    showToast('Commande refusée');
+    await sbPatch(id, { 
+      status: 'refus_en_attente',
+      refus_motif: reason,
+      refus_demande_par: currentUser.username || 'Employé',
+      refus_demande_at: new Date().toISOString()
+    });
+
+    showToast('✅ Demande de refus envoyée en validation');
     closeModal();
     await loadAll();
   } catch(e) {
     showToast(`Erreur : ${e.message}`, 'error');
   }
 }
+function renderRefusValidation() {
+  const refusEnAttente = allOrders.filter(o => o.status === 'refus_en_attente');
+
+  document.getElementById('sideCountRefus').textContent = refusEnAttente.length;
+
+  const container = document.getElementById('list-refus-validation');
+
+  if (refusEnAttente.length === 0) {
+    container.innerHTML = `<div class="empty-state">🎉 Aucune demande de refus en attente de validation</div>`;
+    return;
+  }
+
+  let html = `<div class="orders-grid">`;
+  refusEnAttente.forEach(o => {
+    const items = parseItems(o.items);
+    const preview = items.slice(0,3).map(i=>`${i.name} ×${i.qty}`).join(', ') || '—';
+
+    html += `
+      <div class="order-card" onclick="openRefusValidationModal(${o.id})" style="border-color: #ef4444;">
+        <div class="oc-top-bar" style="background:rgba(239,68,68,.15)">
+          <div class="oc-id">Commande <span>#${o.id}</span></div>
+          <div class="oc-time">${o.created_at ? new Date(o.created_at).toLocaleTimeString('fr-FR') : '—'}</div>
+        </div>
+        <div class="oc-body">
+          <div class="oc-customer">${o.first_name} ${o.last_name}</div>
+          <div class="oc-delivery">${o.delivery_type==='livraison'?'🚴 Livraison':'🏪 Sur place'}</div>
+          <div class="oc-items-list">${escHtml(preview)}</div>
+          <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,.3);border-radius:8px;font-size:13px;color:#fca5a5">
+            <strong>Demande de refus par :</strong> ${escHtml(o.refus_demande_par || '—')}<br>
+            <strong>Motif :</strong> ${escHtml(o.refus_motif || 'Aucun motif')}
+          </div>
+          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
+        </div>
+        <div class="oc-footer">
+          <span class="status-badge status-refusee">⏳ EN ATTENTE DE VALIDATION</span>
+        </div>
+      </div>`;
+  });
+  html += `</div>`;
+  container.innerHTML = html;
+}
 
 // ====================== UI ======================
 function showView(v) {
   document.getElementById('view-active').style.display = v === 'active' ? 'block' : 'none';
-  document.getElementById('view-all').style.display    = v === 'all'    ? 'block' : 'none';
+  document.getElementById('view-all').style.display = v === 'all' ? 'block' : 'none';
+  document.getElementById('view-refus-validation').style.display = v === 'refus-validation' ? 'block' : 'none';
+
   document.getElementById('sideActive').classList.toggle('active', v === 'active');
-  document.getElementById('sideAll').classList.toggle('active',    v === 'all');
+  document.getElementById('sideAll').classList.toggle('active', v === 'all');
+  document.getElementById('sideRefusValidation').classList.toggle('active', v === 'refus-validation');
 }
 
 function logout() { sessionStorage.removeItem('bs_user'); window.location.href = 'auth.html'; }
