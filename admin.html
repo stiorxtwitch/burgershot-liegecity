@@ -260,10 +260,13 @@
         <input type="text" id="discord_username" placeholder="Discord Username (exact)" required>
         <input type="text" id="discord_user_id" placeholder="Discord User ID" required>
         <input type="password" id="password" placeholder="Mot de passe" required>
-        <select id="permission">
-          <option value="">Civil (aucune permission)</option>
-          <option value="it">IT</option>
-          <option value="admin">Admin</option>
+        <select id="permission" required>
+          <option value="">Sélectionner un rôle</option>
+          <option value="user">Utilisateur (Civil)</option>
+          <option value="employee">Employé</option>
+          <option value="admin">Administrateur</option>
+          <option value="owner">Owner</option>
+          <option value="it">IT / Développeur</option>
         </select>
         <button type="submit">Créer le compte</button>
       </form>
@@ -326,16 +329,16 @@
 
 <script>
 // CONFIG
-const API_BASE = window.location.origin.includes('localhost') 
-  ? 'http://localhost:3000' 
+const API_BASE = window.location.origin.includes('localhost')
+  ? 'http://localhost:3000'
   : 'https://bot-burgershot-3amh.onrender.com';
 
 let currentUser = null;
 
-// Vérification simple (à améliorer avec token plus tard)
+// Vérification d'accès
 async function checkAuth() {
   currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
-  if (!currentUser || !['admin','it'].includes(currentUser.permission || '')) {
+  if (!currentUser || !['admin', 'it'].includes(currentUser.permission || '')) {
     alert("Accès refusé : Vous devez être Admin ou IT");
     window.location.href = "auth.html";
   }
@@ -356,8 +359,8 @@ async function loadUsers() {
         <td>${u.discord_username}</td>
         <td>${u.permission || 'Civil'}</td>
         <td>
-          ${u.permission !== 'admin' ? 
-            `<button class="delete-btn" onclick="deleteUser(${u.id})">Supprimer</button>` : 
+          ${u.permission !== 'admin' ?
+            `<button class="delete-btn" onclick="deleteUser(${u.id})">Supprimer</button>` :
             `<span style="color:#888;">Protégé</span>`}
         </td>
       </tr>
@@ -390,7 +393,8 @@ document.getElementById('userForm').addEventListener('submit', async (e) => {
   });
 
   const data = await res.json();
-  alert(data.success ? 'Compte créé avec succès !' : 'Erreur : ' + data.error);
+  alert(data.success ? 'Compte créé avec succès !' : 'Erreur : ' + (data.error || 'Erreur inconnue'));
+  
   if (data.success) {
     e.target.reset();
     loadUsers();
@@ -402,7 +406,6 @@ async function loadAliments() {
   try {
     const res = await fetch(`${API_BASE}/api/aliments`);
     const aliments = await res.json();
-
     const tbody = document.querySelector('#alimentsTable tbody');
     tbody.innerHTML = aliments.map(a => `
       <tr>
@@ -440,7 +443,8 @@ document.getElementById('alimentForm').addEventListener('submit', async (e) => {
   });
 
   const data = await res.json();
-  alert(data.success ? 'Aliment ajouté avec succès !' : 'Erreur : ' + data.error);
+  alert(data.success ? 'Aliment ajouté avec succès !' : 'Erreur : ' + (data.error || 'Erreur inconnue'));
+  
   if (data.success) {
     e.target.reset();
     loadAliments();
@@ -451,12 +455,12 @@ document.getElementById('alimentForm').addEventListener('submit', async (e) => {
 function switchTab(tab) {
   document.querySelectorAll('#tab-0, #tab-1').forEach(el => el.style.display = 'none');
   document.getElementById(`tab-${tab}`).style.display = 'block';
-  
+ 
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-buttons button')[tab].classList.add('active');
 }
 
-// Embers
+// Embers Effect
 (function spawnEmbers() {
   const bg = document.getElementById('fireBg');
   const colors = ['#FF4500','#FF6200','#FF8C00','#FF2200','#FFB300'];
