@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burger Shot — Recrutement</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #CC1A1A;
+    --red-dark: #8B0000;
+    --red-glow: #FF2222;
+    --gold: #F5A623;
+    --gold-light: #FFD166;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --white: #F5F0E8;
+    --gray: #888;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── FIRE BG ── */
+  .fire-bg {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .ember {
+    position: absolute; bottom: -10px;
+    width: 4px; height: 4px; border-radius: 50%;
+    animation: rise linear infinite;
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.8; }
+    50% { transform: translateY(-40vh) translateX(20px) scale(0.7); opacity: 0.5; }
+    100% { transform: translateY(-90vh) translateX(-10px) scale(0); opacity: 0; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 72px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 100%);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(204,26,26,0.3);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo-icon {
+    width: 44px; height: 44px; background: var(--red); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+    box-shadow: 0 0 16px rgba(204,26,26,0.6);
+    animation: pulse-logo 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-logo {
+    0%,100% { box-shadow: 0 0 16px rgba(204,26,26,0.6); }
+    50% { box-shadow: 0 0 28px rgba(255,34,34,0.9); }
+  }
+  .nav-logo span { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--white); }
+  .nav-logo span em { color: var(--red); font-style: normal; }
+  .nav-links { display: flex; gap: 36px; list-style: none; align-items: center; }
+  .nav-links a {
+    color: var(--white); text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    transition: color 0.2s; position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
+    background: var(--red); transform: scaleX(0); transition: transform 0.25s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-btn {
+    background: var(--red); color: #fff !important;
+    padding: 8px 20px; border-radius: 4px;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+  .nav-btn:hover { background: var(--red-glow) !important; transform: translateY(-1px); }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    position: relative; z-index: 2;
+    padding: 130px 48px 60px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 100%, rgba(204,26,26,0.25) 0%, transparent 70%),
+      linear-gradient(180deg, #0A0A0A 0%, #130000 50%, #0A0A0A 100%);
+    border-bottom: 1px solid rgba(204,26,26,0.15);
+  }
+  .page-header-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(204,26,26,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(204,26,26,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(204,26,26,0.15);
+    border: 1px solid rgba(204,26,26,0.4);
+    border-radius: 100px; padding: 6px 18px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+    animation: fadeUp 0.7s 0.2s both;
+  }
+  .page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 100px);
+    line-height: 0.9; letter-spacing: 4px;
+    animation: fadeUp 0.7s 0.3s both;
+  }
+  .page-title span { color: var(--red); text-shadow: 0 0 40px rgba(204,26,26,0.6); }
+  .page-subtitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-top: 12px;
+    animation: fadeUp 0.7s 0.4s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── FORM CONTAINER ── */
+  .form-container {
+    position: relative; z-index: 2;
+    max-width: 860px; margin: 0 auto;
+    padding: 60px 48px 80px;
+  }
+
+  .form-card {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 48px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    position: relative; overflow: hidden;
+  }
+  .form-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--red));
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ── SECTION TITLES ── */
+  .form-section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 3px; color: var(--gold);
+    margin-bottom: 24px; margin-top: 36px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .form-section-title:first-child { margin-top: 0; }
+  .form-section-title::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(245,166,35,0.4), transparent);
+  }
+
+  /* ── GRID ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-grid.full { grid-template-columns: 1fr; }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+  .field label .req { color: var(--red); margin-left: 3px; }
+  .field input,
+  .field textarea,
+  .field select {
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 13px 16px;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    outline: none;
+    width: 100%;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder { color: rgba(255,255,255,0.25); }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(204,26,26,0.15);
+  }
+  .field input.valid { border-color: #22c55e; }
+  .field input.invalid { border-color: #ef4444; }
+  .field textarea { resize: vertical; min-height: 110px; }
+  .field select option { background: var(--dark3); }
+
+  /* ── DISPONIBILITÉS ── */
+  .avail-grid {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .avail-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 1fr;
+    gap: 10px; align-items: center;
+  }
+  .avail-day {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--white);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .avail-day input[type="checkbox"] {
+    width: 16px; height: 16px; cursor: pointer;
+    accent-color: var(--red);
+  }
+  .avail-time {
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px; padding: 10px 12px;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif; font-size: 14px;
+    width: 100%; transition: border-color 0.25s;
+    outline: none;
+  }
+  .avail-time:focus { border-color: var(--red); }
+  .avail-time:disabled { opacity: 0.3; cursor: not-allowed; }
+  .avail-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); text-align: center;
+  }
+
+  /* ── DISCORD VERIFY ── */
+  .discord-wrapper { position: relative; }
+  .discord-status {
+    position: absolute; right: 14px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    transition: opacity 0.2s;
+  }
+  .field-hint {
+    font-size: 12px; color: rgba(255,255,255,0.35);
+    margin-top: -4px; font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+  }
+  .field-hint.error { color: #ef4444; }
+  .field-hint.success { color: #22c55e; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    margin: 32px 0;
+  }
+
+  /* ── SUBMIT ── */
+  .form-submit { margin-top: 40px; text-align: center; }
+  .btn-submit {
+    background: var(--red);
+    color: #fff; border: none;
+    padding: 18px 56px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 3px;
+    border-radius: 6px; cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 24px rgba(204,26,26,0.5);
+    position: relative; overflow: hidden;
+    display: inline-block;
+  }
+  .btn-submit::before {
+    content: '';
+    position: absolute; top: -100%; left: -100%; width: 300%; height: 300%;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
+    transition: top 0.4s, left 0.4s;
+  }
+  .btn-submit:hover::before { top: -50%; left: -50%; }
+  .btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 36px rgba(204,26,26,0.7);
+    background: var(--red-glow);
+  }
+  .btn-submit:disabled {
+    opacity: 0.5; cursor: not-allowed; transform: none;
+    box-shadow: none;
+  }
+  .submit-note {
+    margin-top: 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── SUCCESS / ERROR MESSAGE ── */
+  .result-box {
+    display: none;
+    border-radius: 8px; padding: 20px 24px;
+    margin-top: 24px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; letter-spacing: 1px;
+    text-align: center;
+  }
+  .result-box.success {
+    display: block;
+    background: rgba(34,197,94,0.12);
+    border: 1px solid rgba(34,197,94,0.4);
+    color: #22c55e;
+  }
+  .result-box.error {
+    display: block;
+    background: rgba(239,68,68,0.12);
+    border: 1px solid rgba(239,68,68,0.4);
+    color: #ef4444;
+  }
+
+  /* ── LOADING SPINNER ── */
+  .spinner {
+    display: none;
+    width: 22px; height: 22px;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { gap: 16px; }
+    .page-header { padding: 120px 20px 40px; }
+    .form-container { padding: 32px 16px 60px; }
+    .form-card { padding: 28px 20px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .avail-row { grid-template-columns: 90px 1fr 1fr; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="fire-bg" id="fireBg"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🍔</div>
+    <span>BURGER<em>SHOT</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="menu.html">La Carte</a></li>
+    <li><a href="orders.html">Mes Commandes</a></li>
+    <li><a href="auth.html" class="nav-btn">Connexion</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="page-header-grid"></div>
+  <div class="header-badge">💼 &nbsp; Nous recrutons · Rejoins l'équipe</div>
+  <h1 class="page-title">RECRU<span>TEMENT</span></h1>
+  <p class="page-subtitle">Rejoins l'équipe Burger Shot — Liège City</p>
+</div>
+
+<!-- FORM -->
+<div class="form-container">
+  <div class="form-card">
+
+    <div class="form-section-title">👤 Informations personnelles</div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Prénom <span class="req">*</span></label>
+        <input type="text" id="first_name" placeholder="Jean" autocomplete="given-name">
+      </div>
+      <div class="field">
+        <label>Nom <span class="req">*</span></label>
+        <input type="text" id="last_name" placeholder="Dupont" autocomplete="family-name">
+      </div>
+      <div class="field">
+        <label>Âge <span class="req">*</span></label>
+        <input type="number" id="age" placeholder="20" min="16" max="99">
+      </div>
+      <div class="field">
+        <label>N° de téléphone <span class="req">*</span></label>
+        <input type="tel" id="phone" placeholder="+32 470 00 00 00" autocomplete="tel">
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="form-section-title">🎮 Compte Discord</div>
+    <div class="form-grid full">
+      <div class="field">
+        <label>Nom d'utilisateur Discord <span class="req">*</span></label>
+        <div class="discord-wrapper">
+          <input type="text" id="discord_username" placeholder="tonpseudo (sans #)" autocomplete="off">
+          <span class="discord-status" id="discordStatus"></span>
+        </div>
+        <span class="field-hint" id="discordHint">Entrez votre pseudo Discord exact (ex: monpseudo)</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="form-section-title">💼 Expérience & Motivations</div>
+    <div class="form-grid full">
+      <div class="field">
+        <label>Expérience dans le domaine <span class="req">*</span></label>
+        <textarea id="experience" placeholder="Décrivez vos expériences passées dans la restauration, le service, ou tout domaine lié..."></textarea>
+      </div>
+      <div class="field">
+        <label>Motivations <span class="req">*</span></label>
+        <textarea id="motivations" placeholder="Pourquoi souhaitez-vous rejoindre l'équipe Burger Shot ? Qu'est-ce qui vous motive ?"></textarea>
+      </div>
+      <div class="field">
+        <label>Pire(s) défaut(s) <span class="req">*</span></label>
+        <textarea id="worst_flaws" placeholder="Soyez honnête — quels sont vos défauts les plus importants ?" style="min-height: 90px;"></textarea>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="form-section-title">📅 Disponibilités</div>
+    <p style="font-size:13px; color:rgba(255,255,255,0.4); margin-bottom:20px; font-family:'Barlow Condensed',sans-serif; letter-spacing:1px;">Cochez les jours disponibles et indiquez vos plages horaires.</p>
+
+    <div class="avail-grid">
+      <div style="display:grid; grid-template-columns: 110px 1fr 1fr; gap:10px; margin-bottom:4px;">
+        <div></div>
+        <div class="avail-label">De (heure)</div>
+        <div class="avail-label">À (heure)</div>
+      </div>
+      <div class="avail-row" data-day="Lundi">
+        <label class="avail-day">
+          <input type="checkbox" class="day-check" data-day="Lundi"> Lundi
+        </label>
+        <input type="time" class="avail-time time-start" data-day="Lundi" disabled>
+        <input type="time" class="avail-time time-end" data-day="Lundi" disabled>
+      </div>
+      <div class="avail-row" data-day="Mardi">
+        <label class="avail-day">
+          <input type="checkbox" class="day-check" data-day="Mardi"> Mardi
+        </label>
+        <input type="time" class="avail-time time-start" data-day="Mardi" disabled>
+        <input type="time" class="avail-time time-end" data-day="Mardi" disabled>
+      </div>
+      <div class="avail-row" data-day="Mercredi">
+        <label class="avail-day">
+          <input type="checkbox" class="day-check" data-day="Mercredi"> Mercredi
+        </label>
+        <input type="time" class="avail-time time-start" data-day="Mercredi" disabled>
+        <input type="time" class="avail-time time-end" data-day="Mercredi" disabled>
+      </div>
+      <div class="avail-row" data-day="Jeudi">
+        <label class="avail-day">
+          <input type="checkbox" class="day-check" data-day="Jeudi"> Jeudi
+        </label>
+        <input type="time" class="avail-time time-start" data-day="Jeudi" disabled>
+        <input type="time" class="avail-time time-end" data-day="Jeudi" disabled>
+      </div>
+      <div class="avail-row" data-day="Vendredi">
+        <label class="avail-day">
+          <input type="checkbox" class="day-check" data-day="Vendredi"> Vendredi
+        </label>
+        <input type="time" class="avail-time time-start" data-day="Vendredi" disabled>
+        <input type="time" class="avail-time time-end" data-day="Vendredi" disabled>
+      </div>
+      <div class="avail-row" data-day="Samedi">
+        <label class="avail-day">
+          <input type="checkbox" class="day-check" data-day="Samedi"> Samedi
+        </label>
+        <input type="time" class="avail-time time-start" data-day="Samedi" disabled>
+        <input type="time" class="avail-time time-end" data-day="Samedi" disabled>
+      </div>
+      <div class="avail-row" data-day="Dimanche">
+        <label class="avail-day">
+          <input type="checkbox" class="day-check" data-day="Dimanche"> Dimanche
+        </label>
+        <input type="time" class="avail-time time-start" data-day="Dimanche" disabled>
+        <input type="time" class="avail-time time-end" data-day="Dimanche" disabled>
+      </div>
+    </div>
+
+    <div class="form-submit">
+      <div class="spinner" id="spinner"></div>
+      <button class="btn-submit" id="submitBtn" onclick="submitForm()">
+        🍔 Envoyer ma candidature
+      </button>
+      <p class="submit-note">En soumettant ce formulaire, vous acceptez que vos informations soient traitées par l'équipe RH de Burger Shot.</p>
+    </div>
+
+    <div class="result-box" id="resultBox"></div>
+
+  </div>
+</div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────
+const API_BASE = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
+  ? 'http://localhost:3000'
+  : 'https://bot-burgershot-3amh.onrender.com';
+
+// ─── EMBERS ───────────────────────────────────
+(function spawnEmbers() {
+  const bg = document.getElementById('fireBg');
+  const colors = ['#FF4500','#FF6200','#FF8C00','#FF2200','#FFB300'];
+  setInterval(() => {
+    const e = document.createElement('div');
+    e.className = 'ember';
+    e.style.left = Math.random() * 100 + 'vw';
+    e.style.width = e.style.height = (Math.random() * 5 + 2) + 'px';
+    e.style.background = colors[Math.floor(Math.random() * colors.length)];
+    e.style.boxShadow = `0 0 6px ${colors[0]}`;
+    e.style.animationDuration = (Math.random() * 4 + 3) + 's';
+    e.style.animationDelay = (Math.random() * 2) + 's';
+    bg.appendChild(e);
+    setTimeout(() => e.remove(), 8000);
+  }, 120);
+})();
+
+// ─── DISPONIBILITÉS : activer/désactiver les champs ───────────────
+document.querySelectorAll('.day-check').forEach(cb => {
+  cb.addEventListener('change', function() {
+    const day = this.dataset.day;
+    const row = document.querySelector(`.avail-row[data-day="${day}"]`);
+    const inputs = row.querySelectorAll('.avail-time');
+    inputs.forEach(inp => {
+      inp.disabled = !this.checked;
+      if (!this.checked) inp.value = '';
+    });
+  });
+});
+
+// ─── VÉRIFICATION DISCORD (debounce) ─────────────────────────────
+let discordTimer = null;
+let discordValid = false;
+
+document.getElementById('discord_username').addEventListener('input', function() {
+  clearTimeout(discordTimer);
+  const val = this.value.trim();
+  const statusEl = document.getElementById('discordStatus');
+  const hintEl = document.getElementById('discordHint');
+  discordValid = false;
+
+  if (!val) {
+    statusEl.textContent = '';
+    hintEl.textContent = 'Entrez votre pseudo Discord exact (ex: monpseudo)';
+    hintEl.className = 'field-hint';
+    return;
+  }
+
+  statusEl.textContent = '🔄';
+  hintEl.textContent = 'Vérification en cours...';
+  hintEl.className = 'field-hint';
+
+  discordTimer = setTimeout(async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/verify-discord`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discord_username: val })
+      });
+      const data = await res.json();
+      if (data.found) {
+        statusEl.textContent = '✅';
+        hintEl.textContent = `Compte trouvé : ${data.tag}`;
+        hintEl.className = 'field-hint success';
+        discordValid = true;
+      } else {
+        statusEl.textContent = '❌';
+        hintEl.textContent = 'Compte Discord introuvable sur le serveur.';
+        hintEl.className = 'field-hint error';
+        discordValid = false;
+      }
+    } catch (e) {
+      statusEl.textContent = '⚠️';
+      hintEl.textContent = 'Impossible de vérifier (serveur hors ligne ?)';
+      hintEl.className = 'field-hint error';
+    }
+  }, 700);
+});
+
+// ─── COLLECTE DES DISPONIBILITÉS ─────────────────────────────────
+function getAvailability() {
+  const availability = {};
+  document.querySelectorAll('.day-check:checked').forEach(cb => {
+    const day = cb.dataset.day;
+    const row = document.querySelector(`.avail-row[data-day="${day}"]`);
+    const start = row.querySelector('.time-start').value;
+    const end = row.querySelector('.time-end').value;
+    availability[day] = { start: start || '—', end: end || '—' };
+  });
+  return availability;
+}
+
+// ─── SOUMISSION ───────────────────────────────
+async function submitForm() {
+  const btn = document.getElementById('submitBtn');
+  const spinner = document.getElementById('spinner');
+  const resultBox = document.getElementById('resultBox');
+
+  const first_name   = document.getElementById('first_name').value.trim();
+  const last_name    = document.getElementById('last_name').value.trim();
+  const age          = document.getElementById('age').value.trim();
+  const phone        = document.getElementById('phone').value.trim();
+  const discord_username = document.getElementById('discord_username').value.trim();
+  const experience   = document.getElementById('experience').value.trim();
+  const motivations  = document.getElementById('motivations').value.trim();
+  const worst_flaws  = document.getElementById('worst_flaws').value.trim();
+  const availability = getAvailability();
+
+  // Validation
+  if (!first_name || !last_name || !age || !phone || !discord_username || !experience || !motivations || !worst_flaws) {
+    showResult('error', '❌ Tous les champs obligatoires doivent être remplis.');
+    return;
+  }
+  if (!discordValid) {
+    showResult('error', '❌ Votre compte Discord n\'a pas été trouvé sur le serveur. Vérifiez votre pseudo.');
+    return;
+  }
+  if (Object.keys(availability).length === 0) {
+    showResult('error', '❌ Veuillez sélectionner au moins un jour de disponibilité.');
+    return;
+  }
+
+  // Envoi
+  btn.disabled = true;
+  spinner.style.display = 'block';
+  btn.textContent = 'Envoi en cours...';
+  resultBox.className = 'result-box';
+  resultBox.style.display = 'none';
+
+  try {
+    const res = await fetch(`${API_BASE}/api/recruitment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        first_name, last_name, age: parseInt(age),
+        phone, discord_username, experience,
+        availability, motivations, worst_flaws
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      showResult('success', `✅ Candidature envoyée avec succès ! Un ticket a été créé sur le serveur Discord. Vérifiez vos messages Discord.`);
+      btn.textContent = '✅ Candidature envoyée !';
+      // Vider le formulaire
+      setTimeout(() => {
+        document.querySelectorAll('input[type="text"], input[type="number"], input[type="tel"], textarea').forEach(el => el.value = '');
+        document.querySelectorAll('.day-check:checked').forEach(cb => { cb.checked = false; cb.dispatchEvent(new Event('change')); });
+        document.getElementById('discordStatus').textContent = '';
+        document.getElementById('discordHint').textContent = 'Entrez votre pseudo Discord exact (ex: monpseudo)';
+        document.getElementById('discordHint').className = 'field-hint';
+        discordValid = false;
+        btn.textContent = '🍔 Envoyer ma candidature';
+        btn.disabled = false;
+      }, 4000);
+    } else {
+      let msg = '❌ Une erreur est survenue. Veuillez réessayer.';
+      if (data.error === 'discord_not_found') msg = '❌ Votre compte Discord est introuvable sur le serveur.';
+      else if (data.error) msg = `❌ Erreur : ${data.error}`;
+      showResult('error', msg);
+      btn.textContent = '🍔 Envoyer ma candidature';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    showResult('error', '❌ Impossible de contacter le serveur. Vérifiez votre connexion.');
+    btn.textContent = '🍔 Envoyer ma candidature';
+    btn.disabled = false;
+  }
+
+  spinner.style.display = 'none';
+}
+
+function showResult(type, msg) {
+  const box = document.getElementById('resultBox');
+  box.className = `result-box ${type}`;
+  box.textContent = msg;
+  box.style.display = 'block';
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+</body>
+</html>
