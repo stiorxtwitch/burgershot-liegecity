@@ -290,10 +290,8 @@ let activeModalTab = 'details';
 const STATUS_LABELS = {
   en_attente: 'En attente',
   acceptee: 'Acceptée',
-  recue: 'Reçue',
   preparation: 'En préparation',
   finalisation: 'Finalisation',
-  livraison: 'En livraison',
   termine: 'Terminée',
   reglee: 'Réglée',
   refusee: 'Refusée',
@@ -315,11 +313,11 @@ async function init() {
     document.getElementById('adminLink').style.display = 'inline-flex';
   }
 
-  // Afficher la section Validation des refus seulement pour owner/IT
+  // Afficher section validation refus seulement pour owner/IT
   const refusSection = document.getElementById('refusValidationSection');
   if (refusSection) {
-    const canValidateRefus = ['owner', 'it'].includes(currentUser.permission);
-    refusSection.style.display = canValidateRefus ? 'block' : 'none';
+    const canValidate = ['owner', 'it'].includes(currentUser.permission);
+    refusSection.style.display = canValidate ? 'block' : 'none';
   }
 
   spawnEmbers();
@@ -330,10 +328,8 @@ async function init() {
 // ====================== LOAD ORDERS ======================
 async function loadAll() {
   try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/${ORDERS_TABLE}?select=*&order=created_at.desc`,
-      { headers: SB_HEADERS }
-    );
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${ORDERS_TABLE}?select=*&order=created_at.desc`, 
+      { headers: SB_HEADERS });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     
     allOrders = await res.json();
@@ -341,139 +337,20 @@ async function loadAll() {
     renderRefusValidation();
   } catch(e) {
     showToast(`Erreur Supabase : ${e.message}`, 'error');
-    document.getElementById('list-active').innerHTML =
-      `<div class="empty-state">❌ Impossible de charger les commandes<br><small style="opacity:.5;font-size:12px">${e.message}</small></div>`;
   }
 }
 
 // ====================== SUPABASE PATCH ======================
 async function sbPatch(orderId, payload) {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/${ORDERS_TABLE}?id=eq.${orderId}`,
-    { method: 'PATCH', headers: SB_HEADERS, body: JSON.stringify(payload) }
-  );
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${ORDERS_TABLE}?id=eq.${orderId}`, 
+    { method: 'PATCH', headers: SB_HEADERS, body: JSON.stringify(payload) });
   if (!res.ok) {
-    const e = await res.json();
-    throw new Error(e.message || `HTTP ${res.status}`);
+    const err = await res.json();
+    throw new Error(err.message || `HTTP ${res.status}`);
   }
 }
 
-// ====================== MESSAGES ======================
-async function loadMessages(orderId) {
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/${MESSAGES_TABLE}?id_commande=eq.${orderId}&order=created_at.asc&select=*`,
-      { headers: SB_HEADERS }
-    );
-    if (!res.ok) return [];
-    return await res.json();
-  } catch {
-    return [];
-  }
-}
-
-async function sendMessage() {
-  if (!currentOrder) return;
-  const input = document.getElementById('chatInput');
-  const content = input.value.trim();
-  if (!content) return;
-
-  const btn = document.getElementById('chatSendBtn');
-  btn.disabled = true;
-  input.value = '';
-  autoResize(input);
-
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/${MESSAGES_TABLE}`,
-      {
-        method: 'POST',
-        headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' },
-        body: JSON.stringify({
-          id_commande: currentOrder.id,
-          username: currentUser.username || 'Équipe',
-          message: content,
-        })
-      }
-    );
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    await refreshChat(true);
-    showToast('Message envoyé');
-  } catch(e) {
-    showToast(`Erreur : ${e.message}`, 'error');
-  }
-  btn.disabled = false;
-  input.focus();
-}
-
-async function refreshChat(scrollBottom = false) {
-  if (!currentOrder) return;
-  const messages = await loadMessages(currentOrder.id);
-
-  if (activeModalTab === 'details') {
-    const clientMsgs = messages.filter(m => m.username !== (currentUser.username));
-    const newOnes = clientMsgs.filter(m => !lastMsgIds.has(m.id));
-    if (newOnes.length > 0) {
-      document.getElementById('chatTabBadge').classList.add('show');
-    }
-  }
-  messages.forEach(m => lastMsgIds.add(m.id));
-  renderMessages(messages, scrollBottom);
-}
-
-function renderMessages(messages, scrollBottom = false) {
-  const container = document.getElementById('chatMessages');
-  if (!messages || messages.length === 0) {
-    container.innerHTML = '<div class="chat-empty">💬 Aucun message pour le moment.<br><span style="opacity:.5;font-size:12px">Envoyez un message pour communiquer avec le client.</span></div>';
-    return;
-  }
-
-  const currentUsername = (currentUser && currentUser.username) ? currentUser.username.toLowerCase() : '';
-  
-  container.innerHTML = messages.map(m => {
-    const msgUsername = (m.username || '').toLowerCase();
-    const isEmployee = msgUsername === currentUsername ||
-                       msgUsername === 'mldev' ||
-                       msgUsername.includes('employé') ||
-                       msgUsername.includes('staff') ||
-                       msgUsername.includes('burger');
-
-    const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' }) : '';
-    const avatar = isEmployee ? '👨‍🍳' : '🙋';
-    const sideClass = isEmployee ? 'from-employee' : 'from-client';
-
-    return `
-      <div class="msg-row ${sideClass}">
-        <div class="msg-avatar">${avatar}</div>
-        <div>
-          <div class="msg-name">${escHtml(m.username || (isEmployee ? 'Équipe Burger Shot' : 'Client'))}</div>
-          <div class="msg-bubble">
-            <div class="msg-text">${escHtml(m.message || m.messages)}</div>
-            <div class="msg-time">${time}</div>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
-
-  if (scrollBottom) container.scrollTop = container.scrollHeight;
-}
-
-function escHtml(str) {
-  return String(str || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/\n/g,'<br>');
-}
-
-function handleChatKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
-}
-
-// ====================== RENDER CARDS ======================
+// ====================== RENDER ======================
 function parseItems(items) {
   if (!items) return [];
   if (Array.isArray(items)) return items;
@@ -481,23 +358,23 @@ function parseItems(items) {
 }
 
 function renderCurrentView() {
-  const active = allOrders.filter(o => !['reglee','refusee','refus_en_attente'].includes(o.status || ''));
-
+  const active = allOrders.filter(o => !['reglee','refusee'].includes(o.status || ''));
+  
   document.getElementById('sideCountActive').textContent = active.length;
   document.getElementById('sideCountAll').textContent = allOrders.length;
 
-  document.getElementById('list-active').innerHTML = active.length
-    ? `<div class="orders-grid">${active.map(renderCard).join('')}</div>`
+  document.getElementById('list-active').innerHTML = active.length 
+    ? `<div class="orders-grid">${active.map(renderCard).join('')}</div>` 
     : `<div class="empty-state">🎉 Aucune commande active</div>`;
 
-  document.getElementById('list-all').innerHTML = allOrders.length
-    ? `<div class="orders-grid">${allOrders.map(renderCard).join('')}</div>`
+  document.getElementById('list-all').innerHTML = allOrders.length 
+    ? `<div class="orders-grid">${allOrders.map(renderCard).join('')}</div>` 
     : `<div class="empty-state">Aucune commande dans la base</div>`;
 }
 
 function renderCard(o) {
   const items = parseItems(o.items);
-  const preview = items.slice(0,3).map(i=>`${i.name} ×${i.qty}`).join(', ') || '—';
+  const preview = items.slice(0,3).map(i => `${i.name} ×${i.qty}`).join(', ') || '—';
   const status = o.status || 'en_attente';
 
   return `
@@ -513,11 +390,51 @@ function renderCard(o) {
         <div class="oc-total">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
       </div>
       <div class="oc-footer">
-          <span class="status-badge status-${status}">${STATUS_LABELS[status]||status}</span>
-          ${o.accepted_by ? `<small style="opacity:0.65; margin-left:8px;">✓ ${escHtml(o.accepted_by)}</small>` : ''}
-          <span class="oc-chat-hint">💬 Discussion</span>
+        <span class="status-badge status-${status}">${STATUS_LABELS[status]||status}</span>
+        ${o.accepted_by ? `<small style="opacity:0.65; margin-left:8px;">✓ ${escHtml(o.accepted_by)}</small>` : ''}
+        <span class="oc-chat-hint">💬 Discussion</span>
       </div>
     </div>`;
+}
+
+function renderRefusValidation() {
+  const refusEnAttente = allOrders.filter(o => o.status === 'refus_en_attente');
+  document.getElementById('sideCountRefus').textContent = refusEnAttente.length;
+
+  const container = document.getElementById('list-refus-validation');
+  if (!container) return;
+
+  if (refusEnAttente.length === 0) {
+    container.innerHTML = `<div class="empty-state">🎉 Aucune demande de refus en attente</div>`;
+    return;
+  }
+
+  let html = `<div class="orders-grid">`;
+  refusEnAttente.forEach(o => {
+    const items = parseItems(o.items);
+    const preview = items.slice(0,3).map(i => `${i.name} ×${i.qty}`).join(', ') || '—';
+    html += `
+      <div class="order-card" onclick="openRefusValidationModal(${o.id})" style="border-color:#ef4444;">
+        <div class="oc-top-bar" style="background:rgba(239,68,68,.15)">
+          <div class="oc-id">Commande <span>#${o.id}</span></div>
+          <div class="oc-time">${o.created_at ? new Date(o.created_at).toLocaleTimeString('fr-FR') : '—'}</div>
+        </div>
+        <div class="oc-body">
+          <div class="oc-customer">${o.first_name} ${o.last_name}</div>
+          <div class="oc-delivery">${o.delivery_type==='livraison'?'🚴 Livraison':'🏪 Sur place'}</div>
+          <div class="oc-items-list">${escHtml(preview)}</div>
+          <div style="margin-top:12px;padding:12px;background:rgba(0,0,0,.4);border-radius:8px;color:#fca5a5">
+            <strong>Motif :</strong> ${escHtml(o.refus_motif || '—')}
+          </div>
+          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
+        </div>
+        <div class="oc-footer">
+          <span class="status-badge status-refusee">⏳ EN ATTENTE DE VALIDATION</span>
+        </div>
+      </div>`;
+  });
+  html += `</div>`;
+  container.innerHTML = html;
 }
 
 // ====================== MODAL ======================
@@ -697,56 +614,97 @@ function renderRefusValidation() {
 // ====================== MODAL VALIDATION REFUS ======================
 async function openRefusValidationModal(orderId) {
   currentOrder = allOrders.find(o => o.id === orderId);
-  if (!currentOrder) {
-    showToast("Commande introuvable", "error");
-    return;
-  }
+  if (!currentOrder) return;
 
-  const modalOrderIdEl = document.getElementById('modalOrderId');
-  const modalBody = document.getElementById('modalBody');
-  const modalActions = document.getElementById('modalActions');
+  document.getElementById('modalOrderId').innerHTML = `Validation Refus — Commande <span>#${currentOrder.id}</span>`;
 
-  modalOrderIdEl.innerHTML = `Validation Refus — Commande <span>#${currentOrder.id}</span>`;
-
-  modalBody.innerHTML = `
+  document.getElementById('modalBody').innerHTML = `
     <div class="modal-section full">
       <div class="ms-title">DEMANDE DE REFUS</div>
-      <div style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.4); padding:18px; border-radius:12px; margin-bottom:16px;">
+      <div style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);padding:18px;border-radius:12px;">
         <strong>Demandeur :</strong> ${escHtml(currentOrder.refus_demande_par || 'Employé')}<br>
-        <strong>Date de la demande :</strong> ${currentOrder.refus_demande_at ? new Date(currentOrder.refus_demande_at).toLocaleString('fr-FR') : '—'}<br><br>
-        <strong>Motif fourni :</strong><br>
-        <span style="color:#fca5a5; font-size:15px; line-height:1.5;">${escHtml(currentOrder.refus_motif || 'Aucun motif fourni')}</span>
+        <strong>Date :</strong> ${currentOrder.refus_demande_at ? new Date(currentOrder.refus_demande_at).toLocaleString('fr-FR') : '—'}<br><br>
+        <strong>Motif :</strong><br>
+        <span style="color:#fca5a5;font-size:15px;">${escHtml(currentOrder.refus_motif || 'Aucun motif')}</span>
       </div>
     </div>
-
     <div class="modal-section full">
-      <div class="ms-title">DÉTAILS DE LA COMMANDE</div>
+      <div class="ms-title">COMMANDE</div>
       <div class="ms-info">
-        Client : <strong>${escHtml(currentOrder.first_name || '')} ${escHtml(currentOrder.last_name || '')}</strong><br>
-        Téléphone : ${escHtml(currentOrder.phone || '—')}<br>
-        Type : <strong>${currentOrder.delivery_type === 'livraison' ? '🚴 Livraison' : '🏪 Sur place'}</strong><br>
-        Total : <strong style="color:var(--gold); font-size:18px;">${Number(currentOrder.total || 0).toLocaleString('fr-FR')} DA</strong>
+        Client : <strong>${escHtml(currentOrder.first_name)} ${escHtml(currentOrder.last_name)}</strong><br>
+        Total : <strong style="color:var(--gold)">${Number(currentOrder.total||0).toLocaleString('fr-FR')} DA</strong>
       </div>
     </div>`;
 
-  // Actions de validation (uniquement pour owner/IT)
-  modalActions.innerHTML = `
-    <button class="btn btn-refuse" onclick="validateRefus(${currentOrder.id}, true)" 
-            style="background:#ef4444; color:white; padding:14px 24px; font-size:16px;">
-      ✅ Valider le refus définitivement
+  document.getElementById('modalActions').innerHTML = `
+    <button class="btn btn-refuse" onclick="validateRefus(${orderId}, true)" style="background:#ef4444;color:white;">
+      ✅ Valider le refus
     </button>
-    
-    <button class="btn btn-accept" onclick="validateRefus(${currentOrder.id}, false)" 
-            style="padding:14px 24px; font-size:16px;">
-      🔄 Rejeter la demande et remettre en attente
+    <button class="btn btn-accept" onclick="validateRefus(${orderId}, false)">
+      🔄 Rejeter la demande
     </button>
   `;
 
-  // On cache l'onglet Discussion pour cette modal
   document.getElementById('tabBtnChat').style.display = 'none';
   switchModalTab('details', document.getElementById('tabBtnDetails'));
-
   document.getElementById('modalOverlay').classList.add('open');
+}
+
+async function validateRefus(orderId, approve) {
+  if (!confirm(approve ? "Valider le refus définitivement ?" : "Rejeter la demande et remettre en attente ?")) return;
+
+  try {
+    const payload = { updated_by: currentUser.username || 'IT/Owner', updated_at: new Date().toISOString() };
+
+    if (approve) {
+      payload.status = 'refusee';
+    } else {
+      payload.status = 'en_attente';
+      payload.refus_motif = null;
+      payload.refus_demande_par = null;
+      payload.refus_demande_at = null;
+    }
+
+    await sbPatch(orderId, payload);
+    showToast(approve ? '✅ Refus validé' : '🔄 Demande rejetée');
+    closeModal();
+    await loadAll();
+  } catch(e) {
+    showToast(`Erreur : ${e.message}`, 'error');
+  }
+}
+
+// ====================== UI ======================
+function showView(v) {
+  document.getElementById('view-active').style.display = v === 'active' ? 'block' : 'none';
+  document.getElementById('view-all').style.display = v === 'all' ? 'block' : 'none';
+  document.getElementById('view-refus-validation').style.display = v === 'refus-validation' ? 'block' : 'none';
+
+  document.getElementById('sideActive').classList.toggle('active', v === 'active');
+  document.getElementById('sideAll').classList.toggle('active', v === 'all');
+  if (document.getElementById('sideRefusValidation')) {
+    document.getElementById('sideRefusValidation').classList.toggle('active', v === 'refus-validation');
+  }
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('tabBtnChat').style.display = 'block';
+  clearInterval(chatPollInterval);
+  currentOrder = null;
+}
+
+function switchModalTab(tab, btn) {
+  activeModalTab = tab;
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.modal-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                         .replace(/"/g,'&quot;').replace(/\n/g,'<br>');
 }
 
 function logout() { 
