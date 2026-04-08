@@ -383,12 +383,12 @@ async function loadUsers() {
 const supabaseUrl = 'https://gktawbaposndfxijkxdk.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdGF3YmFwb3NuZGZ4aWpreGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwNzUyNDUsImV4cCI6MjA3OTY1MTI0NX0.tY-CHuyb2zr9s6hlGkwmrdTvg920VVNghI9S45CjwKk';
 
-let supabase; // Déclaration sans initialisation immédiate
+let supabaseClient; // Déclaration sans initialisation immédiate
 
 // Initialiser Supabase une seule fois
 function initSupabase() {
-  if (!supabase) {
-    supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
+  if (!supabaseClient) {
+    supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
   }
 }
 
@@ -417,7 +417,7 @@ async function editUser(userId, currentPermission) {
   if (!confirm(`Changer la permission en "${newPermission}" ?`)) return;
 
   try {
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .from('users_burgershot')
       .update({ permission: newPermission })
       .eq('id', userId);
