@@ -351,26 +351,30 @@
   // ====================== RENDER MESSAGES ======================
   function renderMessages(messages, currentUser) {
     const msgEl = document.getElementById('oc-messages');
-
     if (!messages || messages.length === 0) {
       msgEl.innerHTML = '<div class="no-messages">Aucun message pour l\'instant.</div>';
       return;
     }
 
-    // On distingue "client" vs "staff" selon le username :
-    // Les messages du client sont ceux dont le username correspond à l'utilisateur connecté
-    // (ou si pas connecté, on affiche tout comme staff côté client)
-    const myUsername = currentUser ? currentUser.username : null;
+    // Username du client connecté
+    const myUsername = currentUser ? (currentUser.username || '').trim() : null;
 
     msgEl.innerHTML = messages.map(m => {
-      // Si le message vient du même username que le client connecté → from-client
-      const isClient = myUsername && m.username === myUsername;
-      const time = new Date(m.created_at).toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      const msgUsername = (m.username || '').trim();
+
+      // Un message est du CLIENT si le username correspond à celui connecté
+      const isClient = myUsername && msgUsername === myUsername;
+
+      const time = m.created_at 
+        ? new Date(m.created_at).toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit' }) 
+        : '';
 
       return `
         <div class="msg ${isClient ? 'from-client' : 'from-staff'}">
-          <div class="msg-meta">${isClient ? '👤 Vous' : '👨‍🍳 ' + (m.username || 'Burger Shot')} · ${time}</div>
-          <div class="msg-text">${escHtml(m.messages)}</div>
+          <div class="msg-meta">
+            ${isClient ? '👤 Vous' : '👨‍🍳 ' + escHtml(m.username || 'Burger Shot')} · ${time}
+          </div>
+          <div class="msg-text">${escHtml(m.message || m.messages)}</div>
         </div>
       `;
     }).join('');
