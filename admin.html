@@ -363,8 +363,8 @@ async function loadUsers() {
           ${['admin', 'owner'].includes(u.permission) 
             ? `<span style="color:#888;">Protégé</span>`
             : `
-              <button class="delete-btn" onclick="deleteUser(${u.id})" style="margin-right:6px;">Supprimer</button>
-              <button onclick="editUser(${u.id}, '${u.permission || "user"}')" 
+              <button class="delete-btn" onclick="deleteUser('${u.id}')" style="margin-right:6px;">Supprimer</button>
+              <button onclick="editUser('${u.id}', '${u.permission || 'user'}')" 
                       style="background:#F5A623; color:#000; padding:6px 12px; font-size:13px; border:none; border-radius:4px; cursor:pointer;">
                 Modifier
               </button>
