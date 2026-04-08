@@ -550,98 +550,59 @@ window.addEventListener('load', async () => {
   loadAliments();
 });
 
-  // ====================== MODIFIER UTILISATEUR (Permission) ======================
-let editingUserId = null;
+// ====================== MODIFIER PERMISSION DIRECTEMENT DANS SUPABASE ======================
+// Initialisation Supabase (une seule fois)
+const supabaseUrl = 'https://gktawbaposndfxijkxdk.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdGF3YmFwb3NuZGZ4aWpreGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwNzUyNDUsImV4cCI6MjA3OTY1MTI0NX0.tY-CHuyb2zr9s6hlGkwmrdTvg920VVNghI9S45CjwKk';
+
+let supabase = null;   // ← Important : null au départ
+
+function initSupabase() {
+  if (!supabase) {
+    supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
+  }
+}
 
 async function editUser(userId, currentPermission) {
+  initSupabase();
+
   const newPermission = prompt(
     "Modifier la permission de l'utilisateur :\n\n" +
-    "Valeurs possibles : user, employee, admin\n\n" +
+    "Valeurs possibles :\n" +
+    "→ user\n" +
+    "→ employee\n" +
+    "→ admin\n\n" +
     "Permission actuelle : " + (currentPermission || "user"),
     currentPermission || "user"
   );
 
-  if (!newPermission) return;
-  if (!["user", "employee", "admin"].includes(newPermission)) {
-    alert("Permission invalide ! Utilise : user, employee ou admin");
+  if (newPermission === null) return;
+
+  const validPermissions = ["user", "employee", "admin"];
+  if (!validPermissions.includes(newPermission)) {
+    alert("Permission invalide !\nUtilise uniquement : user, employee ou admin");
     return;
   }
 
   if (!confirm(`Changer la permission en "${newPermission}" ?`)) return;
 
   try {
-    const res = await fetch(`${API_BASE}/api/admin/users/${userId}/permission`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ permission: newPermission })
-    });
+    const { error } = await supabase
+      .from('users_burgershot')
+      .update({ permission: newPermission })
+      .eq('id', userId);
 
-    const data = await res.json();
-    if (data.success) {
-      alert("Permission mise à jour avec succès !");
-      loadUsers();
-    } else {
-      alert("Erreur : " + (data.error || "Impossible de modifier"));
-    }
-  } catch (e) {
-    alert("Erreur de connexion");
-    console.error(e);
-  }
-}
-
-// ====================== MODIFIER ALIMENT ======================
-let editingAlimentId = null;
-
-async function editAliment(alimentId) {
-  // Récupérer les infos actuelles de l'aliment
-  try {
-    const res = await fetch(`${API_BASE}/api/aliments`);
-    const aliments = await res.json();
-    const aliment = aliments.find(a => a.id === alimentId);
-
-    if (!aliment) {
-      alert("Aliment non trouvé");
+    if (error) {
+      console.error(error);
+      alert("Erreur Supabase : " + error.message);
       return;
     }
 
-    const newName = prompt("Nouveau nom :", aliment.name);
-    if (newName === null) return; // Annulé
-
-    const newDescription = prompt("Nouvelle description :", aliment.description);
-    if (newDescription === null) return;
-
-    const newPriceStr = prompt("Nouveau prix (€) :", aliment.price);
-    if (newPriceStr === null) return;
-    const newPrice = parseFloat(newPriceStr);
-
-    if (!newName || isNaN(newPrice)) {
-      alert("Nom et prix sont obligatoires et le prix doit être un nombre");
-      return;
-    }
-
-    if (!confirm("Enregistrer les modifications ?")) return;
-
-    const resUpdate = await fetch(`${API_BASE}/api/admin/aliments/${alimentId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: newName.trim(),
-        description: newDescription.trim(),
-        price: newPrice,
-        category: aliment.category // on garde la catégorie pour l'instant
-      })
-    });
-
-    const data = await resUpdate.json();
-    if (data.success) {
-      alert("Aliment modifié avec succès !");
-      loadAliments();
-    } else {
-      alert("Erreur : " + (data.error || "Impossible de modifier"));
-    }
-  } catch (e) {
-    console.error(e);
-    alert("Erreur lors de la modification");
+    alert(`✅ Permission mise à jour avec succès ! → ${newPermission}`);
+    loadUsers();
+  } catch (err) {
+    console.error(err);
+    alert("Erreur de connexion à Supabase");
   }
 }
 </script>
