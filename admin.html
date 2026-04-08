@@ -265,8 +265,6 @@
           <option value="user">Utilisateur (Civil)</option>
           <option value="employee">Employé</option>
           <option value="admin">Administrateur</option>
-          <option value="owner">Owner</option>
-          <option value="it">IT / Développeur</option>
         </select>
         <button type="submit">Créer le compte</button>
       </form>
@@ -296,7 +294,7 @@
       <form id="alimentForm" class="form-grid">
         <input type="text" id="a_name" placeholder="Nom de l'aliment" required>
         <textarea id="a_description" rows="3" placeholder="Description de l'aliment" required></textarea>
-        <input type="number" id="a_price" placeholder="Prix en DA" required>
+        <input type="number" id="a_price" placeholder="Prix en €" required>
         <select id="a_category" required>
           <option value="">Choisir catégorie</option>
           <option value="Burgers">Burgers</option>
@@ -359,7 +357,7 @@ async function loadUsers() {
         <td>${u.discord_username}</td>
         <td>${u.permission || 'Civil'}</td>
         <td>
-          ${u.permission !== 'admin' ?
+          ${u.permission !== 'admin', 'owner' ?
             `<button class="delete-btn" onclick="deleteUser(${u.id})">Supprimer</button>` :
             `<span style="color:#888;">Protégé</span>`}
         </td>
