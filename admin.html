@@ -527,7 +527,7 @@ async function editAliment(id, currentName, currentPrice, currentDescription, cu
 
   try {
     const { error } = await supabaseClient
-      .from('aliments')
+      .from('aliments_burgershot')
       .update({
         name: newName.trim(),
         price: parseInt(newPrice),
