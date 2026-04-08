@@ -28,25 +28,21 @@
   @keyframes pulseLogo { 0%,100% { box-shadow: 0 0 16px rgba(204,26,26,0.6); } 50% { box-shadow: 0 0 28px rgba(255,34,34,0.9); } }
   .nav-logo span { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--white); }
   .nav-logo span em { color: var(--red); font-style: normal; }
-
   .nav-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: flex-end; }
   .nav-user { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 1px; color: rgba(255,255,255,0.5); }
   .nav-user strong { color: var(--gold); }
-
   .nav-logout { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); padding: 7px 16px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
   .nav-logout:hover { border-color: var(--red-err); color: var(--red-err); }
-
   .nav-orders-link, .nav-management-link {
-    font-family: 'Barlow Condensed', sans-serif; 
-    font-size: 12px; 
-    letter-spacing: 1px; 
-    padding: 7px 14px; 
-    border-radius: 4px; 
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 7px 14px;
+    border-radius: 4px;
     transition: all 0.2s;
   }
   .nav-orders-link { color: var(--gold); text-decoration: none; border: 1px solid rgba(245,166,35,0.3); }
   .nav-orders-link:hover { background: rgba(245,166,35,0.1); }
-  
   .nav-management-link {
     background: #22c55e;
     color: #000;
@@ -55,7 +51,6 @@
     border: none;
   }
   .nav-management-link:hover { background: #4ade80; transform: translateY(-1px); }
-
   .nav-admin-btn {
     background: var(--gold);
     color: var(--black);
@@ -202,12 +197,10 @@
   <div class="nav-right">
     <a href="orders.html" class="nav-orders-link">📋 Mes commandes</a>
     
-    <!-- Bouton Gestion Commandes - Visible pour employee, admin, owner, it -->
     <a href="employee.html" id="nav-management-btn" class="nav-management-link" style="display: none;">
       📋 Gestion Commandes
     </a>
-
-    <!-- Bouton Gestion Admin/IT -->
+    
     <a href="admin.html" id="nav-admin-btn" class="nav-admin-btn" style="display: none;">⚙️ Gestion</a>
     
     <span class="nav-user">Connecté : <strong id="nav-username">—</strong></span>
@@ -222,7 +215,6 @@
       <h2 class="section-title">LA <span>CARTE</span></h2>
       <div class="section-line"></div>
     </div>
-
     <div class="menu-tabs">
       <button class="tab-btn active" onclick="switchTab('burgers', this)">🍔 Burgers</button>
       <button class="tab-btn" onclick="switchTab('brochettes', this)">🍢 Brochettes</button>
@@ -309,8 +301,8 @@
 <div class="success-overlay" id="successOverlay">
   <div class="success-box">
     <div class="success-icon">✅</div>
-    <h2>COMMANDE ENVOYÉE !</h2>
-    <p>Ta commande a bien été reçue. Vérifie tes DMs Discord pour la confirmation et les mises à jour.</p>
+    <h2>COMMANDE ENREGISTRÉE !</h2>
+    <p>Ta commande a bien été sauvegardée dans le système.</p>
     <div class="success-order-id" id="successOrderId">Commande #—</div>
     <div class="success-btns">
       <a href="#" id="suiviBtn" class="btn-suivi">📦 Suivre ma commande</a>
@@ -337,7 +329,7 @@ if (!currentUser) {
     document.getElementById('nav-admin-btn').style.display = 'inline-block';
   }
 
-  // Bouton Gestion Commandes - Visible pour : employee, admin, owner, it
+  // Bouton Gestion Commandes
   const allowedRoles = ['employee', 'admin', 'owner', 'it'];
   if (allowedRoles.includes(currentUser.permission)) {
     document.getElementById('nav-management-btn').style.display = 'inline-block';
@@ -349,12 +341,12 @@ function logout() {
   window.location.href = 'auth.html';
 }
 
-// ─── CHARGEMENT DYNAMIQUE DES ALIMENTS ──────────────────────────────
+// ─── CHARGEMENT ALIMENTS ──────────────────────────────
 async function loadAliments() {
   try {
     const res = await fetch(`${API_BASE}/api/aliments`);
     if (!res.ok) throw new Error('Erreur serveur');
-   
+    
     const aliments = await res.json();
     const grouped = aliments.reduce((acc, item) => {
       const cat = item.category || 'Autres';
@@ -458,6 +450,7 @@ function toggleDelivery() {
   document.getElementById('delivery-fields').classList.toggle('show', v === 'livraison');
 }
 
+// ─── PLACE ORDER → Enregistre dans Supabase ──────────────────────────────
 async function placeOrder() {
   const firstname = document.getElementById('o-firstname').value.trim();
   const lastname = document.getElementById('o-lastname').value.trim();
@@ -474,10 +467,6 @@ async function placeOrder() {
   if (delivery === 'livraison' && (!address || !zip)) 
     return showModalBanner(banner, '⚠️ Adresse et ZIP requis pour la livraison.', 'err');
 
-  const discordUsername = currentUser.discord_username;
-  if (!discordUsername) 
-    return showModalBanner(banner, '❌ Erreur : discord_username manquant. Reconnecte-toi.', 'err');
-
   const items = Object.entries(cart).map(([name, v]) => ({ name, price: v.price, qty: v.qty }));
   const total = items.reduce((s, i) => s + i.price * i.qty, 0);
 
@@ -491,8 +480,8 @@ async function placeOrder() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         user_id: currentUser.id,
-        discord_username: discordUsername,
-        discord_user_id: currentUser.discord_user_id,
+        discord_username: currentUser.discord_username || null,
+        discord_user_id: currentUser.discord_user_id || null,
         first_name: firstname,
         last_name: lastname,
         phone,
@@ -505,10 +494,13 @@ async function placeOrder() {
     });
 
     const data = await res.json();
+
     if (data.success) {
-      cart = {};
+      cart = {};                    // Vider le panier
       updateCartUI();
       closeOrderModal();
+
+      // Affichage succès avec l'ID retourné par Supabase
       document.getElementById('successOrderId').textContent = `Commande #${data.order_id}`;
       document.getElementById('suiviBtn').href = `suivi.html?id=${data.order_id}`;
       document.getElementById('successOverlay').classList.add('open');
@@ -516,6 +508,7 @@ async function placeOrder() {
       showModalBanner(banner, `❌ Erreur : ${data.error || 'Erreur inconnue'}`, 'err');
     }
   } catch (e) {
+    console.error(e);
     showModalBanner(banner, '⚠️ Impossible de contacter le serveur.', 'err');
   }
 
@@ -546,7 +539,7 @@ function switchTab(tab, btn) {
   btn.classList.add('active');
 }
 
-// Embers Effect
+// Embers
 (function() {
   const bg = document.getElementById('fireBg');
   const colors = ['#FF4500','#FF6200','#FF8C00','#FF2200','#FFB300'];
