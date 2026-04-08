@@ -35,7 +35,6 @@
   .page-header h1 em { color: var(--red); font-style: normal; }
   .page-header p { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 2px; color: rgba(255,255,255,0.35); margin-top: 8px; }
 
-  /* LOADING */
   .loading-state { text-align: center; padding: 60px; color: rgba(255,255,255,0.3); font-size: 15px; font-style: italic; }
   .spinner { display: inline-block; width: 40px; height: 40px; border: 3px solid rgba(204,26,26,0.2); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -44,14 +43,12 @@
   .error-state .err-icon { font-size: 56px; margin-bottom: 16px; }
   .error-state p { color: rgba(255,255,255,0.4); font-size: 15px; }
 
-  /* ORDER CARD */
   .order-card { background: var(--dark2); border: 1px solid rgba(204,26,26,0.2); border-radius: 16px; padding: 36px; margin-bottom: 24px; }
   .order-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
   .order-id { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 3px; color: var(--white); }
   .order-id span { color: var(--red); }
   .order-date { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-top: 4px; }
 
-  /* STATUS BADGE */
   .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 100px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; }
   .status-en_attente  { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); }
   .status-acceptee    { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
@@ -63,7 +60,6 @@
   .status-reglee      { background: rgba(34,197,94,0.25); border: 1px solid rgba(34,197,94,0.5); color: var(--green); }
   .status-refusee     { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: var(--red-err); }
 
-  /* PROGRESS BAR */
   .progress-bar { margin-bottom: 32px; }
   .progress-steps { display: flex; align-items: center; justify-content: space-between; position: relative; }
   .progress-steps::before { content: ''; position: absolute; top: 16px; left: 8px; right: 8px; height: 2px; background: rgba(255,255,255,0.1); z-index: 0; }
@@ -76,13 +72,11 @@
   .step-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.3); text-align: center; max-width: 60px; }
   .step-label.active { color: var(--gold); }
 
-  /* DETAILS */
   .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
   .detail-item { background: var(--dark3); border-radius: 8px; padding: 16px; }
   .detail-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
   .detail-value { font-size: 15px; color: var(--white); line-height: 1.5; }
 
-  /* ITEMS LIST */
   .items-section { background: var(--dark3); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
   .items-section h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 14px; }
   .item-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; }
@@ -93,25 +87,25 @@
   .total-row span:first-child { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); }
   .total-row span:last-child { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--gold); }
 
-  /* REFUSAL */
   .refusal-box { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 16px; margin-bottom: 20px; }
   .refusal-box strong { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--red-err); margin-bottom: 6px; }
   .refusal-box p { font-size: 14px; color: rgba(255,255,255,0.6); }
 
-  /* MESSAGES / CHAT */
   .messages-card { background: var(--dark2); border: 1px solid rgba(79,122,248,0.2); border-radius: 16px; padding: 28px; }
-  .messages-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; margin-bottom: 20px; color: var(--blue); display:flex;align-items:center;gap:10px }
-  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;animation:livePulse 2s infinite}
-  @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
+  .messages-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; margin-bottom: 20px; color: var(--blue); display:flex; align-items:center; gap:10px; }
+  .live-dot { width:8px; height:8px; border-radius:50%; background:var(--green); display:inline-block; animation:livePulse 2s infinite; }
+  @keyframes livePulse { 0%,100% { box-shadow:0 0 0 0 rgba(34,197,94,.6); } 50% { box-shadow:0 0 0 6px rgba(34,197,94,0); } }
   .no-messages { color: rgba(255,255,255,0.3); font-size: 14px; font-style: italic; text-align: center; padding: 20px 0; }
   .chat-msgs-wrap { display:flex; flex-direction:column; gap:10px; margin-bottom:18px; max-height:320px; overflow-y:auto; padding:4px 0; }
-  .chat-msgs-wrap::-webkit-scrollbar{width:4px}
-  .chat-msgs-wrap::-webkit-scrollbar-thumb{background:rgba(79,122,248,.3);border-radius:4px}
+  .chat-msgs-wrap::-webkit-scrollbar { width:4px; }
+  .chat-msgs-wrap::-webkit-scrollbar-thumb { background:rgba(79,122,248,.3); border-radius:4px; }
+
   .msg { padding: 12px 16px; border-radius: 10px; max-width: 85%; font-size: 14px; line-height: 1.5; }
   .msg.from-staff { background: rgba(204,26,26,0.1); border: 1px solid rgba(204,26,26,0.2); align-self: flex-start; }
   .msg.from-client { background: rgba(79,122,248,0.1); border: 1px solid rgba(79,122,248,0.2); align-self: flex-end; text-align:right; }
   .msg-meta { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-bottom: 5px; }
   .msg-text { color: rgba(255,255,255,0.85); }
+
   .chat-input-row { display:flex; gap:10px; }
   .chat-input { flex:1; background:var(--dark3); border:1px solid rgba(79,122,248,0.2); color:var(--white); border-radius:6px; padding:12px 16px; font-family:'Barlow',sans-serif; font-size:14px; transition:border-color .2s; }
   .chat-input::placeholder { color:rgba(255,255,255,0.2); }
@@ -119,7 +113,6 @@
   .chat-send { background:var(--blue); color:#fff; border:none; border-radius:6px; padding:12px 20px; cursor:pointer; font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:1.5px; transition:all .2s; white-space:nowrap; }
   .chat-send:hover { background:#3d66e6; transform:translateY(-1px); }
 
-  /* REFRESH */
   .refresh-row { display: flex; justify-content: center; margin-top: 28px; }
   .refresh-btn { background: transparent; border: 1px solid rgba(204,26,26,0.3); color: rgba(255,255,255,0.4); padding: 10px 24px; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
   .refresh-btn:hover { border-color: var(--red); color: var(--white); }
@@ -127,7 +120,13 @@
   .back-link { display: inline-flex; align-items: center; gap: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 1px; color: rgba(255,255,255,0.35); text-decoration: none; margin-bottom: 32px; transition: color 0.2s; }
   .back-link:hover { color: var(--gold); }
 
-  @media (max-width: 600px) { nav { padding: 0 16px; } main { padding: 90px 16px 40px; } .details-grid { grid-template-columns: 1fr; } .order-card { padding: 24px 18px; } .step-label { font-size: 9px; max-width: 50px; } }
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; }
+    main { padding: 90px 16px 40px; }
+    .details-grid { grid-template-columns: 1fr; }
+    .order-card { padding: 24px 18px; }
+    .step-label { font-size: 9px; max-width: 50px; }
+  }
 </style>
 </head>
 <body>
@@ -171,21 +170,16 @@
         <div class="status-badge" id="oc-status-badge">—</div>
       </div>
 
-      <!-- PROGRESS -->
       <div class="progress-bar" id="progress-bar-wrap">
-        <div class="progress-steps" id="progress-steps">
-          <!-- injecté en JS -->
-        </div>
+        <div class="progress-steps" id="progress-steps"></div>
         <div class="progress-fill" id="progress-fill" style="width:0%"></div>
       </div>
 
-      <!-- REFUSAL -->
       <div class="refusal-box" id="refusal-box" style="display:none">
         <strong>❌ Motif du refus</strong>
         <p id="refusal-reason">—</p>
       </div>
 
-      <!-- DETAILS -->
       <div class="details-grid">
         <div class="detail-item"><div class="detail-label">👤 Client</div><div class="detail-value" id="oc-name">—</div></div>
         <div class="detail-item"><div class="detail-label">📞 Téléphone</div><div class="detail-value" id="oc-phone">—</div></div>
@@ -193,7 +187,6 @@
         <div class="detail-item"><div class="detail-label" id="oc-addr-label">📍 Adresse</div><div class="detail-value" id="oc-addr">—</div></div>
       </div>
 
-      <!-- ITEMS -->
       <div class="items-section">
         <h4>🛒 Articles commandés</h4>
         <div id="oc-items">—</div>
@@ -204,10 +197,12 @@
       </div>
     </div>
 
-    <!-- CHAT BIDIRECTIONNEL -->
+    <!-- CHAT -->
     <div class="messages-card">
       <h3>💬 Chat commande <span class="live-dot" style="margin-left:4px"></span></h3>
-      <div class="chat-msgs-wrap" id="oc-messages"><div class="no-messages">Aucun message pour l'instant.</div></div>
+      <div class="chat-msgs-wrap" id="oc-messages">
+        <div class="no-messages">Aucun message pour l'instant.</div>
+      </div>
       <div class="chat-input-row" id="chatInputRow" style="display:none">
         <input type="text" class="chat-input" id="chatMsgInput" placeholder="Écrire un message à l'équipe…" maxlength="500" onkeydown="if(event.key==='Enter')sendClientMsg()">
         <button class="chat-send" onclick="sendClientMsg()">Envoyer →</button>
@@ -224,45 +219,63 @@
 </main>
 
 <script>
-  const API_BASE = window.location.origin.includes('localhost')
-    ? 'http://localhost:3000'
-    : 'https://bot-burgershot-3amh.onrender.com'; // ← MODIFIER ICI
+  // ====================== CONFIG SUPABASE ======================
+  const SUPABASE_URL = 'https://gktawbaposndfxijkxdk.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdGF3YmFwb3NuZGZ4aWpreGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwNzUyNDUsImV4cCI6MjA3OTY1MTI0NX0.tY-CHuyb2zr9s6hlGkwmrdTvg920VVNghI9S45CjwKk';
+  const SB_HEADERS = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json'
+  };
+  const ORDERS_TABLE   = 'orders_burgershot';
+  const MESSAGES_TABLE = 'messages_burgershot';
 
+  // ====================== LABELS & STEPS ======================
   const STATUS_LABELS = {
     en_attente: '⏳ En attente', acceptee: '✅ Acceptée', refusee: '❌ Refusée',
     recue: '📥 Reçue', preparation: '🍳 En préparation', finalisation: '🔍 Finalisation',
     termine: '✅ Terminée', livraison: '🚴 En livraison', reglee: '💰 Réglée',
   };
 
-  // Steps pour la barre de progression (hors refusee)
   const STEPS = [
-    { key: 'en_attente', label: 'Reçue', icon: '📥' },
-    { key: 'acceptee',   label: 'Acceptée', icon: '✅' },
-    { key: 'preparation',label: 'Prépa', icon: '🍳' },
-    { key: 'finalisation',label: 'Final', icon: '🔍' },
-    { key: 'termine',    label: 'Prête', icon: '🏁' },
+    { key: 'en_attente',  label: 'Reçue',    icon: '📥' },
+    { key: 'acceptee',    label: 'Acceptée',  icon: '✅' },
+    { key: 'preparation', label: 'Prépa',     icon: '🍳' },
+    { key: 'finalisation',label: 'Final',     icon: '🔍' },
+    { key: 'termine',     label: 'Prête',     icon: '🏁' },
   ];
 
-  const STEP_ORDER = ['en_attente','acceptee','recue','preparation','finalisation','livraison','termine','reglee'];
-
-  const params = new URLSearchParams(window.location.search);
+  const params  = new URLSearchParams(window.location.search);
   const orderId = params.get('id');
 
+  // ====================== LOAD ORDER ======================
   async function loadOrder() {
     if (!orderId) { showError(); return; }
 
     document.getElementById('loading-state').style.display = 'block';
     document.getElementById('order-content').style.display = 'none';
-    document.getElementById('error-state').style.display = 'none';
+    document.getElementById('error-state').style.display   = 'none';
 
     try {
-      const res = await fetch(`${API_BASE}/api/order/${orderId}`);
-      const data = await res.json();
+      // Récupère la commande
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/${ORDERS_TABLE}?id=eq.${orderId}&select=*`,
+        { headers: SB_HEADERS }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const orders = await res.json();
+      if (!orders || orders.length === 0) { showError(); return; }
 
-      if (!data.success || !data.order) { showError(); return; }
+      // Récupère les messages
+      const msgRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/${MESSAGES_TABLE}?id_commande=eq.${orderId}&order=created_at.asc&select=*`,
+        { headers: SB_HEADERS }
+      );
+      const messages = msgRes.ok ? await msgRes.json() : [];
 
-      renderOrder(data.order, data.messages || []);
+      renderOrder(orders[0], messages);
     } catch (e) {
+      console.error(e);
       showError();
     }
 
@@ -271,9 +284,10 @@
 
   function showError() {
     document.getElementById('loading-state').style.display = 'none';
-    document.getElementById('error-state').style.display = 'block';
+    document.getElementById('error-state').style.display   = 'block';
   }
 
+  // ====================== RENDER ORDER ======================
   function renderOrder(order, messages) {
     document.getElementById('order-content').style.display = 'block';
 
@@ -281,36 +295,36 @@
     document.getElementById('oc-id').innerHTML = `Commande <span>#${order.id}</span>`;
     document.getElementById('oc-date').textContent = new Date(order.created_at).toLocaleString('fr-FR');
 
-    // Status badge
+    // Badge statut
     const badge = document.getElementById('oc-status-badge');
     badge.textContent = STATUS_LABELS[order.status] || order.status;
-    badge.className = `status-badge status-${order.status}`;
+    badge.className   = `status-badge status-${order.status}`;
 
-    // Refusal
-    if (order.status === 'refusee' && order.refusal_reason) {
+    // Refus
+    if (order.status === 'refusee' && order.refus_motif) {
       document.getElementById('refusal-box').style.display = 'block';
-      document.getElementById('refusal-reason').textContent = order.refusal_reason;
+      document.getElementById('refusal-reason').textContent = order.refus_motif;
     } else {
       document.getElementById('refusal-box').style.display = 'none';
     }
 
-    // Progress
+    // Barre de progression
     renderProgress(order.status, order.delivery_type);
 
-    // Details
-    document.getElementById('oc-name').textContent = `${order.first_name} ${order.last_name}`;
-    document.getElementById('oc-phone').textContent = order.phone || '—';
+    // Détails
+    document.getElementById('oc-name').textContent    = `${order.first_name} ${order.last_name}`;
+    document.getElementById('oc-phone').textContent   = order.phone || '—';
     document.getElementById('oc-delivery').textContent = order.delivery_type === 'livraison' ? '🚴 Livraison' : '🏪 Sur place';
 
     if (order.delivery_type === 'livraison') {
       document.getElementById('oc-addr-label').textContent = '📍 Adresse';
-      document.getElementById('oc-addr').textContent = `${order.address || '—'} (ZIP: ${order.zip_code || '—'})`;
+      document.getElementById('oc-addr').textContent       = `${order.address || '—'} (ZIP: ${order.zip_code || '—'})`;
     } else {
       document.getElementById('oc-addr-label').textContent = '📍 Mode';
-      document.getElementById('oc-addr').textContent = 'Sur place au restaurant';
+      document.getElementById('oc-addr').textContent       = 'Sur place au restaurant';
     }
 
-    // Items
+    // Articles
     const items = Array.isArray(order.items) ? order.items : JSON.parse(order.items || '[]');
     document.getElementById('oc-items').innerHTML = items.map(i => `
       <div class="item-row">
@@ -320,11 +334,10 @@
     `).join('');
     document.getElementById('oc-total').textContent = Number(order.total).toLocaleString('fr-FR') + ' DA';
 
-    // Messages / Chat
+    // Chat
     const currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
-    const msgEl = document.getElementById('oc-messages');
-    const chatInput = document.getElementById('chatInputRow');
-    const chatNotice = document.getElementById('chatLoginNotice');
+    const chatInput   = document.getElementById('chatInputRow');
+    const chatNotice  = document.getElementById('chatLoginNotice');
 
     if (currentUser) {
       chatInput.style.display = 'flex';
@@ -332,58 +345,83 @@
       chatNotice.style.display = 'block';
     }
 
-    if (messages.length === 0) {
+    renderMessages(messages, currentUser);
+  }
+
+  // ====================== RENDER MESSAGES ======================
+  function renderMessages(messages, currentUser) {
+    const msgEl = document.getElementById('oc-messages');
+
+    if (!messages || messages.length === 0) {
       msgEl.innerHTML = '<div class="no-messages">Aucun message pour l\'instant.</div>';
-    } else {
-      msgEl.innerHTML = messages.map(m => {
-        const isClient = !m.sender_role || m.sender_role === 'client';
-        return `
-          <div class="msg ${isClient ? 'from-client' : 'from-staff'}">
-            <div class="msg-meta">${isClient ? '👤 Vous' : '👨‍🍳 ' + (m.sender_name || 'Burger Shot')} · ${new Date(m.created_at).toLocaleString('fr-FR', {hour:'2-digit',minute:'2-digit'})}</div>
-            <div class="msg-text">${m.content}</div>
-          </div>
-        `;
-      }).join('');
-      msgEl.scrollTop = msgEl.scrollHeight;
+      return;
+    }
+
+    // On distingue "client" vs "staff" selon le username :
+    // Les messages du client sont ceux dont le username correspond à l'utilisateur connecté
+    // (ou si pas connecté, on affiche tout comme staff côté client)
+    const myUsername = currentUser ? currentUser.username : null;
+
+    msgEl.innerHTML = messages.map(m => {
+      // Si le message vient du même username que le client connecté → from-client
+      const isClient = myUsername && m.username === myUsername;
+      const time = new Date(m.created_at).toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+      return `
+        <div class="msg ${isClient ? 'from-client' : 'from-staff'}">
+          <div class="msg-meta">${isClient ? '👤 Vous' : '👨‍🍳 ' + (m.username || 'Burger Shot')} · ${time}</div>
+          <div class="msg-text">${escHtml(m.messages)}</div>
+        </div>
+      `;
+    }).join('');
+
+    msgEl.scrollTop = msgEl.scrollHeight;
+  }
+
+  // ====================== SEND MESSAGE (CLIENT) ======================
+  async function sendClientMsg() {
+    const input       = document.getElementById('chatMsgInput');
+    const content     = input.value.trim();
+    if (!content) return;
+
+    const currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
+    if (!currentUser) return;
+
+    input.value = '';
+
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/${MESSAGES_TABLE}`,
+        {
+          method: 'POST',
+          headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' },
+          body: JSON.stringify({
+            id_commande: parseInt(orderId),
+            username:    currentUser.username,
+            messages:    content,
+          })
+        }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      await loadOrder();
+    } catch(e) {
+      console.error('Erreur envoi message :', e);
     }
   }
 
-  async function sendClientMsg() {
-    const input = document.getElementById('chatMsgInput');
-    const content = input.value.trim();
-    if (!content) return;
-    const currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
-    if (!currentUser) { return; }
-    input.value = '';
-    try {
-      const res = await fetch(`${API_BASE}/api/orders/${orderId}/messages`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-          content,
-          sender_id: currentUser.id,
-          sender_name: currentUser.username,
-          sender_role: 'client'
-        })
-      });
-      const data = await res.json();
-      if (data.success) { loadOrder(); }
-    } catch(e) {}
-  }
-
+  // ====================== PROGRESS BAR ======================
   function renderProgress(currentStatus, deliveryType) {
     let steps = [...STEPS];
     if (deliveryType === 'livraison') {
-      // Insère livraison avant termine
       steps.splice(4, 0, { key: 'livraison', label: 'Livraison', icon: '🚴' });
     }
 
     const currentIdx = steps.findIndex(s => s.key === currentStatus);
+    const stepsEl    = document.getElementById('progress-steps');
 
-    const stepsEl = document.getElementById('progress-steps');
     stepsEl.innerHTML = steps.map((s, i) => {
       let dotClass = '';
-      if (i < currentIdx) dotClass = 'done';
+      if (i < currentIdx)      dotClass = 'done';
       else if (i === currentIdx) dotClass = 'current';
       return `
         <div class="step">
@@ -393,27 +431,32 @@
       `;
     }).join('');
 
-    // Fill width
     const pct = steps.length <= 1 ? 0 : Math.min((currentIdx / (steps.length - 1)) * 100, 100);
     document.getElementById('progress-fill').style.width = pct + '%';
   }
 
-  // Auto-refresh toutes les 20s
+  function escHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ====================== INIT ======================
   loadOrder();
   setInterval(loadOrder, 20000);
 
   // Embers
   (function() {
-    const bg = document.getElementById('fireBg');
+    const bg     = document.getElementById('fireBg');
     const colors = ['#FF4500','#FF6200','#FF8C00'];
     setInterval(() => {
-      const e = document.createElement('div'); e.className = 'ember';
-      e.style.left = Math.random() * 100 + 'vw';
-      e.style.width = e.style.height = (Math.random() * 4 + 2) + 'px';
-      e.style.background = colors[Math.floor(Math.random() * colors.length)];
+      const e = document.createElement('div');
+      e.className = 'ember';
+      e.style.left            = Math.random() * 100 + 'vw';
+      e.style.width           = e.style.height = (Math.random() * 4 + 2) + 'px';
+      e.style.background      = colors[Math.floor(Math.random() * colors.length)];
       e.style.animationDuration = (Math.random() * 5 + 4) + 's';
-      e.style.animationDelay = Math.random() * 2 + 's';
-      bg.appendChild(e); setTimeout(() => e.remove(), 10000);
+      e.style.animationDelay  = Math.random() * 2 + 's';
+      bg.appendChild(e);
+      setTimeout(() => e.remove(), 10000);
     }, 150);
   })();
 </script>
