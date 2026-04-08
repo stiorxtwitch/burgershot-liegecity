@@ -338,7 +338,7 @@ let currentUser = null;
 // Vérification d'accès
 async function checkAuth() {
   currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
-  if (!currentUser || !['admin', 'it', 'owner'].includes(currentUser.permission || '')) {
+  if (!currentUser || !['it', 'owner'].includes(currentUser.permission || '')) {
     alert("Accès refusé : Vous devez être Admin ou IT");
     window.location.href = "auth.html";
   }
