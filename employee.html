@@ -394,27 +394,35 @@ function renderMessages(messages, scrollBottom = false) {
     return;
   }
 
-  // Côté employé, on considère comme "from-employee" tout message dont le username
-  // correspond à un membre du staff (= l'employé connecté ou tout autre que le client).
-  // On n'a pas de champ sender_type, donc on compare avec le username du client.
-  // Pour simplifier : les messages de l'employé connecté → from-employee, le reste → from-client.
-  // Si un autre employé répond, on peut l'afficher aussi en from-employee.
-  // Règle : si username === currentUser.username → from-employee, sinon → from-client.
-  // (Adapte selon ta logique de gestion des rôles si nécessaire.)
+  const currentUsername = (currentUser && currentUser.username) ? currentUser.username.toLowerCase() : '';
 
   container.innerHTML = messages.map(m => {
-    const isEmployee = m.username === currentUser.username;
-    const time = m.created_at
-      ? new Date(m.created_at).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' })
+    const msgUsername = (m.username || '').toLowerCase();
+    
+    // Un message est considéré comme venant de l'employé si :
+    // - c'est le username de l'employé connecté
+    // - OU le username contient des mots typiques du staff (tu peux en ajouter)
+    const isEmployee = 
+      msgUsername === currentUsername ||
+      msgUsername === 'mldev' ||
+      msgUsername.includes('employé') ||
+      msgUsername.includes('staff') ||
+      msgUsername.includes('burger');
+
+    const time = m.created_at 
+      ? new Date(m.created_at).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' }) 
       : '';
+
     const avatar = isEmployee ? '👨‍🍳' : '🙋';
+    const sideClass = isEmployee ? 'from-employee' : 'from-client';
+
     return `
-      <div class="msg-row ${isEmployee ? 'from-employee' : 'from-client'}">
+      <div class="msg-row ${sideClass}">
         <div class="msg-avatar">${avatar}</div>
         <div>
-          <div class="msg-name">${escHtml(m.username || '?')}</div>
+          <div class="msg-name">${escHtml(m.username || (isEmployee ? 'Équipe Burger Shot' : 'Client'))}</div>
           <div class="msg-bubble">
-            <div class="msg-text">${escHtml(m.messages)}</div>
+            <div class="msg-text">${escHtml(m.message || m.messages)}</div>   <!-- important : m.message ou m.messages -->
             <div class="msg-time">${time}</div>
           </div>
         </div>
