@@ -387,7 +387,7 @@ function renderCard(o) {
         <div class="oc-customer">${o.first_name||''} ${o.last_name||''}</div>
         <div class="oc-delivery">${o.delivery_type==='livraison'?'🚴 Livraison':'🏪 Sur place'}</div>
         <div class="oc-items-list">${escHtml(preview)}</div>
-        <div class="oc-total">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
+        <div class="oc-total">${Number(o.total||0).toLocaleString('fr-FR')} €</div>
       </div>
       <div class="oc-footer">
         <span class="status-badge status-${status}">${STATUS_LABELS[status]||status}</span>
@@ -426,7 +426,7 @@ function renderRefusValidation() {
           <div style="margin-top:12px;padding:12px;background:rgba(0,0,0,.4);border-radius:8px;color:#fca5a5">
             <strong>Motif :</strong> ${escHtml(o.refus_motif || '—')}
           </div>
-          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
+          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} €</div>
         </div>
         <div class="oc-footer">
           <span class="status-badge status-refusee">⏳ EN ATTENTE DE VALIDATION</span>
@@ -476,10 +476,10 @@ async function openModal(orderId) {
     <div class="modal-section full">
       <div class="ms-title">Articles</div>
       <table class="items-table">
-        ${items.map(i=>`<tr><td>${escHtml(i.name)}</td><td style="color:rgba(255,255,255,.4)">×${i.qty}</td><td>${(Number(i.price)*Number(i.qty)).toLocaleString('fr-FR')} DA</td></tr>`).join('')}
+        ${items.map(i=>`<tr><td>${escHtml(i.name)}</td><td style="color:rgba(255,255,255,.4)">×${i.qty}</td><td>${(Number(i.price)*Number(i.qty)).toLocaleString('fr-FR')} €</td></tr>`).join('')}
       </table>
       <div style="margin-top:16px;text-align:right;font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold)">
-        TOTAL : ${Number(currentOrder.total||0).toLocaleString('fr-FR')} DA
+        TOTAL : ${Number(currentOrder.total||0).toLocaleString('fr-FR')} €
       </div>
     </div>`;
 
@@ -600,7 +600,7 @@ function renderRefusValidation() {
             <strong>Demande de refus par :</strong> ${escHtml(o.refus_demande_par || '—')}<br>
             <strong>Motif :</strong> ${escHtml(o.refus_motif || 'Aucun motif')}
           </div>
-          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
+          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} €</div>
         </div>
         <div class="oc-footer">
           <span class="status-badge status-refusee">⏳ EN ATTENTE DE VALIDATION</span>
@@ -632,7 +632,7 @@ async function openRefusValidationModal(orderId) {
       <div class="ms-title">COMMANDE</div>
       <div class="ms-info">
         Client : <strong>${escHtml(currentOrder.first_name)} ${escHtml(currentOrder.last_name)}</strong><br>
-        Total : <strong style="color:var(--gold)">${Number(currentOrder.total||0).toLocaleString('fr-FR')} DA</strong>
+        Total : <strong style="color:var(--gold)">${Number(currentOrder.total||0).toLocaleString('fr-FR')} €</strong>
       </div>
     </div>`;
 
