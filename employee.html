@@ -694,30 +694,59 @@ function renderRefusValidation() {
   container.innerHTML = html;
 }
 
-function openRefusValidationModal(orderId) {
-  alert("Modal de validation des refus pas encore implémentée.\n\nCommande #" + orderId + " sélectionnée.\n\nJe te la ferai dans le prochain message si tu veux.");
-  // Ici on ajoutera plus tard la vraie modal avec boutons Valider Refus / Rejeter la demande
-}
+// ====================== MODAL VALIDATION REFUS ======================
+async function openRefusValidationModal(orderId) {
+  currentOrder = allOrders.find(o => o.id === orderId);
+  if (!currentOrder) {
+    showToast("Commande introuvable", "error");
+    return;
+  }
 
-// ====================== UI ======================
-function showView(v) {
-  // Gestion sécurisée des vues
-  const viewActive = document.getElementById('view-active');
-  const viewAll = document.getElementById('view-all');
-  const viewRefus = document.getElementById('view-refus-validation');
+  const modalOrderIdEl = document.getElementById('modalOrderId');
+  const modalBody = document.getElementById('modalBody');
+  const modalActions = document.getElementById('modalActions');
 
-  if (viewActive) viewActive.style.display = (v === 'active') ? 'block' : 'none';
-  if (viewAll) viewAll.style.display = (v === 'all') ? 'block' : 'none';
-  if (viewRefus) viewRefus.style.display = (v === 'refus-validation') ? 'block' : 'none';
+  modalOrderIdEl.innerHTML = `Validation Refus — Commande <span>#${currentOrder.id}</span>`;
 
-  // Gestion sidebar
-  const sideActive = document.getElementById('sideActive');
-  const sideAll = document.getElementById('sideAll');
-  const sideRefus = document.getElementById('sideRefusValidation');
+  modalBody.innerHTML = `
+    <div class="modal-section full">
+      <div class="ms-title">DEMANDE DE REFUS</div>
+      <div style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.4); padding:18px; border-radius:12px; margin-bottom:16px;">
+        <strong>Demandeur :</strong> ${escHtml(currentOrder.refus_demande_par || 'Employé')}<br>
+        <strong>Date de la demande :</strong> ${currentOrder.refus_demande_at ? new Date(currentOrder.refus_demande_at).toLocaleString('fr-FR') : '—'}<br><br>
+        <strong>Motif fourni :</strong><br>
+        <span style="color:#fca5a5; font-size:15px; line-height:1.5;">${escHtml(currentOrder.refus_motif || 'Aucun motif fourni')}</span>
+      </div>
+    </div>
 
-  if (sideActive) sideActive.classList.toggle('active', v === 'active');
-  if (sideAll) sideAll.classList.toggle('active', v === 'all');
-  if (sideRefus) sideRefus.classList.toggle('active', v === 'refus-validation');
+    <div class="modal-section full">
+      <div class="ms-title">DÉTAILS DE LA COMMANDE</div>
+      <div class="ms-info">
+        Client : <strong>${escHtml(currentOrder.first_name || '')} ${escHtml(currentOrder.last_name || '')}</strong><br>
+        Téléphone : ${escHtml(currentOrder.phone || '—')}<br>
+        Type : <strong>${currentOrder.delivery_type === 'livraison' ? '🚴 Livraison' : '🏪 Sur place'}</strong><br>
+        Total : <strong style="color:var(--gold); font-size:18px;">${Number(currentOrder.total || 0).toLocaleString('fr-FR')} DA</strong>
+      </div>
+    </div>`;
+
+  // Actions de validation (uniquement pour owner/IT)
+  modalActions.innerHTML = `
+    <button class="btn btn-refuse" onclick="validateRefus(${currentOrder.id}, true)" 
+            style="background:#ef4444; color:white; padding:14px 24px; font-size:16px;">
+      ✅ Valider le refus définitivement
+    </button>
+    
+    <button class="btn btn-accept" onclick="validateRefus(${currentOrder.id}, false)" 
+            style="padding:14px 24px; font-size:16px;">
+      🔄 Rejeter la demande et remettre en attente
+    </button>
+  `;
+
+  // On cache l'onglet Discussion pour cette modal
+  document.getElementById('tabBtnChat').style.display = 'none';
+  switchModalTab('details', document.getElementById('tabBtnDetails'));
+
+  document.getElementById('modalOverlay').classList.add('open');
 }
 
 function logout() { 
