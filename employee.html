@@ -387,7 +387,7 @@ function renderCard(o) {
         <div class="oc-customer">${o.first_name||''} ${o.last_name||''}</div>
         <div class="oc-delivery">${o.delivery_type==='livraison'?'🚴 Livraison':'🏪 Sur place'}</div>
         <div class="oc-items-list">${escHtml(preview)}</div>
-        <div class="oc-total">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
+        <div class="oc-total">${Number(o.total||0).toLocaleString('fr-FR')} €</div>
       </div>
       <div class="oc-footer">
         <span class="status-badge status-${status}">${STATUS_LABELS[status]||status}</span>
@@ -426,7 +426,7 @@ function renderRefusValidation() {
           <div style="margin-top:12px;padding:12px;background:rgba(0,0,0,.4);border-radius:8px;color:#fca5a5">
             <strong>Motif :</strong> ${escHtml(o.refus_motif || '—')}
           </div>
-          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
+          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} €</div>
         </div>
         <div class="oc-footer">
           <span class="status-badge status-refusee">⏳ EN ATTENTE DE VALIDATION</span>
@@ -476,10 +476,10 @@ async function openModal(orderId) {
     <div class="modal-section full">
       <div class="ms-title">Articles</div>
       <table class="items-table">
-        ${items.map(i=>`<tr><td>${escHtml(i.name)}</td><td style="color:rgba(255,255,255,.4)">×${i.qty}</td><td>${(Number(i.price)*Number(i.qty)).toLocaleString('fr-FR')} DA</td></tr>`).join('')}
+        ${items.map(i=>`<tr><td>${escHtml(i.name)}</td><td style="color:rgba(255,255,255,.4)">×${i.qty}</td><td>${(Number(i.price)*Number(i.qty)).toLocaleString('fr-FR')} €</td></tr>`).join('')}
       </table>
       <div style="margin-top:16px;text-align:right;font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold)">
-        TOTAL : ${Number(currentOrder.total||0).toLocaleString('fr-FR')} DA
+        TOTAL : ${Number(currentOrder.total||0).toLocaleString('fr-FR')} €
       </div>
     </div>`;
 
@@ -567,7 +567,118 @@ async function doRefuse(id) {
     showToast(`Erreur : ${e.message}`, 'error');
   }
 }
+// ====================== CHAT SYSTEM ======================
+async function loadMessages(orderId) {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/${MESSAGES_TABLE}?id_commande=eq.${orderId}&order=created_at.asc&select=*`,
+      { headers: SB_HEADERS }
+    );
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
 
+async function refreshChat(scrollBottom = false) {
+  if (!currentOrder) return;
+  const messages = await loadMessages(currentOrder.id);
+
+  // Gestion du badge pour nouveaux messages client
+  if (activeModalTab === 'details') {
+    const clientMsgs = messages.filter(m => 
+      (m.username || '').toLowerCase() !== (currentUser.username || '').toLowerCase()
+    );
+    if (clientMsgs.some(m => !lastMsgIds.has(m.id))) {
+      document.getElementById('chatTabBadge').classList.add('show');
+    }
+  }
+  messages.forEach(m => lastMsgIds.add(m.id));
+
+  renderMessages(messages, scrollBottom);
+}
+
+function renderMessages(messages, scrollBottom = false) {
+  const container = document.getElementById('chatMessages');
+  if (!messages || messages.length === 0) {
+    container.innerHTML = '<div class="chat-empty">💬 Aucun message pour le moment.<br><span style="opacity:.5;font-size:12px">Envoyez un message pour communiquer avec le client.</span></div>';
+    return;
+  }
+
+  const currentUsername = (currentUser?.username || '').toLowerCase();
+
+  container.innerHTML = messages.map(m => {
+    const msgUsername = (m.username || '').toLowerCase();
+    const isEmployee = msgUsername === currentUsername ||
+                       msgUsername === 'mldev' ||
+                       msgUsername.includes('employé') ||
+                       msgUsername.includes('staff');
+
+    const time = m.created_at 
+      ? new Date(m.created_at).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' }) 
+      : '';
+
+    const avatar = isEmployee ? '👨‍🍳' : '🙋';
+    const sideClass = isEmployee ? 'from-employee' : 'from-client';
+
+    return `
+      <div class="msg-row ${sideClass}">
+        <div class="msg-avatar">${avatar}</div>
+        <div>
+          <div class="msg-name">${escHtml(m.username || (isEmployee ? 'Équipe Burger Shot' : 'Client'))}</div>
+          <div class="msg-bubble">
+            <div class="msg-text">${escHtml(m.message || m.messages)}</div>
+            <div class="msg-time">${time}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  if (scrollBottom) container.scrollTop = container.scrollHeight;
+}
+
+async function sendMessage() {
+  if (!currentOrder) return;
+  const input = document.getElementById('chatInput');
+  const content = input.value.trim();
+  if (!content) return;
+
+  const btn = document.getElementById('chatSendBtn');
+  btn.disabled = true;
+  input.value = '';
+  autoResize(input);
+
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/${MESSAGES_TABLE}`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        id_commande: currentOrder.id,
+        username: currentUser.username || 'Équipe',
+        message: content,
+      })
+    });
+    await refreshChat(true);
+    showToast('Message envoyé');
+  } catch(e) {
+    showToast(`Erreur : ${e.message}`, 'error');
+  }
+  btn.disabled = false;
+  input.focus();
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
 // ====================== VALIDATION DES REFUS ======================
 function renderRefusValidation() {
   const refusEnAttente = allOrders.filter(o => o.status === 'refus_en_attente');
@@ -600,7 +711,7 @@ function renderRefusValidation() {
             <strong>Demande de refus par :</strong> ${escHtml(o.refus_demande_par || '—')}<br>
             <strong>Motif :</strong> ${escHtml(o.refus_motif || 'Aucun motif')}
           </div>
-          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
+          <div class="oc-total" style="color:#ef4444">${Number(o.total||0).toLocaleString('fr-FR')} €</div>
         </div>
         <div class="oc-footer">
           <span class="status-badge status-refusee">⏳ EN ATTENTE DE VALIDATION</span>
@@ -632,7 +743,7 @@ async function openRefusValidationModal(orderId) {
       <div class="ms-title">COMMANDE</div>
       <div class="ms-info">
         Client : <strong>${escHtml(currentOrder.first_name)} ${escHtml(currentOrder.last_name)}</strong><br>
-        Total : <strong style="color:var(--gold)">${Number(currentOrder.total||0).toLocaleString('fr-FR')} DA</strong>
+        Total : <strong style="color:var(--gold)">${Number(currentOrder.total||0).toLocaleString('fr-FR')} €</strong>
       </div>
     </div>`;
 
