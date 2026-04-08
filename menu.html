@@ -253,7 +253,7 @@
     <div class="cart-header"><h3>🛒 MON PANIER</h3><button class="cart-close" onclick="toggleCart()">✕</button></div>
     <div class="cart-items" id="cartItems"><div class="cart-empty">Ton panier est vide…</div></div>
     <div class="cart-footer">
-      <div class="cart-total"><span>TOTAL</span><span id="cartTotal">0 DA</span></div>
+      <div class="cart-total"><span>TOTAL</span><span id="cartTotal">0 €</span></div>
       <button class="order-btn" id="orderBtn" onclick="openOrderModal()" disabled>Passer la commande →</button>
     </div>
   </div>
@@ -384,7 +384,7 @@ function buildGrid(gridId, items) {
         <div class="card-desc">${item.description || ''}</div>
       </div>
       <div class="card-right">
-        <div class="card-price">${Number(item.price).toLocaleString('fr-FR')}<br><span>DA</span></div>
+        <div class="card-price">${Number(item.price).toLocaleString('fr-FR')}<br><span>€</span></div>
         <button class="add-btn" onclick="addToCart('${item.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}', ${item.price})">+</button>
       </div>
     </div>`).join('');
@@ -424,10 +424,10 @@ function updateCartUI() {
     : items.map(([name, v]) => `
       <div class="cart-item">
         <div class="ci-info"><div class="ci-name">${name}</div><div class="ci-qty">× ${v.qty}</div></div>
-        <div class="ci-price">${(v.price * v.qty).toLocaleString('fr-FR')} DA</div>
+        <div class="ci-price">${(v.price * v.qty).toLocaleString('fr-FR')} €</div>
         <button class="ci-remove" onclick="removeFromCart('${name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">✕</button>
       </div>`).join('');
-  document.getElementById('cartTotal').textContent = total.toLocaleString('fr-FR') + ' DA';
+  document.getElementById('cartTotal').textContent = total.toLocaleString('fr-FR') + ' €';
   document.getElementById('orderBtn').disabled = items.length === 0;
 }
 
@@ -435,10 +435,10 @@ function updateCartUI() {
 function openOrderModal() {
   const items = Object.entries(cart);
   const total = items.reduce((s, [, v]) => s + v.price * v.qty, 0);
-  const summary = items.map(([name, v]) => `• ${name} ×${v.qty} — ${(v.price * v.qty).toLocaleString('fr-FR')} DA`).join('\n');
+  const summary = items.map(([name, v]) => `• ${name} ×${v.qty} — ${(v.price * v.qty).toLocaleString('fr-FR')} €`).join('\n');
   document.getElementById('order-summary').innerHTML =
     `<div style="white-space:pre-line;margin-bottom:8px;">${summary}</div>` +
-    `<strong>TOTAL : ${total.toLocaleString('fr-FR')} DA</strong>`;
+    `<strong>TOTAL : ${total.toLocaleString('fr-FR')} €</strong>`;
   document.getElementById('orderModal').classList.add('open');
 }
 
