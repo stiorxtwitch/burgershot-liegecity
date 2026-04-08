@@ -550,59 +550,6 @@ window.addEventListener('load', async () => {
   loadAliments();
 });
 
-// ====================== MODIFIER PERMISSION DIRECTEMENT DANS SUPABASE ======================
-// Initialisation Supabase (une seule fois)
-
-let supabase = null;   // ← Important : null au départ
-
-function initSupabase() {
-  if (!supabase) {
-    supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
-  }
-}
-
-async function editUser(userId, currentPermission) {
-  initSupabase();
-
-  const newPermission = prompt(
-    "Modifier la permission de l'utilisateur :\n\n" +
-    "Valeurs possibles :\n" +
-    "→ user\n" +
-    "→ employee\n" +
-    "→ admin\n\n" +
-    "Permission actuelle : " + (currentPermission || "user"),
-    currentPermission || "user"
-  );
-
-  if (newPermission === null) return;
-
-  const validPermissions = ["user", "employee", "admin"];
-  if (!validPermissions.includes(newPermission)) {
-    alert("Permission invalide !\nUtilise uniquement : user, employee ou admin");
-    return;
-  }
-
-  if (!confirm(`Changer la permission en "${newPermission}" ?`)) return;
-
-  try {
-    const { error } = await supabase
-      .from('users_burgershot')
-      .update({ permission: newPermission })
-      .eq('id', userId);
-
-    if (error) {
-      console.error(error);
-      alert("Erreur Supabase : " + error.message);
-      return;
-    }
-
-    alert(`✅ Permission mise à jour avec succès ! → ${newPermission}`);
-    loadUsers();
-  } catch (err) {
-    console.error(err);
-    alert("Erreur de connexion à Supabase");
-  }
-}
 </script>
 </body>
 </html>
