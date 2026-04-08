@@ -15,12 +15,10 @@
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Barlow',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden}
 
-  /* FIRE */
   .fire-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
   .ember{position:absolute;bottom:-10px;border-radius:50%;animation:rise linear infinite}
   @keyframes rise{0%{transform:translateY(0) scale(1);opacity:.8}100%{transform:translateY(-95vh) scale(0);opacity:0}}
 
-  /* NAV */
   nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:68px;background:linear-gradient(180deg,rgba(0,0,0,.97),rgba(0,0,0,.8));backdrop-filter:blur(16px);border-bottom:1px solid rgba(204,26,26,.3)}
   .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white)}
   .nav-logo-icon{width:40px;height:40px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;animation:pulseLogo 2.5s infinite}
@@ -34,42 +32,35 @@
   .nav-btn-sm{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.4);padding:6px 14px;border:1px solid rgba(255,255,255,.1);border-radius:4px;background:transparent;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
   .nav-btn-sm:hover{border-color:var(--gold);color:var(--gold)}
 
-  /* SIDEBAR */
   .sidebar{position:fixed;top:68px;left:0;width:260px;height:calc(100vh - 68px);background:var(--dark);border-right:1px solid rgba(255,255,255,.06);padding:24px 16px;z-index:100;display:flex;flex-direction:column;gap:8px;overflow-y:auto}
   .sidebar-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.2);margin:8px 0 4px 8px}
-  .sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;transition:all .2s;font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.5px;color:rgba(255,255,255,.5);border:1px solid transparent;text-decoration:none}
+  .sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;transition:all .2s;font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.5px;color:rgba(255,255,255,.5);border:1px solid transparent}
   .sidebar-item:hover{background:rgba(255,255,255,.05);color:var(--white)}
   .sidebar-item.active{background:rgba(204,26,26,.15);border-color:rgba(204,26,26,.3);color:var(--white)}
-  .sidebar-item .si-icon{font-size:16px;width:20px;text-align:center}
   .sidebar-count{margin-left:auto;background:var(--red);color:#fff;font-size:11px;font-family:'Bebas Neue',sans-serif;padding:2px 8px;border-radius:100px;min-width:22px;text-align:center}
   .sidebar-count.gold{background:var(--gold);color:var(--black)}
 
-  /* MAIN */
-  .main-content{margin-left:260px;flex:1;padding:100px 28px 60px;position:relative;z-index:2}
-
+  .main-content{margin-left:260px;padding:100px 28px 60px;position:relative;z-index:2}
   .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px}
   .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,52px);letter-spacing:3px}
   .page-title em{color:var(--red)}
-
   .refresh-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);padding:8px 16px;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:transparent;cursor:pointer;transition:all .2s}
   .refresh-btn:hover{border-color:var(--gold);color:var(--gold)}
 
   .orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
-
-  .order-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:0;overflow:hidden;transition:all .25s;cursor:pointer}
+  .order-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;transition:all .25s;cursor:pointer}
   .order-card:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 8px 30px rgba(204,26,26,.2)}
   .oc-top-bar{background:rgba(204,26,26,.08);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05)}
   .oc-id{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px}
   .oc-id span{color:var(--red)}
   .oc-time{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:rgba(255,255,255,.4)}
   .oc-body{padding:16px}
-  .oc-customer{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;letter-spacing:.5px}
+  .oc-customer{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px}
   .oc-delivery{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:rgba(255,255,255,.5);margin-bottom:8px}
-  .oc-items-list{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:4px}
+  .oc-items-list{font-size:13px;color:rgba(255,255,255,.6)}
   .oc-total{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);text-align:right;margin-top:10px}
   .oc-footer{padding:12px 16px;background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center}
 
-  /* STATUS BADGES — MANQUAIENT COMPLÈTEMENT */
   .status-badge{padding:5px 14px;border-radius:100px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px}
   .status-en_attente{background:rgba(245,166,35,.2);color:var(--gold);border:1px solid rgba(245,166,35,.4)}
   .status-acceptee{background:rgba(79,122,248,.2);color:#7da9ff;border:1px solid rgba(79,122,248,.4)}
@@ -78,7 +69,6 @@
   .status-reglee{background:rgba(255,255,255,.1);color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.15)}
   .status-refusee{background:rgba(239,68,68,.2);color:var(--red-err);border:1px solid rgba(239,68,68,.3)}
 
-  /* MODAL */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center}
   .modal-overlay.open{display:flex}
   .modal{background:var(--dark2);border:1px solid rgba(204,26,26,.3);border-radius:16px;width:90%;max-width:800px;max-height:92vh;overflow-y:auto}
@@ -87,32 +77,25 @@
   .modal-order-id span{color:var(--red)}
   .modal-close{background:rgba(255,255,255,.1);border:none;color:var(--white);width:40px;height:40px;border-radius:50%;font-size:22px;cursor:pointer;transition:background .2s}
   .modal-close:hover{background:var(--red)}
-
   .modal-body{padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
   .modal-section{background:var(--dark3);padding:20px;border-radius:12px}
   .modal-section.full{grid-column:1/-1}
   .ms-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px}
   .ms-info{font-size:14.5px;line-height:1.7}
-
   .items-table{width:100%;border-collapse:collapse}
   .items-table td{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:14px}
   .items-table td:last-child{text-align:right;font-weight:600;color:var(--gold)}
-
   .modal-actions{padding:0 28px 28px;display:flex;flex-wrap:wrap;gap:10px}
 
-  /* BOUTONS — btn-paid était manquant */
   .btn{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:11px 22px;border:none;border-radius:8px;cursor:pointer;transition:all .2s}
   .btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
   .btn-accept{background:var(--green);color:#000}
   .btn-refuse{background:rgba(239,68,68,.2);color:var(--red-err);border:1px solid rgba(239,68,68,.4)}
   .btn-prep{background:rgba(168,85,247,.25);color:#c084fc;border:1px solid rgba(168,85,247,.4)}
   .btn-done{background:var(--green);color:#000}
-  .btn-delivery{background:var(--blue);color:#fff}
-  .btn-paid{background:rgba(245,166,35,.25);color:var(--gold);border:1px solid rgba(245,166,35,.4)} /* FIX: manquait */
+  .btn-paid{background:rgba(245,166,35,.25);color:var(--gold);border:1px solid rgba(245,166,35,.4)}
 
   .loading-state,.empty-state{text-align:center;padding:100px;color:rgba(255,255,255,.4);font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:1px}
-
-  /* TOAST */
   .toast{position:fixed;bottom:30px;right:30px;z-index:999;background:var(--dark3);border:1px solid rgba(34,197,94,.4);color:#4ade80;font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:1px;padding:14px 22px;border-radius:10px;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none}
   .toast.show{transform:translateY(0);opacity:1}
   .toast.error{border-color:rgba(239,68,68,.4);color:var(--red-err)}
@@ -150,9 +133,8 @@
       <h1 class="page-title">COMMANDES <em>ACTIVES</em></h1>
       <button class="refresh-btn" onclick="loadAll()">↻ Actualiser</button>
     </div>
-    <div id="list-active"><div class="loading-state">Chargement des commandes...</div></div>
+    <div id="list-active"><div class="loading-state">Connexion à Supabase...</div></div>
   </div>
-
   <div id="view-all" style="display:none">
     <div class="page-header">
       <h1 class="page-title">TOUTES LES <em>COMMANDES</em></h1>
@@ -162,7 +144,6 @@
   </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
   <div class="modal">
     <div class="modal-header">
@@ -174,143 +155,112 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ====================== CONFIG ======================
-const API_BASE = window.location.origin.includes('localhost')
-  ? 'http://localhost:3000'
-  : 'https://bot-burgershot-3amh.onrender.com';
+// ====================== SUPABASE ======================
+const SUPABASE_URL = 'https://gktawbaposndfxijkxdk.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdGF3YmFwb3NuZGZ4aWpreGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwNzUyNDUsImV4cCI6MjA3OTY1MTI0NX0.tY-CHuyb2zr9s6hlGkwmrdTvg920VVNghI9S45CjwKk';
+const TABLE        = 'orders_burgershot';
+const SB_HEADERS   = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': `Bearer ${SUPABASE_KEY}`,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=representation'
+};
 
-// FIX : Données de démo si pas connecté ou si API down
-const DEMO_ORDERS = [
-  { id: 1001, first_name:'Ahmed', last_name:'Benali', phone:'0555123456', delivery_type:'livraison', status:'en_attente', total:3200, created_at: new Date().toISOString(), items: JSON.stringify([{name:'Double Burger',qty:2,price:1200},{name:'Frites',qty:1,price:600},{name:'Soda',qty:1,price:200}]) },
-  { id: 1002, first_name:'Sara', last_name:'Mekki', phone:'0661987654', delivery_type:'sur_place', status:'acceptee', total:1800, created_at: new Date(Date.now()-5*60000).toISOString(), items: JSON.stringify([{name:'Chicken Burger',qty:1,price:1200},{name:'Milkshake',qty:1,price:600}]) },
-  { id: 1003, first_name:'Karim', last_name:'Hadj', phone:'0770456789', delivery_type:'livraison', status:'preparation', total:4400, created_at: new Date(Date.now()-12*60000).toISOString(), items: JSON.stringify([{name:'Mega Burger',qty:2,price:1600},{name:'Frites',qty:2,price:600}]) },
-  { id: 1004, first_name:'Lina', last_name:'Aouad', phone:'0550321654', delivery_type:'sur_place', status:'termine', total:1200, created_at: new Date(Date.now()-25*60000).toISOString(), items: JSON.stringify([{name:'Classic Burger',qty:1,price:1200}]) },
-  { id: 1005, first_name:'Youcef', last_name:'Brahimi', phone:'0661234567', delivery_type:'livraison', status:'reglee', total:2600, created_at: new Date(Date.now()-60*60000).toISOString(), items: JSON.stringify([{name:'Double Burger',qty:1,price:1400},{name:'Frites',qty:1,price:600},{name:'Eau',qty:1,price:200}]) },
-  { id: 1006, first_name:'Nadia', last_name:'Zidane', phone:'0770000001', delivery_type:'sur_place', status:'refusee', total:800, created_at: new Date(Date.now()-90*60000).toISOString(), items: JSON.stringify([{name:'Soda',qty:2,price:200},{name:'Frites',qty:1,price:400}]) },
-];
-
-let currentUser = null;
-let allOrders = [];
+let currentUser  = null;
+let allOrders    = [];
 let currentOrder = null;
-let isDemoMode = false;
 
 const STATUS_LABELS = {
-  en_attente: 'En attente',
-  acceptee: 'Acceptée',
-  preparation: 'En préparation',
-  termine: 'Terminée',
-  reglee: 'Réglée',
-  refusee: 'Refusée',
+  en_attente: 'En attente', acceptee: 'Acceptée',
+  preparation: 'En préparation', termine: 'Terminée',
+  reglee: 'Réglée', refusee: 'Refusée',
 };
 
 // ====================== INIT ======================
 async function init() {
-  // FIX : récupère l'user ou crée un user démo
   currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
-
   if (!currentUser) {
-    // Mode démo : on crée un utilisateur fictif au lieu de rediriger
-    isDemoMode = true;
-    currentUser = { username: 'Employé Démo', permission: 'employee' };
-    showToast('⚠️ Mode démo — connectez-vous pour les vraies données', 'error');
+    currentUser = { username: 'Démo', permission: 'employee' };
+    showToast('Mode démo — connectez-vous pour les vraies sessions', 'error');
   }
-
-  if (!['employee','admin','owner','it'].includes(currentUser.permission)) {
-    showToast('Accès refusé', 'error');
-    setTimeout(() => window.location.href = 'menu.html', 1500);
-    return;
-  }
-
   document.getElementById('navUsername').textContent = currentUser.username || '—';
-  document.getElementById('roleLabel').textContent = currentUser.permission.toUpperCase();
-
-  if (['admin','owner','it'].includes(currentUser.permission)) {
+  document.getElementById('roleLabel').textContent   = (currentUser.permission || 'employee').toUpperCase();
+  if (['admin','owner','it'].includes(currentUser.permission))
     document.getElementById('adminLink').style.display = 'inline-flex';
-  }
 
   spawnEmbers();
   await loadAll();
   setInterval(loadAll, 15000);
 }
 
-// ====================== LOAD ======================
+// ====================== SUPABASE CALLS ======================
 async function loadAll() {
-  if (isDemoMode) {
-    allOrders = DEMO_ORDERS;
-    renderCurrentView();
-    return;
-  }
-
   try {
-    const res = await fetch(`${API_BASE}/api/orders`, { signal: AbortSignal.timeout(6000) });
-    const data = await res.json();
-    if (data.success) {
-      allOrders = data.orders || [];
-      renderCurrentView();
-    } else {
-      throw new Error('API returned failure');
-    }
-  } catch(e) {
-    console.error('API error, switching to demo:', e);
-    if (allOrders.length === 0) {
-      // Fallback démo si le serveur ne répond pas
-      allOrders = DEMO_ORDERS;
-      showToast('⚠️ Serveur indisponible — affichage démo', 'error');
-    }
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/${TABLE}?select=*&order=created_at.desc`,
+      { headers: SB_HEADERS }
+    );
+    if (!res.ok) { const e = await res.json(); throw new Error(e.message || `HTTP ${res.status}`); }
+    allOrders = await res.json();
     renderCurrentView();
+  } catch(e) {
+    console.error(e);
+    showToast(`Erreur Supabase : ${e.message}`, 'error');
+    document.getElementById('list-active').innerHTML =
+      `<div class="empty-state">❌ Impossible de charger les commandes<br><small style="opacity:.5;font-size:12px">${e.message}</small></div>`;
   }
 }
 
+async function sbPatch(orderId, payload) {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${orderId}`,
+    { method: 'PATCH', headers: SB_HEADERS, body: JSON.stringify(payload) }
+  );
+  if (!res.ok) { const e = await res.json(); throw new Error(e.message || `HTTP ${res.status}`); }
+}
+
+// ====================== RENDER ======================
 function parseItems(items) {
   if (!items) return [];
   if (Array.isArray(items)) return items;
   try { return JSON.parse(items); } catch { return []; }
 }
 
-// ====================== RENDER ======================
 function renderCurrentView() {
-  const activeOrders = allOrders.filter(o => !['reglee','refusee'].includes(o.status || ''));
+  const active = allOrders.filter(o => !['reglee','refusee'].includes(o.status || ''));
+  document.getElementById('sideCountActive').textContent = active.length;
+  document.getElementById('sideCountAll').textContent    = allOrders.length;
 
-  // FIX : mise à jour des compteurs sidebar
-  document.getElementById('sideCountActive').textContent = activeOrders.length;
-  document.getElementById('sideCountAll').textContent = allOrders.length;
+  document.getElementById('list-active').innerHTML = active.length
+    ? `<div class="orders-grid">${active.map(renderCard).join('')}</div>`
+    : `<div class="empty-state">🎉 Aucune commande active</div>`;
 
-  const activeEl = document.getElementById('list-active');
-  const allEl = document.getElementById('list-all');
-
-  activeEl.innerHTML = activeOrders.length
-    ? `<div class="orders-grid">${activeOrders.map(renderOrderCard).join('')}</div>`
-    : `<div class="empty-state">🎉 Aucune commande active en ce moment</div>`;
-
-  allEl.innerHTML = allOrders.length
-    ? `<div class="orders-grid">${allOrders.map(renderOrderCard).join('')}</div>`
-    : `<div class="empty-state">Aucune commande</div>`;
+  document.getElementById('list-all').innerHTML = allOrders.length
+    ? `<div class="orders-grid">${allOrders.map(renderCard).join('')}</div>`
+    : `<div class="empty-state">Aucune commande dans la base</div>`;
 }
 
-function renderOrderCard(order) {
-  const items = parseItems(order.items);
-  const preview = items.slice(0,3).map(i => `${i.name} ×${i.qty}`).join(', ') || '—';
-  const status = order.status || 'en_attente';
-  const label = STATUS_LABELS[status] || status;
-
+function renderCard(o) {
+  const items   = parseItems(o.items);
+  const preview = items.slice(0,3).map(i=>`${i.name} ×${i.qty}`).join(', ') || '—';
+  const status  = o.status || 'en_attente';
   return `
-    <div class="order-card" onclick="openModal(${order.id})">
+    <div class="order-card" onclick="openModal(${o.id})">
       <div class="oc-top-bar">
-        <div class="oc-id">Commande <span>#${order.id}</span></div>
-        <div class="oc-time">${new Date(order.created_at).toLocaleTimeString('fr-FR')}</div>
+        <div class="oc-id">Commande <span>#${o.id}</span></div>
+        <div class="oc-time">${o.created_at ? new Date(o.created_at).toLocaleTimeString('fr-FR') : '—'}</div>
       </div>
       <div class="oc-body">
-        <div class="oc-customer">${order.first_name} ${order.last_name}</div>
-        <div class="oc-delivery">${order.delivery_type === 'livraison' ? '🚴 Livraison' : '🏪 Sur place'}</div>
+        <div class="oc-customer">${o.first_name||''} ${o.last_name||''}</div>
+        <div class="oc-delivery">${o.delivery_type==='livraison'?'🚴 Livraison':'🏪 Sur place'}</div>
         <div class="oc-items-list">${preview}</div>
-        <div class="oc-total">${Number(order.total).toLocaleString('fr-FR')} DA</div>
+        <div class="oc-total">${Number(o.total||0).toLocaleString('fr-FR')} DA</div>
       </div>
       <div class="oc-footer">
-        <span class="status-badge status-${status}">${label}</span>
+        <span class="status-badge status-${status}">${STATUS_LABELS[status]||status}</span>
       </div>
     </div>`;
 }
@@ -320,164 +270,90 @@ function openModal(orderId) {
   currentOrder = allOrders.find(o => o.id === orderId);
   if (!currentOrder) return;
 
-  document.getElementById('modalOrderId').innerHTML = `Commande <span>#${currentOrder.id}</span>`;
-
-  const items = parseItems(currentOrder.items);
+  const items  = parseItems(currentOrder.items);
   const status = currentOrder.status || 'en_attente';
 
-  const bodyHTML = `
+  document.getElementById('modalOrderId').innerHTML = `Commande <span>#${currentOrder.id}</span>`;
+  document.getElementById('modalBody').innerHTML = `
     <div class="modal-section">
       <div class="ms-title">Client</div>
-      <div class="ms-info">
-        <strong>${currentOrder.first_name} ${currentOrder.last_name}</strong><br>
-        📞 ${currentOrder.phone || '—'}
-      </div>
+      <div class="ms-info"><strong>${currentOrder.first_name||''} ${currentOrder.last_name||''}</strong><br>📞 ${currentOrder.phone||'—'}</div>
     </div>
     <div class="modal-section">
       <div class="ms-title">Récupération</div>
-      <div class="ms-info">${currentOrder.delivery_type === 'livraison' ? '🚴 Livraison à domicile' : '🏪 Sur place'}</div>
-      <div class="ms-title" style="margin-top:12px">Statut</div>
-      <div><span class="status-badge status-${status}">${STATUS_LABELS[status] || status}</span></div>
+      <div class="ms-info">${currentOrder.delivery_type==='livraison'?'🚴 Livraison à domicile':'🏪 Sur place'}</div>
+      <div class="ms-title" style="margin-top:14px">Statut</div>
+      <span class="status-badge status-${status}">${STATUS_LABELS[status]||status}</span>
     </div>
     <div class="modal-section full">
-      <div class="ms-title">Articles commandés</div>
+      <div class="ms-title">Articles</div>
       <table class="items-table">
-        ${items.map(i => `
-          <tr>
-            <td>${i.name}</td>
-            <td style="color:rgba(255,255,255,.5)">×${i.qty}</td>
-            <td>${(i.price * i.qty).toLocaleString('fr-FR')} DA</td>
-          </tr>`).join('')}
+        ${items.map(i=>`<tr><td>${i.name}</td><td style="color:rgba(255,255,255,.4)">×${i.qty}</td><td>${(Number(i.price)*Number(i.qty)).toLocaleString('fr-FR')} DA</td></tr>`).join('')}
       </table>
-      <div style="margin-top:16px;text-align:right;font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold)">
-        TOTAL : ${Number(currentOrder.total).toLocaleString('fr-FR')} DA
+      <div style="margin-top:16px;text-align:right;font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold)">
+        TOTAL : ${Number(currentOrder.total||0).toLocaleString('fr-FR')} DA
       </div>
     </div>`;
 
-  document.getElementById('modalBody').innerHTML = bodyHTML;
+  const actions = {
+    en_attente:  `<button class="btn btn-accept" onclick="doUpdate(${currentOrder.id},'acceptee')">✅ Accepter</button>
+                  <button class="btn btn-refuse" onclick="doRefuse(${currentOrder.id})">❌ Refuser</button>`,
+    acceptee:    `<button class="btn btn-prep"   onclick="doUpdate(${currentOrder.id},'preparation')">🍳 En préparation</button>`,
+    preparation: `<button class="btn btn-done"   onclick="doUpdate(${currentOrder.id},'termine')">✅ Terminée</button>`,
+    termine:     `<button class="btn btn-paid"   onclick="doUpdate(${currentOrder.id},'reglee')">💰 Marquer payée</button>`,
+  };
+  document.getElementById('modalActions').innerHTML =
+    actions[status] || `<span style="font-family:'Barlow Condensed',sans-serif;color:rgba(255,255,255,.3);font-size:13px;letter-spacing:1px">Aucune action disponible</span>`;
 
-  // FIX : Boutons selon statut + btn-paid existant
-  let actionsHTML = '';
-  if (status === 'en_attente') {
-    actionsHTML = `
-      <button class="btn btn-accept" onclick="updateStatus(${currentOrder.id},'acceptee')">✅ Accepter</button>
-      <button class="btn btn-refuse" onclick="refuseOrder(${currentOrder.id})">❌ Refuser</button>`;
-  } else if (status === 'acceptee') {
-    actionsHTML = `<button class="btn btn-prep" onclick="updateStatus(${currentOrder.id},'preparation')">🍳 En préparation</button>`;
-  } else if (status === 'preparation') {
-    actionsHTML = `<button class="btn btn-done" onclick="updateStatus(${currentOrder.id},'termine')">✅ Terminée</button>`;
-  } else if (status === 'termine') {
-    actionsHTML = `<button class="btn btn-paid" onclick="updateStatus(${currentOrder.id},'reglee')">💰 Marquer payée</button>`;
-  } else {
-    actionsHTML = `<span style="font-family:'Barlow Condensed',sans-serif;color:rgba(255,255,255,.3);font-size:13px;letter-spacing:1px">Aucune action disponible</span>`;
-  }
-
-  document.getElementById('modalActions').innerHTML = actionsHTML;
   document.getElementById('modalOverlay').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-}
-
-// Fermer en cliquant à l'extérieur
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
-}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function handleOverlayClick(e) { if (e.target===document.getElementById('modalOverlay')) closeModal(); }
 
 // ====================== ACTIONS ======================
-async function updateStatus(orderId, newStatus) {
-  if (isDemoMode) {
-    // En démo : mise à jour locale
-    const order = allOrders.find(o => o.id === orderId);
-    if (order) order.status = newStatus;
-    showToast(`✅ Statut → ${STATUS_LABELS[newStatus]}`);
-    closeModal();
-    renderCurrentView();
-    return;
-  }
-
+async function doUpdate(id, status) {
   try {
-    const res = await fetch(`${API_BASE}/api/orders/${orderId}/status`, {
-      method: 'PATCH',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ status: newStatus })
-    });
-    const data = await res.json();
-    if (data.success) {
-      showToast(`✅ Statut mis à jour : ${STATUS_LABELS[newStatus] || newStatus}`);
-      closeModal();
-      loadAll();
-    } else {
-      showToast('Erreur lors de la mise à jour', 'error');
-    }
-  } catch(e) {
-    showToast('Erreur de connexion au serveur', 'error');
-  }
+    await sbPatch(id, { status });
+    showToast(`✅ Statut → ${STATUS_LABELS[status]}`);
+    closeModal(); await loadAll();
+  } catch(e) { showToast(`Erreur : ${e.message}`, 'error'); }
 }
 
-function refuseOrder(orderId) {
-  const reason = prompt("Motif du refus (obligatoire) :");
-  if (!reason || !reason.trim()) return;
-
-  if (isDemoMode) {
-    const order = allOrders.find(o => o.id === orderId);
-    if (order) order.status = 'refusee';
-    showToast(`❌ Commande refusée`);
-    closeModal();
-    renderCurrentView();
-    return;
-  }
-
-  // Appel API refus
-  fetch(`${API_BASE}/api/orders/${orderId}/status`, {
-    method: 'PATCH',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ status: 'refusee', reason })
-  }).then(() => {
+async function doRefuse(id) {
+  const reason = prompt('Motif du refus :');
+  if (!reason?.trim()) return;
+  try {
+    await sbPatch(id, { status: 'refusee', refus_motif: reason });
     showToast('Commande refusée');
-    closeModal();
-    loadAll();
-  }).catch(() => {
-    showToast('Erreur lors du refus', 'error');
-  });
+    closeModal(); await loadAll();
+  } catch(e) { showToast(`Erreur : ${e.message}`, 'error'); }
 }
 
-function showView(view) {
-  document.getElementById('view-active').style.display = view === 'active' ? 'block' : 'none';
-  document.getElementById('view-all').style.display = view === 'all' ? 'block' : 'none';
-  document.getElementById('sideActive').classList.toggle('active', view === 'active');
-  document.getElementById('sideAll').classList.toggle('active', view === 'all');
+// ====================== UI ======================
+function showView(v) {
+  document.getElementById('view-active').style.display = v==='active'?'block':'none';
+  document.getElementById('view-all').style.display    = v==='all'?'block':'none';
+  document.getElementById('sideActive').classList.toggle('active', v==='active');
+  document.getElementById('sideAll').classList.toggle('active',   v==='all');
 }
-
-function logout() {
-  sessionStorage.removeItem('bs_user');
-  window.location.href = 'auth.html';
-}
-
-// ====================== TOAST ======================
-function showToast(msg, type = 'success') {
+function logout() { sessionStorage.removeItem('bs_user'); window.location.href='auth.html'; }
+function showToast(msg, type='success') {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = `toast ${type === 'error' ? 'error' : ''} show`;
-  setTimeout(() => t.classList.remove('show'), 3500);
+  t.className = `toast ${type==='error'?'error':''} show`;
+  setTimeout(()=>t.classList.remove('show'), 3500);
 }
-
-// ====================== EMBERS ======================
 function spawnEmbers() {
-  const bg = document.getElementById('fireBg');
-  const colors = ['#FF4500','#FF6200','#FF8C00','#FFB347'];
-  setInterval(() => {
-    const e = document.createElement('div');
-    e.className = 'ember';
-    e.style.left = Math.random() * 100 + 'vw';
-    const size = Math.random() * 5 + 2;
-    e.style.width = e.style.height = size + 'px';
-    e.style.background = colors[Math.floor(Math.random() * colors.length)];
-    e.style.animationDuration = (Math.random() * 5 + 3) + 's';
-    bg.appendChild(e);
-    setTimeout(() => e.remove(), 8000);
-  }, 150);
+  const bg=document.getElementById('fireBg'), colors=['#FF4500','#FF6200','#FF8C00','#FFB347'];
+  setInterval(()=>{
+    const e=document.createElement('div'); e.className='ember';
+    e.style.left=Math.random()*100+'vw';
+    const s=Math.random()*5+2; e.style.width=e.style.height=s+'px';
+    e.style.background=colors[Math.floor(Math.random()*colors.length)];
+    e.style.animationDuration=(Math.random()*5+3)+'s';
+    bg.appendChild(e); setTimeout(()=>e.remove(),8000);
+  },150);
 }
 
 window.addEventListener('load', init);
