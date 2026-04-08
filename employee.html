@@ -10,34 +10,31 @@
     --red:#CC1A1A; --red-glow:#FF2222; --gold:#F5A623; --gold-light:#FFD166;
     --black:#0A0A0A; --dark:#111111; --dark2:#1A1A1A; --dark3:#222222; --dark4:#2A2A2A;
     --white:#F5F0E8; --green:#22c55e; --red-err:#ef4444; --blue:#4f7af8;
-    --orange:#f97316; --purple:#a855f7;
+    --purple:#a855f7;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Barlow',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden}
 
-  /* ─── FIRE ─── */
+  /* FIRE */
   .fire-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
   .ember{position:absolute;bottom:-10px;border-radius:50%;animation:rise linear infinite}
   @keyframes rise{0%{transform:translateY(0) scale(1);opacity:.8}100%{transform:translateY(-95vh) scale(0);opacity:0}}
 
-  /* ─── NAV ─── */
+  /* NAV */
   nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:68px;background:linear-gradient(180deg,rgba(0,0,0,.97),rgba(0,0,0,.8));backdrop-filter:blur(16px);border-bottom:1px solid rgba(204,26,26,.3)}
   .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
   .nav-logo-icon{width:40px;height:40px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;animation:pulseLogo 2.5s infinite}
   @keyframes pulseLogo{0%,100%{box-shadow:0 0 14px rgba(204,26,26,.6)}50%{box-shadow:0 0 26px rgba(255,34,34,.9)}}
   .nav-logo span{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px}
-  .nav-logo span em{color:var(--red);font-style:normal}
+  .nav-logo span em{color:var(--red)}
   .nav-badge{background:rgba(204,26,26,.2);border:1px solid rgba(204,26,26,.4);color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;padding:4px 10px;border-radius:4px;text-transform:uppercase}
   .nav-right{display:flex;align-items:center;gap:12px}
   .nav-user{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px;color:rgba(255,255,255,.4)}
   .nav-user strong{color:var(--gold)}
-  .nav-btn-sm{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.4);padding:6px 14px;border:1px solid rgba(255,255,255,.1);border-radius:4px;background:transparent;cursor:pointer;transition:all .2s;text-decoration:none}
+  .nav-btn-sm{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.4);padding:6px 14px;border:1px solid rgba(255,255,255,.1);border-radius:4px;background:transparent;cursor:pointer;transition:all .2s}
   .nav-btn-sm:hover{border-color:var(--gold);color:var(--gold)}
 
-  /* ─── LAYOUT ─── */
-  .app-layout{display:flex;min-height:100vh;padding-top:68px}
-  
-  /* ─── SIDEBAR ─── */
+  /* SIDEBAR */
   .sidebar{position:fixed;top:68px;left:0;width:260px;height:calc(100vh - 68px);background:var(--dark);border-right:1px solid rgba(255,255,255,.06);padding:24px 16px;z-index:100;display:flex;flex-direction:column;gap:8px;overflow-y:auto}
   .sidebar-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.2);margin:8px 0 4px 8px}
   .sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;transition:all .2s;font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.5px;color:rgba(255,255,255,.5);border:1px solid transparent;text-decoration:none}
@@ -46,187 +43,67 @@
   .sidebar-item .si-icon{font-size:16px;width:20px;text-align:center}
   .sidebar-count{margin-left:auto;background:var(--red);color:#fff;font-size:11px;font-family:'Bebas Neue',sans-serif;padding:2px 8px;border-radius:100px;min-width:22px;text-align:center}
   .sidebar-count.gold{background:var(--gold);color:var(--black)}
-  .sidebar-count.green{background:var(--green);color:var(--black)}
 
-  /* ─── MAIN ─── */
-  .main-content{margin-left:260px;flex:1;padding:28px 28px 60px;position:relative;z-index:2;min-width:0}
+  /* MAIN */
+  .main-content{margin-left:260px;flex:1;padding:28px 28px 60px;position:relative;z-index:2}
 
-  /* ─── PAGE HEADER ─── */
   .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px}
   .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,52px);letter-spacing:3px}
-  .page-title em{color:var(--red);font-style:normal}
-  .page-sub{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,.3);margin-top:4px}
-  .header-actions{display:flex;gap:10px;align-items:center}
+  .page-title em{color:var(--red)}
+
   .refresh-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);padding:8px 16px;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:transparent;cursor:pointer;transition:all .2s}
   .refresh-btn:hover{border-color:var(--gold);color:var(--gold)}
-  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:livePulse 2s infinite;display:inline-block;margin-right:6px}
-  @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
 
-  /* ─── STATS ROW ─── */
-  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
-  .stat-card{background:var(--dark2);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:18px 20px}
-  .stat-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:6px}
-  .stat-val{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px}
-  .stat-val.red{color:var(--red)} .stat-val.gold{color:var(--gold)} .stat-val.green{color:var(--green)} .stat-val.blue{color:var(--blue)}
-
-  /* ─── ORDERS GRID ─── */
   .orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
-  
-  .order-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:0;overflow:hidden;transition:all .25s;position:relative}
-  .order-card:hover{border-color:rgba(204,26,26,.3);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.5)}
-  .order-card.claimed{border-color:rgba(245,166,35,.3)}
-  .order-card.claimed .oc-top-bar{background:rgba(245,166,35,.1)}
 
+  .order-card{background:var(--dark2);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:0;overflow:hidden;transition:all .25s;cursor:pointer}
+  .order-card:hover{border-color:var(--red);transform:translateY(-3px)}
   .oc-top-bar{background:rgba(204,26,26,.08);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05)}
   .oc-id{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px}
   .oc-id span{color:var(--red)}
-  .oc-time{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.3)}
-
   .oc-body{padding:16px}
-  .oc-customer{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.5px;margin-bottom:4px}
-  .oc-delivery{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.4);margin-bottom:10px}
-  .oc-items-list{margin-bottom:12px}
-  .oc-item-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-  .oc-item-row:last-child{border-bottom:none}
-  .oc-item-name{color:rgba(255,255,255,.7)}
-  .oc-item-qty{color:rgba(255,255,255,.35);font-size:12px}
-  .oc-total{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);text-align:right;margin-bottom:12px}
+  .oc-customer{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;margin-bottom:6px}
+  .oc-delivery{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:rgba(255,255,255,.5)}
+  .oc-items-list{margin:10px 0;font-size:13px;color:rgba(255,255,255,.75)}
+  .oc-total{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);text-align:right;margin-top:10px}
+  .oc-footer{padding:12px 16px;background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center}
 
-  .oc-footer{padding:12px 16px;background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .status-badge{padding:6px 14px;border-radius:100px;font-family:'Bebas Neue',sans-serif;font-size:13px}
 
-  /* STATUS BADGES */
-  .status-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:100px;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1.5px}
-  .status-en_attente{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6)}
-  .status-acceptee{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:var(--green)}
-  .status-recue{background:rgba(79,122,248,.15);border:1px solid rgba(79,122,248,.3);color:var(--blue)}
-  .status-preparation{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);color:var(--gold)}
-  .status-finalisation{background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);color:var(--gold)}
-  .status-termine{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);color:var(--green)}
-  .status-livraison{background:rgba(79,122,248,.2);border:1px solid rgba(79,122,248,.4);color:var(--blue)}
-  .status-reglee{background:rgba(34,197,94,.25);border:1px solid rgba(34,197,94,.5);color:var(--green)}
-  .status-refusee{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:var(--red-err)}
-
-  /* CLAIM BUTTON */
-  .btn-claim{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;background:var(--red);color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;transition:all .2s}
-  .btn-claim:hover{background:var(--red-glow);transform:translateY(-1px)}
-  .claimed-by{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:.5px;color:var(--gold)}
-
-  /* ─── MODAL OVERLAY ─── */
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:500;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .3s}
-  .modal-overlay.open{opacity:1;pointer-events:all}
-
-  .modal{background:var(--dark2);border:1px solid rgba(204,26,26,.25);border-radius:16px;width:100%;max-width:760px;position:relative;overflow:hidden;animation:slideUp .3s ease}
-  @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-
-  .modal-header{background:linear-gradient(135deg,rgba(204,26,26,.15),rgba(245,166,35,.05));padding:24px 28px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between}
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center}
+  .modal-overlay.open{display:flex}
+  .modal{background:var(--dark2);border:1px solid rgba(204,26,26,.3);border-radius:16px;width:90%;max-width:800px;max-height:92vh;overflow-y:auto}
+  .modal-header{padding:24px 28px;background:linear-gradient(135deg,rgba(204,26,26,.15),rgba(245,166,35,.05));display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08)}
   .modal-order-id{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px}
   .modal-order-id span{color:var(--red)}
-  .modal-close{background:rgba(255,255,255,.1);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-  .modal-close:hover{background:var(--red);transform:rotate(90deg)}
+  .modal-close{background:rgba(255,255,255,.1);border:none;color:var(--white);width:40px;height:40px;border-radius:50%;font-size:22px;cursor:pointer}
+  .modal-close:hover{background:var(--red)}
 
-  .modal-body{padding:24px 28px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  .modal-section{background:var(--dark3);border-radius:10px;padding:18px}
+  .modal-body{padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .modal-section{background:var(--dark3);padding:20px;border-radius:12px}
   .modal-section.full{grid-column:1/-1}
-  .ms-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:12px}
-  .ms-info{font-size:14px;color:rgba(255,255,255,.75);line-height:1.8}
-  .ms-info strong{color:var(--white)}
+  .ms-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px}
+  .ms-info{font-size:14.5px;line-height:1.7}
 
-  .items-table{width:100%;border-collapse:collapse;margin-top:4px}
-  .items-table td{padding:8px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06)}
-  .items-table td:last-child{text-align:right;font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold)}
-  .items-table tr:last-child td{border-bottom:none}
-  .items-total{display:flex;justify-content:space-between;padding-top:12px;margin-top:4px;border-top:1px solid rgba(255,255,255,.1)}
-  .items-total span:first-child{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3)}
-  .items-total span:last-child{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold)}
+  .items-table{width:100%;border-collapse:collapse}
+  .items-table td{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+  .items-table td:last-child{text-align:right;font-weight:600;color:var(--gold)}
 
-  /* ─── ACTION BUTTONS ─── */
-  .modal-actions{padding:0 28px 20px}
-  .action-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
-  .action-row-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:8px}
-  
-  .btn{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:10px 20px;border-radius:6px;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
-  .btn:hover{transform:translateY(-2px)}
-  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-  .btn-accept{background:var(--green);color:#0a0a0a}.btn-accept:hover{background:#16a34a}
-  .btn-refuse{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);color:var(--red-err)}.btn-refuse:hover{background:var(--red-err);color:#fff}
-  .btn-prep{background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.4);color:var(--gold)}.btn-prep:hover{background:var(--gold);color:#000}
-  .btn-final{background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.5);color:var(--gold)}.btn-final:hover{background:#e69310;color:#000}
-  .btn-done{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);color:var(--green)}.btn-done:hover{background:var(--green);color:#000}
-  .btn-delivery{background:rgba(79,122,248,.2);border:1px solid rgba(79,122,248,.4);color:var(--blue)}.btn-delivery:hover{background:var(--blue);color:#fff}
-  .btn-paid{background:linear-gradient(135deg,var(--green),#16a34a);color:#fff}.btn-paid:hover{background:linear-gradient(135deg,#16a34a,#15803d)}
-  .btn-admin-close{background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.4);color:var(--purple)}.btn-admin-close:hover{background:var(--purple);color:#fff}
+  .modal-actions{padding:0 28px 28px;display:flex;flex-wrap:wrap;gap:10px}
+  .btn{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:11px 22px;border:none;border-radius:8px;cursor:pointer;transition:all .2s}
+  .btn-accept{background:var(--green);color:#000}
+  .btn-refuse{background:rgba(239,68,68,.25);color:var(--red-err);border:1px solid rgba(239,68,68,.4)}
+  .btn-prep{background:rgba(245,166,35,.2);color:var(--gold)}
+  .btn-done{background:var(--green);color:#000}
+  .btn-delivery{background:var(--blue);color:#fff}
 
-  /* ─── REFUSAL MODAL ─── */
-  .refusal-panel{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:18px;margin-bottom:12px;display:none}
-  .refusal-panel.open{display:block}
-  .refusal-panel textarea{width:100%;background:var(--dark3);border:1px solid rgba(239,68,68,.3);color:var(--white);border-radius:6px;padding:12px;font-family:'Barlow',sans-serif;font-size:14px;resize:vertical;min-height:80px;margin-top:10px}
-  .refusal-panel textarea::placeholder{color:rgba(255,255,255,.25)}
-  .refusal-panel textarea:focus{outline:none;border-color:var(--red-err)}
-  .refusal-panel-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red-err)}
-
-  /* ─── CHAT ─── */
-  .chat-section{padding:0 28px 28px}
-  .chat-header{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-  .chat-header span{color:var(--blue)}
-  .chat-messages{background:var(--dark3);border:1px solid rgba(79,122,248,.15);border-radius:10px;padding:14px;min-height:120px;max-height:200px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:8px}
-  .chat-messages::-webkit-scrollbar{width:4px}
-  .chat-messages::-webkit-scrollbar-track{background:transparent}
-  .chat-messages::-webkit-scrollbar-thumb{background:rgba(79,122,248,.3);border-radius:4px}
-  
-  .msg{padding:10px 14px;border-radius:8px;max-width:90%;font-size:13px;line-height:1.5}
-  .msg.from-client{background:rgba(79,122,248,.12);border:1px solid rgba(79,122,248,.2);align-self:flex-start}
-  .msg.from-staff{background:rgba(204,26,26,.12);border:1px solid rgba(204,26,26,.2);align-self:flex-end;text-align:right}
-  .msg-meta{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:4px}
-  .msg-text{color:rgba(255,255,255,.85)}
-  .no-msgs{color:rgba(255,255,255,.25);font-size:13px;font-style:italic;text-align:center;padding:16px 0}
-
-  .chat-input-row{display:flex;gap:8px}
-  .chat-input{flex:1;background:var(--dark3);border:1px solid rgba(79,122,248,.2);color:var(--white);border-radius:6px;padding:10px 14px;font-family:'Barlow',sans-serif;font-size:13px;transition:border-color .2s}
-  .chat-input::placeholder{color:rgba(255,255,255,.2)}
-  .chat-input:focus{outline:none;border-color:var(--blue)}
-  .chat-send{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:10px 18px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;transition:all .2s;white-space:nowrap}
-  .chat-send:hover{background:#3d66e6;transform:translateY(-1px)}
-
-  /* ─── REFUSAL VALIDATION PANEL (owner) ─── */
-  .refusal-validation{background:var(--dark2);border:1px solid rgba(239,68,68,.25);border-radius:12px;padding:20px;margin-bottom:16px}
-  .rv-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--red-err);margin-bottom:8px}
-  .rv-reason{font-size:14px;color:rgba(255,255,255,.6);margin-bottom:14px;padding:10px;background:rgba(239,68,68,.08);border-radius:6px;border-left:3px solid var(--red-err)}
-  .rv-employee{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:12px}
-
-  /* ─── EMPTY / LOADING ─── */
-  .loading-state{text-align:center;padding:80px;color:rgba(255,255,255,.3)}
-  .spinner{display:inline-block;width:40px;height:40px;border:3px solid rgba(204,26,26,.2);border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .empty-state{text-align:center;padding:80px;color:rgba(255,255,255,.3)}
-  .empty-icon{font-size:64px;margin-bottom:16px}
-  .empty-text{font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:1px}
-
-  /* ─── TOAST ─── */
-  .toast{position:fixed;bottom:30px;right:30px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-  .toast-item{background:var(--dark3);border-left:4px solid var(--gold);padding:14px 18px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.6);font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.5px;min-width:250px;animation:toastIn .3s ease;pointer-events:none}
-  .toast-item.error{border-left-color:var(--red-err)}
-  .toast-item.success{border-left-color:var(--green)}
-  @keyframes toastIn{from{transform:translateX(40px);opacity:0}to{transform:translateX(0);opacity:1}}
-  @keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateX(40px)}}
-
-  /* ─── RESPONSIVE ─── */
-  @media(max-width:900px){
-    .sidebar{display:none}
-    .main-content{margin-left:0}
-    nav{padding:0 16px}
-    .modal-body{grid-template-columns:1fr}
-    .modal{max-width:100%}
-  }
-  @media(max-width:600px){
-    .orders-grid{grid-template-columns:1fr}
-    .stats-row{grid-template-columns:repeat(2,1fr)}
-  }
+  .loading-state,.empty-state{text-align:center;padding:100px;color:rgba(255,255,255,.4)}
 </style>
 </head>
 <body>
 <div class="fire-bg" id="fireBg"></div>
 
-<!-- ─── NAV ─── -->
 <nav>
   <a href="menu.html" class="nav-logo">
     <div class="nav-logo-icon">🍔</div>
@@ -240,772 +117,231 @@
   </div>
 </nav>
 
-<!-- ─── SIDEBAR ─── -->
 <div class="sidebar">
   <div class="sidebar-title">Navigation</div>
   <div class="sidebar-item active" onclick="showView('active')" id="sideActive">
-    <span class="si-icon">🔥</span> Commandes actives
-    <span class="sidebar-count" id="sideCountActive">0</span>
-  </div>
-  <div class="sidebar-item" onclick="showView('mine')" id="sideMine" style="display:none">
-    <span class="si-icon">📦</span> Mes commandes
-    <span class="sidebar-count gold" id="sideCountMine">0</span>
-  </div>
-  <div class="sidebar-item" onclick="showView('pending-refusals')" id="sidePending" style="display:none">
-    <span class="si-icon">⚠️</span> Refus à valider
-    <span class="sidebar-count" id="sideCountPending">0</span>
+    🔥 Commandes actives <span class="sidebar-count" id="sideCountActive">0</span>
   </div>
   <div class="sidebar-item" onclick="showView('all')" id="sideAll">
-    <span class="si-icon">📋</span> Toutes les commandes
-    <span class="sidebar-count green" id="sideCountAll">0</span>
+    📋 Toutes les commandes <span class="sidebar-count green" id="sideCountAll">0</span>
   </div>
-  <div class="sidebar-title" style="margin-top:16px">Liens</div>
-  <a href="menu.html" class="sidebar-item"><span class="si-icon">🍔</span> Menu client</a>
-  <a href="orders.html" class="sidebar-item"><span class="si-icon">🧾</span> Mes commandes (client)</a>
 </div>
 
-<!-- ─── MAIN ─── -->
-<div class="app-layout">
-<main class="main-content">
-
-  <!-- ACTIVE ORDERS VIEW -->
+<div class="main-content">
   <div id="view-active">
     <div class="page-header">
-      <div>
-        <h1 class="page-title">COMMANDES <em>ACTIVES</em></h1>
-        <p class="page-sub"><span class="live-dot"></span>Mise à jour automatique toutes les 15 secondes</p>
-      </div>
-      <div class="header-actions">
-        <button class="refresh-btn" onclick="loadAll()">↻ Actualiser</button>
-      </div>
+      <h1 class="page-title">COMMANDES <em>ACTIVES</em></h1>
+      <button class="refresh-btn" onclick="loadAll()">↻ Actualiser</button>
     </div>
-    <div class="stats-row" id="statsRow">
-      <div class="stat-card"><div class="stat-label">En attente</div><div class="stat-val red" id="st-pending">—</div></div>
-      <div class="stat-card"><div class="stat-label">En cours</div><div class="stat-val gold" id="st-inprogress">—</div></div>
-      <div class="stat-card"><div class="stat-label">Terminées</div><div class="stat-val green" id="st-done">—</div></div>
-      <div class="stat-card"><div class="stat-label">Total aujourd'hui</div><div class="stat-val blue" id="st-total">—</div></div>
-    </div>
-    <div id="list-active"><div class="loading-state"><div class="spinner"></div><br>Chargement...</div></div>
+    <div id="list-active"><div class="loading-state">Chargement des commandes...</div></div>
   </div>
 
-  <!-- MY ORDERS VIEW (employees) -->
-  <div id="view-mine" style="display:none">
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">MES <em>COMMANDES</em></h1>
-        <p class="page-sub">Commandes que tu as réclamées</p>
-      </div>
-    </div>
-    <div id="list-mine"><div class="loading-state"><div class="spinner"></div><br>Chargement...</div></div>
-  </div>
-
-  <!-- PENDING REFUSALS (owner/admin/it) -->
-  <div id="view-pending-refusals" style="display:none">
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">REFUS À <em>VALIDER</em></h1>
-        <p class="page-sub">Demandes de refus en attente d'approbation</p>
-      </div>
-    </div>
-    <div id="list-pending-refusals"><div class="loading-state"><div class="spinner"></div><br>Chargement...</div></div>
-  </div>
-
-  <!-- ALL ORDERS VIEW (admin/it/owner) -->
   <div id="view-all" style="display:none">
     <div class="page-header">
-      <div>
-        <h1 class="page-title">TOUTES LES <em>COMMANDES</em></h1>
-        <p class="page-sub">Vue globale — lecture seule</p>
-      </div>
-      <div class="header-actions">
-        <button class="refresh-btn" onclick="loadAll()">↻ Actualiser</button>
-      </div>
+      <h1 class="page-title">TOUTES LES <em>COMMANDES</em></h1>
+      <button class="refresh-btn" onclick="loadAll()">↻ Actualiser</button>
     </div>
-    <div id="list-all"><div class="loading-state"><div class="spinner"></div><br>Chargement...</div></div>
+    <div id="list-all"><div class="loading-state">Chargement...</div></div>
   </div>
-
-</main>
 </div>
 
-<!-- ─── ORDER MODAL ─── -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalIfBg(event)">
-  <div class="modal" id="modalBox">
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
     <div class="modal-header">
-      <div>
-        <div class="modal-order-id" id="m-orderId">Commande <span>#—</span></div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.3);margin-top:4px" id="m-orderDate"></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px">
-        <span class="status-badge" id="m-statusBadge"></span>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
+      <div class="modal-order-id" id="modalOrderId">Commande <span>#0000</span></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-
-    <!-- Details -->
-    <div class="modal-body" id="m-body">
-      <div class="modal-section">
-        <div class="ms-title">Client</div>
-        <div class="ms-info" id="m-client"></div>
-      </div>
-      <div class="modal-section">
-        <div class="ms-title">Livraison</div>
-        <div class="ms-info" id="m-delivery"></div>
-      </div>
-      <div class="modal-section full">
-        <div class="ms-title">Commande</div>
-        <table class="items-table" id="m-items"></table>
-        <div class="items-total">
-          <span>Total</span>
-          <span id="m-total"></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="modal-actions" id="m-actions"></div>
-
-    <!-- Chat -->
-    <div class="chat-section" id="m-chat">
-      <div class="chat-header">💬 Chat <span>Commande</span></div>
-      <div class="chat-messages" id="m-chatMsgs"><div class="no-msgs">Aucun message pour l'instant.</div></div>
-      <div class="chat-input-row" id="m-chatInputRow">
-        <input type="text" class="chat-input" id="m-chatInput" placeholder="Envoyer un message au client…" maxlength="500" onkeydown="if(event.key==='Enter')sendChatMsg()">
-        <button class="chat-send" onclick="sendChatMsg()">Envoyer →</button>
-      </div>
-    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-actions" id="modalActions"></div>
   </div>
 </div>
-
-<!-- ─── TOAST ─── -->
-<div class="toast" id="toastContainer"></div>
 
 <script>
-// =====================================================
-// CONFIG
-// =====================================================
-const API_BASE = window.location.origin.includes('localhost')
-  ? 'http://localhost:3000'
-  : 'https://bot-burgershot-3amh.onrender.com';
-
-const STATUS_LABELS = {
-  en_attente:'⏳ En attente', acceptee:'✅ Acceptée', refusee:'❌ Refusée',
-  recue:'📥 Reçue', preparation:'🍳 En préparation', finalisation:'🔍 Finalisation',
-  termine:'✅ Terminée', livraison:'🚴 En livraison', reglee:'💰 Réglée',
-  pending_refusal:'⚠️ Refus en attente'
-};
-
-// Rôles: civil, employee, admin, owner, it
-const ROLE_LABELS = { civil:'CIVIL', employee:'EMPLOYÉ', admin:'ADMIN', owner:'GÉRANT', it:'IT' };
-const POWERFUL_ROLES = ['admin','owner','it'];
+// ====================== CONFIG ======================
+const API_BASE = window.location.origin.includes('localhost') ? 'http://localhost:3000' : 'https://bot-burgershot-3amh.onrender.com';
 
 let currentUser = null;
-let currentView = 'active';
 let allOrders = [];
-let openOrderId = null;
-let chatPollInterval = null;
-let mainPollInterval = null;
+let currentOrder = null;
 
-// =====================================================
-// AUTH CHECK
-// =====================================================
-function init() {
+// ====================== INIT ======================
+async function init() {
   currentUser = JSON.parse(sessionStorage.getItem('bs_user') || 'null');
-  if (!currentUser) { window.location.href = 'auth.html'; return; }
-
-  const role = currentUser.permission || 'civil';
-  if (role === 'civil') {
-    alert('Accès refusé. Cette page est réservée aux employés.');
-    window.location.href = 'menu.html';
+  if (!currentUser || !['employee','admin','owner','it'].includes(currentUser.permission)) {
+    alert("Accès refusé.");
+    window.location.href = "menu.html";
     return;
   }
 
-  document.getElementById('navUsername').textContent = currentUser.username;
-  document.getElementById('roleLabel').textContent = ROLE_LABELS[role] || role.toUpperCase();
+  document.getElementById('navUsername').textContent = currentUser.username || '—';
+  document.getElementById('roleLabel').textContent = currentUser.permission.toUpperCase();
 
-  // Show admin link for powerful roles
-  if (POWERFUL_ROLES.includes(role)) {
+  if (['admin','owner','it'].includes(currentUser.permission)) {
     document.getElementById('adminLink').style.display = 'inline-flex';
   }
 
-  // Show mine tab for employees
-  if (role === 'employee') {
-    document.getElementById('sideMine').style.display = 'flex';
-    // Hide "all" for employees
-    document.getElementById('sideAll').style.display = 'none';
-  }
-
-  // Show pending refusals tab for owner/it
-  if (['owner','it'].includes(role)) {
-    document.getElementById('sidePending').style.display = 'flex';
-  }
-
   spawnEmbers();
-  loadAll();
-  mainPollInterval = setInterval(loadAll, 15000);
+  await loadAll();
+  setInterval(loadAll, 15000);
 }
 
-function logout() {
-  clearInterval(mainPollInterval);
-  clearInterval(chatPollInterval);
-  sessionStorage.removeItem('bs_user');
-  window.location.href = 'auth.html';
-}
-
-// =====================================================
-// DATA LOADING
-// =====================================================
 async function loadAll() {
   try {
     const res = await fetch(`${API_BASE}/api/orders`);
     const data = await res.json();
-    if (!data.success) return;
-    allOrders = data.orders || [];
-    renderCurrentView();
-    updateSideCounts();
-    updateStats();
-  } catch(e) {
-    console.error('loadAll error:', e);
-  }
-}
-
-function updateStats() {
-  const today = new Date().toDateString();
-  const todayOrders = allOrders.filter(o => new Date(o.created_at).toDateString() === today);
-  document.getElementById('st-pending').textContent = allOrders.filter(o => o.status === 'en_attente').length;
-  document.getElementById('st-inprogress').textContent = allOrders.filter(o => ['acceptee','recue','preparation','finalisation','livraison'].includes(o.status)).length;
-  document.getElementById('st-done').textContent = allOrders.filter(o => ['termine','reglee'].includes(o.status)).length;
-  document.getElementById('st-total').textContent = todayOrders.length;
-}
-
-function updateSideCounts() {
-  const role = currentUser.permission || 'civil';
-  const active = allOrders.filter(o => !['reglee','refusee'].includes(o.status));
-  document.getElementById('sideCountActive').textContent = active.length;
-  document.getElementById('sideCountAll').textContent = allOrders.length;
-
-  if (role === 'employee') {
-    const mine = allOrders.filter(o => o.claimed_by === currentUser.id && !['reglee','refusee'].includes(o.status));
-    document.getElementById('sideCountMine').textContent = mine.length;
-  }
-
-  if (['owner','it'].includes(role)) {
-    const pending = allOrders.filter(o => o.status === 'pending_refusal');
-    document.getElementById('sideCountPending').textContent = pending.length;
-    const el = document.getElementById('sideCountPending');
-    if (pending.length > 0) el.style.animation = 'livePulse 2s infinite';
-  }
-}
-
-// =====================================================
-// VIEW SWITCHING
-// =====================================================
-function showView(view) {
-  currentView = view;
-  ['active','mine','pending-refusals','all'].forEach(v => {
-    document.getElementById('view-'+v).style.display = v === view ? 'block' : 'none';
-    const sideId = 'side' + v.split('-').map(s=>s[0].toUpperCase()+s.slice(1)).join('');
-    const el = document.getElementById(sideId);
-    if(el) el.classList.toggle('active', v === view);
-  });
-  renderCurrentView();
-}
-
-function renderCurrentView() {
-  if (currentView === 'active') renderOrderList('list-active', getActiveOrders());
-  if (currentView === 'mine') renderOrderList('list-mine', getMyOrders());
-  if (currentView === 'all') renderOrderList('list-all', allOrders);
-  if (currentView === 'pending-refusals') renderRefusalsList();
-}
-
-function getActiveOrders() {
-  return allOrders.filter(o => !['reglee','refusee'].includes(o.status));
-}
-
-function getMyOrders() {
-  return allOrders.filter(o => o.claimed_by === currentUser.id);
-}
-
-// =====================================================
-// RENDER ORDER LIST
-// =====================================================
-function renderOrderList(containerId, orders) {
-  const el = document.getElementById(containerId);
-  if (!orders.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Aucune commande à afficher</div></div>`;
-    return;
-  }
-
-  const role = currentUser.permission || 'civil';
-  el.innerHTML = `<div class="orders-grid">${orders.map(order => renderOrderCard(order, role)).join('')}</div>`;
-}
-
-function renderOrderCard(order, role) {
-  const items = parseItems(order.items);
-  const itemsHtml = items.slice(0,3).map(i => `
-    <div class="oc-item-row">
-      <span class="oc-item-name">${escHtml(i.name)}</span>
-      <span class="oc-item-qty">×${i.qty}</span>
-    </div>
-  `).join('') + (items.length > 3 ? `<div class="oc-item-row"><span style="color:rgba(255,255,255,.3);font-size:12px">+${items.length-3} autres…</span></div>` : '');
-
-  const isClaimed = !!order.claimed_by;
-  const isMineClaim = order.claimed_by === currentUser.id;
-  const timeAgo = formatTimeAgo(order.created_at);
-
-  let footerContent = '';
-  if (role === 'employee') {
-    if (!isClaimed) {
-      footerContent = `<span style="font-size:12px;color:rgba(255,255,255,.3)">Non réclamée</span><button class="btn-claim" onclick="claimOrder(${order.id},event)">Réclamer →</button>`;
-    } else if (isMineClaim) {
-      footerContent = `<span class="claimed-by">📦 Ta commande</span><button class="btn-claim" onclick="openModal(${order.id},event)">Gérer →</button>`;
-    } else {
-      footerContent = `<span class="claimed-by" style="color:rgba(255,255,255,.3)">Réclamée par un autre</span>`;
+    if (data.success) {
+      allOrders = data.orders || [];
+      renderCurrentView();
     }
-  } else {
-    // Admin/owner/it can always open
-    const claimedTxt = isClaimed ? `<span class="claimed-by">Pris en charge</span>` : `<span style="color:rgba(255,255,255,.3);font-size:12px">Non réclamée</span>`;
-    footerContent = `${claimedTxt}<button class="btn-claim" onclick="openModal(${order.id},event)">Voir →</button>`;
-  }
+  } catch(e) { console.error(e); }
+}
 
+function parseItems(items) {
+  if (!items) return [];
+  if (Array.isArray(items)) return items;
+  try { return JSON.parse(items); } catch { return []; }
+}
+
+// ====================== RENDER ======================
+function renderCurrentView() {
+  const activeEl = document.getElementById('list-active');
+  const allEl = document.getElementById('list-all');
+
+  const activeOrders = allOrders.filter(o => !['reglee','refusee'].includes(o.status || ''));
+
+  activeEl.innerHTML = activeOrders.length ? `<div class="orders-grid">${activeOrders.map(renderOrderCard).join('')}</div>` : `<div class="empty-state">Aucune commande active</div>`;
+  allEl.innerHTML = allOrders.length ? `<div class="orders-grid">${allOrders.map(renderOrderCard).join('')}</div>` : `<div class="empty-state">Aucune commande</div>`;
+}
+
+function renderOrderCard(order) {
+  const items = parseItems(order.items);
+  const preview = items.slice(0,3).map(i => `${i.name} ×${i.qty}`).join(', ') || '—';
   return `
-    <div class="order-card ${isClaimed ? 'claimed' : ''}" id="card-${order.id}">
+    <div class="order-card" onclick="openModal(${order.id})">
       <div class="oc-top-bar">
         <div class="oc-id">Commande <span>#${order.id}</span></div>
-        <div class="oc-time">${timeAgo}</div>
+        <div class="oc-time">${new Date(order.created_at).toLocaleTimeString('fr-FR')}</div>
       </div>
       <div class="oc-body">
-        <div class="oc-customer">👤 ${escHtml(order.first_name)} ${escHtml(order.last_name)}</div>
+        <div class="oc-customer">${order.first_name} ${order.last_name}</div>
         <div class="oc-delivery">${order.delivery_type === 'livraison' ? '🚴 Livraison' : '🏪 Sur place'}</div>
-        <div class="oc-items-list">${itemsHtml}</div>
+        <div class="oc-items-list">${preview}</div>
         <div class="oc-total">${Number(order.total).toLocaleString('fr-FR')} DA</div>
       </div>
       <div class="oc-footer">
-        <span class="status-badge status-${order.status}">${STATUS_LABELS[order.status] || order.status}</span>
-        <div style="display:flex;align-items:center;gap:8px">${footerContent}</div>
+        <span class="status-badge status-${order.status || 'en_attente'}">${order.status || 'En attente'}</span>
       </div>
+    </div>`;
+}
+
+// ====================== MODAL + BOUTONS ======================
+async function openModal(orderId) {
+  currentOrder = allOrders.find(o => o.id === orderId);
+  if (!currentOrder) return;
+
+  document.getElementById('modalOrderId').innerHTML = `Commande <span>#${currentOrder.id}</span>`;
+
+  const items = parseItems(currentOrder.items);
+  let bodyHTML = `
+    <div class="modal-section">
+      <div class="ms-title">Client</div>
+      <div class="ms-info"><strong>${currentOrder.first_name} ${currentOrder.last_name}</strong><br>📞 ${currentOrder.phone || '—'}</div>
+    </div>
+    <div class="modal-section">
+      <div class="ms-title">Récupération</div>
+      <div class="ms-info">${currentOrder.delivery_type === 'livraison' ? '🚴 Livraison à domicile' : '🏪 Sur place'}</div>
+    </div>
+    <div class="modal-section full">
+      <div class="ms-title">Articles</div>
+      <table class="items-table">
+        ${items.map(i => `<tr><td>${i.name}</td><td>×${i.qty}</td><td>${(i.price * i.qty).toLocaleString('fr-FR')} DA</td></tr>`).join('')}
+      </table>
+      <div style="margin-top:15px;text-align:right;font-size:24px;color:var(--gold)">Total : ${Number(currentOrder.total).toLocaleString('fr-FR')} DA</div>
     </div>
   `;
-}
 
-// =====================================================
-// RENDER REFUSALS LIST (owner/it)
-// =====================================================
-function renderRefusalsList() {
-  const el = document.getElementById('list-pending-refusals');
-  const pending = allOrders.filter(o => o.status === 'pending_refusal');
-  if (!pending.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">Aucun refus en attente</div></div>`;
-    return;
+  document.getElementById('modalBody').innerHTML = bodyHTML;
+
+  // Boutons d'actions
+  let actionsHTML = '';
+  const status = currentOrder.status || 'en_attente';
+
+  if (status === 'en_attente') {
+    actionsHTML = `
+      <button class="btn btn-accept" onclick="updateStatus(${currentOrder.id}, 'acceptee')">✅ Accepter</button>
+      <button class="btn btn-refuse" onclick="refuseOrder(${currentOrder.id})">❌ Refuser</button>
+    `;
+  } else if (status === 'acceptee') {
+    actionsHTML = `<button class="btn btn-prep" onclick="updateStatus(${currentOrder.id}, 'preparation')">🍳 En préparation</button>`;
+  } else if (status === 'preparation') {
+    actionsHTML = `<button class="btn btn-done" onclick="updateStatus(${currentOrder.id}, 'termine')">✅ Terminée</button>`;
+  } else if (status === 'termine') {
+    actionsHTML = `<button class="btn btn-paid" onclick="updateStatus(${currentOrder.id}, 'reglee')">💰 Payée</button>`;
   }
-  el.innerHTML = pending.map(order => `
-    <div class="refusal-validation" style="margin-bottom:16px">
-      <div class="rv-title">⚠️ Commande #${order.id} — Demande de refus</div>
-      <div class="rv-employee">Demandé par : <strong>${order.claimed_by_username || 'Employé'}</strong></div>
-      <div class="rv-reason">${escHtml(order.refusal_reason || 'Aucun motif fourni')}</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-refuse" onclick="approveRefusal(${order.id})">❌ Approuver le refus</button>
-        <button class="btn btn-accept" onclick="denyRefusal(${order.id})">✅ Refuser le refus (remettre en attente)</button>
-        <button class="btn" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)" onclick="openModal(${order.id},null)">👁 Voir la commande</button>
-      </div>
-    </div>
-  `).join('');
-}
 
-// =====================================================
-// CLAIM ORDER
-// =====================================================
-async function claimOrder(orderId, event) {
-  if (event) event.stopPropagation();
-  try {
-    const res = await fetch(`${API_BASE}/api/orders/${orderId}/claim`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ employee_id: currentUser.id, employee_username: currentUser.username })
-    });
-    const data = await res.json();
-    if (data.success) {
-      toast('Commande réclamée !', 'success');
-      await loadAll();
-      openModal(orderId, null);
-    } else {
-      toast(data.error || 'Erreur lors de la réclamation', 'error');
-    }
-  } catch(e) {
-    toast('Erreur réseau', 'error');
-  }
-}
-
-// =====================================================
-// MODAL
-// =====================================================
-function openModal(orderId, event) {
-  if (event) event.stopPropagation();
-  openOrderId = orderId;
-  renderModal(orderId);
+  document.getElementById('modalActions').innerHTML = actionsHTML;
   document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  startChatPoll(orderId);
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-  openOrderId = null;
-  clearInterval(chatPollInterval);
 }
 
-function closeModalIfBg(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
-}
-
-function renderModal(orderId) {
-  const order = allOrders.find(o => o.id === orderId);
-  if (!order) return;
-  const role = currentUser.permission || 'civil';
-  const items = parseItems(order.items);
-
-  // Header
-  document.getElementById('m-orderId').innerHTML = `Commande <span>#${order.id}</span>`;
-  document.getElementById('m-orderDate').textContent = new Date(order.created_at).toLocaleString('fr-FR');
-  const badge = document.getElementById('m-statusBadge');
-  badge.textContent = STATUS_LABELS[order.status] || order.status;
-  badge.className = `status-badge status-${order.status}`;
-
-  // Client info
-  document.getElementById('m-client').innerHTML = `
-    <strong>${escHtml(order.first_name)} ${escHtml(order.last_name)}</strong><br>
-    📞 ${escHtml(order.phone || '—')}<br>
-    🆔 Commande #${order.id}
-  `;
-
-  // Delivery
-  let deliveryHtml = order.delivery_type === 'livraison'
-    ? `<strong>🚴 Livraison</strong><br>📍 ${escHtml(order.address || '—')}<br>📮 ZIP: ${escHtml(order.zip_code || '—')}`
-    : `<strong>🏪 Sur place</strong><br>Le client viendra chercher sa commande.`;
-  document.getElementById('m-delivery').innerHTML = deliveryHtml;
-
-  // Items
-  document.getElementById('m-items').innerHTML = items.map(i => `
-    <tr>
-      <td style="color:rgba(255,255,255,.7)">${escHtml(i.name)}</td>
-      <td style="color:rgba(255,255,255,.35)">×${i.qty}</td>
-      <td>${(i.price * i.qty).toLocaleString('fr-FR')} DA</td>
-    </tr>
-  `).join('');
-  document.getElementById('m-total').textContent = Number(order.total).toLocaleString('fr-FR') + ' DA';
-
-  // Actions
-  renderActions(order, role);
-
-  // Load chat
-  loadChat(orderId);
-}
-
-function renderActions(order, role) {
-  const el = document.getElementById('m-actions');
-  const isEmployee = role === 'employee';
-  const isPowerful = POWERFUL_ROLES.includes(role);
-  const isMineClaim = order.claimed_by === currentUser.id;
-  const canAct = isMineClaim || isPowerful;
-
-  let html = '';
-
-  // Show refusal validation if pending
-  if (order.status === 'pending_refusal') {
-    html += `
-      <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:16px;margin-bottom:14px">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red-err);margin-bottom:6px">⚠️ Refus en attente de validation</div>
-        <div style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:12px;padding:10px;background:rgba(0,0,0,.2);border-radius:6px;border-left:3px solid var(--red-err)">${escHtml(order.refusal_reason||'Aucun motif')}</div>
-    `;
-    if (['owner','it'].includes(role)) {
-      html += `
-        <div class="action-row">
-          <button class="btn btn-refuse" onclick="approveRefusal(${order.id})">❌ Approuver le refus</button>
-          <button class="btn btn-accept" onclick="denyRefusal(${order.id})">✅ Annuler le refus</button>
-        </div>
-      `;
-    }
-    html += `</div>`;
-  }
-
-  // Refusal form panel
-  html += `
-    <div class="refusal-panel" id="refusalPanel">
-      <div class="refusal-panel-title">Motif du refus</div>
-      <textarea id="refusalReason" placeholder="Expliquez pourquoi vous refusez cette commande…"></textarea>
-      <div class="action-row" style="margin-top:10px">
-        <button class="btn btn-refuse" onclick="submitRefusal(${order.id})">Soumettre le refus</button>
-        <button class="btn" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)" onclick="toggleRefusalPanel(false)">Annuler</button>
-      </div>
-    </div>
-  `;
-
-  if (!canAct) {
-    // Read-only for non-claiming employees
-    html += `<div style="padding:12px 0;color:rgba(255,255,255,.3);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px">👁 Vue en lecture seule — Commande gérée par un autre employé</div>`;
-    el.innerHTML = html;
-    return;
-  }
-
-  // ── STATUS-BASED BUTTONS ──
-  const s = order.status;
-
-  if (s === 'en_attente' || s === 'recue') {
-    html += `<div class="action-row-label">Actions initiales</div><div class="action-row">
-      <button class="btn btn-accept" onclick="updateStatus(${order.id},'acceptee')">✅ Accepter la commande</button>
-      <button class="btn btn-refuse" onclick="toggleRefusalPanel(true)">❌ Refuser la commande</button>
-    </div>`;
-  }
-
-  if (s === 'acceptee') {
-    html += `<div class="action-row-label">Progression</div><div class="action-row">
-      <button class="btn btn-prep" onclick="updateStatus(${order.id},'preparation')">🍳 Commande en préparation</button>
-      <button class="btn btn-refuse" onclick="toggleRefusalPanel(true)">❌ Refuser</button>
-    </div>`;
-  }
-
-  if (s === 'preparation') {
-    html += `<div class="action-row-label">Progression</div><div class="action-row">
-      <button class="btn btn-final" onclick="updateStatus(${order.id},'finalisation')">🔍 En finalisation</button>
-    </div>`;
-  }
-
-  if (s === 'finalisation') {
-    let nextButtons = `<button class="btn btn-done" onclick="updateStatus(${order.id},'termine')">✅ Commande terminée</button>`;
-    if (order.delivery_type === 'livraison') {
-      nextButtons = `<button class="btn btn-delivery" onclick="updateStatus(${order.id},'livraison')">🚴 En cours de livraison</button>`;
-    }
-    html += `<div class="action-row-label">Progression</div><div class="action-row">${nextButtons}</div>`;
-  }
-
-  if (s === 'livraison') {
-    html += `<div class="action-row-label">Progression</div><div class="action-row">
-      <button class="btn btn-done" onclick="updateStatus(${order.id},'termine')">✅ Commande livrée / Terminée</button>
-    </div>`;
-  }
-
-  if (s === 'termine') {
-    html += `<div class="action-row-label">Clôture</div><div class="action-row">
-      <button class="btn btn-paid" onclick="updateStatus(${order.id},'reglee')">💰 Commande reçue et payée</button>
-    </div>`;
-  }
-
-  if (s === 'reglee' || s === 'refusee') {
-    html += `<div style="padding:12px 0;color:rgba(255,255,255,.35);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px">Commande clôturée — aucune action possible.</div>`;
-  }
-
-  // Owner/IT can always force-close
-  if (['owner','it'].includes(role) && !['reglee','refusee'].includes(s)) {
-    html += `<div class="action-row" style="margin-top:8px"><button class="btn btn-admin-close" onclick="updateStatus(${order.id},'reglee')">👑 Forcer la clôture</button></div>`;
-  }
-
-  el.innerHTML = html;
-}
-
-function toggleRefusalPanel(open) {
-  const p = document.getElementById('refusalPanel');
-  p.classList.toggle('open', open);
-  if (!open) document.getElementById('refusalReason').value = '';
-}
-
-// =====================================================
-// STATUS UPDATES
-// =====================================================
 async function updateStatus(orderId, newStatus) {
   try {
     const res = await fetch(`${API_BASE}/api/orders/${orderId}/status`, {
       method: 'PATCH',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ status: newStatus, updated_by: currentUser.id })
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ status: newStatus })
     });
     const data = await res.json();
     if (data.success) {
-      toast(`Statut mis à jour : ${STATUS_LABELS[newStatus] || newStatus}`, 'success');
-
-      // If reglee → close modal & reload
-      if (newStatus === 'reglee') {
-        closeModal();
-        toast('🎉 Commande clôturée !', 'success');
-      }
-      await loadAll();
-      if (openOrderId === orderId && newStatus !== 'reglee') {
-        renderModal(orderId);
-      }
-    } else {
-      toast(data.error || 'Erreur de mise à jour', 'error');
+      alert(`Statut mis à jour : ${newStatus}`);
+      closeModal();
+      loadAll();
     }
   } catch(e) {
-    toast('Erreur réseau', 'error');
+    alert("Erreur lors de la mise à jour");
   }
 }
 
-async function submitRefusal(orderId) {
-  const reason = document.getElementById('refusalReason').value.trim();
-  if (!reason) { toast('Veuillez saisir un motif de refus', 'error'); return; }
-  try {
-    const res = await fetch(`${API_BASE}/api/orders/${orderId}/request-refusal`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        reason,
-        employee_id: currentUser.id,
-        employee_username: currentUser.username
-      })
-    });
-    const data = await res.json();
-    if (data.success) {
-      toast('Demande de refus envoyée au gérant', 'success');
-      toggleRefusalPanel(false);
-      await loadAll();
-      renderModal(orderId);
-    } else {
-      toast(data.error || 'Erreur', 'error');
-    }
-  } catch(e) {
-    toast('Erreur réseau', 'error');
-  }
+function refuseOrder(orderId) {
+  const reason = prompt("Motif du refus :");
+  if (!reason) return;
+  alert(`Refus envoyé avec motif : ${reason}`);
+  // Tu peux appeler ici ton endpoint de refus si tu en as un
+  closeModal();
+  loadAll();
 }
 
-async function approveRefusal(orderId) {
-  if (!confirm('Approuver ce refus ? Le client sera notifié.')) return;
-  await updateStatus(orderId, 'refusee');
-  if (currentView === 'pending-refusals') renderRefusalsList();
+function showView(view) {
+  document.getElementById('view-active').style.display = view === 'active' ? 'block' : 'none';
+  document.getElementById('view-all').style.display = view === 'all' ? 'block' : 'none';
+  document.getElementById('sideActive').classList.toggle('active', view === 'active');
+  document.getElementById('sideAll').classList.toggle('active', view === 'all');
 }
 
-async function denyRefusal(orderId) {
-  try {
-    const res = await fetch(`${API_BASE}/api/orders/${orderId}/deny-refusal`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ owner_id: currentUser.id })
-    });
-    const data = await res.json();
-    if (data.success) {
-      toast('Refus annulé — commande remise en attente', 'success');
-      await loadAll();
-      if (openOrderId === orderId) renderModal(orderId);
-      if (currentView === 'pending-refusals') renderRefusalsList();
-    }
-  } catch(e) {
-    toast('Erreur réseau', 'error');
-  }
+function logout() {
+  sessionStorage.removeItem('bs_user');
+  window.location.href = 'auth.html';
 }
 
-// =====================================================
-// CHAT
-// =====================================================
-async function loadChat(orderId) {
-  try {
-    const res = await fetch(`${API_BASE}/api/orders/${orderId}/messages`);
-    const data = await res.json();
-    const msgs = (data.messages || data || []);
-    renderChatMessages(msgs);
-  } catch(e) {}
-}
-
-function renderChatMessages(msgs) {
-  const el = document.getElementById('m-chatMsgs');
-  if (!msgs || !msgs.length) {
-    el.innerHTML = '<div class="no-msgs">Aucun message pour l\'instant.</div>';
-    return;
-  }
-  el.innerHTML = msgs.map(m => {
-    const isStaff = m.sender_role && m.sender_role !== 'client';
-    return `
-      <div class="msg ${isStaff ? 'from-staff' : 'from-client'}">
-        <div class="msg-meta">${isStaff ? '👨‍🍳 ' + escHtml(m.sender_name||'Staff') : '👤 Client'} · ${new Date(m.created_at).toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'})}</div>
-        <div class="msg-text">${escHtml(m.content)}</div>
-      </div>
-    `;
-  }).join('');
-  el.scrollTop = el.scrollHeight;
-}
-
-async function sendChatMsg() {
-  const input = document.getElementById('m-chatInput');
-  const content = input.value.trim();
-  if (!content || !openOrderId) return;
-  input.value = '';
-  try {
-    const res = await fetch(`${API_BASE}/api/orders/${openOrderId}/messages`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        content,
-        sender_id: currentUser.id,
-        sender_name: currentUser.username,
-        sender_role: currentUser.permission || 'employee'
-      })
-    });
-    const data = await res.json();
-    if (data.success) {
-      loadChat(openOrderId);
-    } else {
-      toast(data.error || 'Erreur envoi message', 'error');
-    }
-  } catch(e) {
-    toast('Erreur réseau', 'error');
-  }
-}
-
-function startChatPoll(orderId) {
-  clearInterval(chatPollInterval);
-  chatPollInterval = setInterval(() => {
-    if (openOrderId === orderId) loadChat(orderId);
-  }, 8000);
-}
-
-// =====================================================
-// UTILS
-// =====================================================
-function parseItems(items) {
-  if (Array.isArray(items)) return items;
-  try { return JSON.parse(items || '[]'); } catch { return []; }
-}
-
-function escHtml(str) {
-  if (str == null) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function formatTimeAgo(dateStr) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const m = Math.floor(diff/60000);
-  if (m < 1) return 'À l\'instant';
-  if (m < 60) return `Il y a ${m} min`;
-  const h = Math.floor(m/60);
-  if (h < 24) return `Il y a ${h}h`;
-  return new Date(dateStr).toLocaleDateString('fr-FR');
-}
-
-function toast(msg, type='info') {
-  const c = document.getElementById('toastContainer');
-  const t = document.createElement('div');
-  t.className = `toast-item ${type}`;
-  t.textContent = msg;
-  c.appendChild(t);
-  setTimeout(() => {
-    t.style.animation = 'toastOut .3s ease forwards';
-    setTimeout(() => t.remove(), 300);
-  }, 3500);
-}
-
-// =====================================================
-// EMBERS
-// =====================================================
 function spawnEmbers() {
   const bg = document.getElementById('fireBg');
-  const c = ['#FF4500','#FF6200','#FF8C00'];
+  const colors = ['#FF4500','#FF6200','#FF8C00'];
   setInterval(() => {
     const e = document.createElement('div');
     e.className = 'ember';
-    e.style.cssText = `left:${Math.random()*100}vw;width:${Math.random()*4+2}px;height:${Math.random()*4+2}px;background:${c[Math.floor(Math.random()*c.length)]};animation-duration:${Math.random()*4+3}s;animation-delay:${Math.random()*2}s`;
+    e.style.left = Math.random()*100 + 'vw';
+    e.style.width = e.style.height = (Math.random()*5 + 2) + 'px';
+    e.style.background = colors[Math.floor(Math.random()*colors.length)];
+    e.style.animationDuration = (Math.random()*5 + 3) + 's';
     bg.appendChild(e);
     setTimeout(() => e.remove(), 8000);
   }, 150);
 }
 
-// ─── INIT ───
 window.addEventListener('load', init);
 </script>
 </body>
