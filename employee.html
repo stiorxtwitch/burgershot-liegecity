@@ -212,6 +212,16 @@
     </div>
     <div id="list-all"><div class="loading-state">Chargement...</div></div>
   </div>
+    <!-- VUE VALIDATION DES REFUS -->
+  <div id="view-refus-validation" style="display:none">
+    <div class="page-header">
+      <h1 class="page-title">VALIDATION <em>DES REFUS</em></h1>
+      <button class="refresh-btn" onclick="loadAll()">↻ Actualiser</button>
+    </div>
+    <div id="list-refus-validation">
+      <div class="loading-state">Chargement des demandes de refus...</div>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL -->
@@ -258,30 +268,36 @@
 
 <script>
 // ====================== CONFIG SUPABASE ======================
-const SUPABASE_URL    = 'https://gktawbaposndfxijkxdk.supabase.co';
-const SUPABASE_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdGF3YmFwb3NuZGZ4aWpreGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwNzUyNDUsImV4cCI6MjA3OTY1MTI0NX0.tY-CHuyb2zr9s6hlGkwmrdTvg920VVNghI9S45CjwKk';
-const SB_HEADERS      = {
+const SUPABASE_URL = 'https://gktawbaposndfxijkxdk.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrdGF3YmFwb3NuZGZ4aWpreGRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwNzUyNDUsImV4cCI6MjA3OTY1MTI0NX0.tY-CHuyb2zr9s6hlGkwmrdTvg920VVNghI9S45CjwKk';
+const SB_HEADERS = {
   'apikey': SUPABASE_KEY,
   'Authorization': `Bearer ${SUPABASE_KEY}`,
   'Content-Type': 'application/json',
   'Prefer': 'return=representation'
 };
-const ORDERS_TABLE    = 'orders_burgershot';
-const MESSAGES_TABLE  = 'messages_burgershot';
+const ORDERS_TABLE = 'orders_burgershot';
+const MESSAGES_TABLE = 'messages_burgershot';
 
 // ====================== STATE ======================
-let currentUser      = null;
-let allOrders        = [];
-let currentOrder     = null;
+let currentUser = null;
+let allOrders = [];
+let currentOrder = null;
 let chatPollInterval = null;
-let lastMsgIds       = new Set();   // IDs des messages déjà vus pour le badge
-let activeModalTab   = 'details';
+let lastMsgIds = new Set();
+let activeModalTab = 'details';
 
 const STATUS_LABELS = {
-  en_attente:'En attente', acceptee:'Acceptée', recue:'Reçue',
-  preparation:'En préparation', finalisation:'Finalisation',
-  livraison:'En livraison', termine:'Terminée',
-  reglee:'Réglée', refusee:'Refusée',
+  en_attente: 'En attente',
+  acceptee: 'Acceptée',
+  recue: 'Reçue',
+  preparation: 'En préparation',
+  finalisation: 'Finalisation',
+  livraison: 'En livraison',
+  termine: 'Terminée',
+  reglee: 'Réglée',
+  refusee: 'Refusée',
+  refus_en_attente: '⏳ Refus en attente'
 };
 
 // ====================== INIT ======================
@@ -291,16 +307,24 @@ async function init() {
     currentUser = { username: 'Démo', permission: 'employee' };
     showToast('Mode démo — connectez-vous pour les vraies sessions', 'error');
   }
+
   document.getElementById('navUsername').textContent = currentUser.username || '—';
   document.getElementById('roleLabel').textContent = (currentUser.permission || 'employee').toUpperCase();
-  if (['admin','owner','it'].includes(currentUser.permission))
+
+  if (['admin','owner','it'].includes(currentUser.permission)) {
     document.getElementById('adminLink').style.display = 'inline-flex';
+  }
+
+  // Afficher la section Validation des refus seulement pour owner/IT
+  const refusSection = document.getElementById('refusValidationSection');
+  if (refusSection) {
+    const canValidateRefus = ['owner', 'it'].includes(currentUser.permission);
+    refusSection.style.display = canValidateRefus ? 'block' : 'none';
+  }
 
   spawnEmbers();
   await loadAll();
   setInterval(loadAll, 12000);
-  const canValidateRefus = ['owner', 'it'].includes(currentUser.permission);
-  document.getElementById('refusValidationSection').style.display = canValidateRefus ? 'block' : 'none';
 }
 
 // ====================== LOAD ORDERS ======================
@@ -311,9 +335,10 @@ async function loadAll() {
       { headers: SB_HEADERS }
     );
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    
     allOrders = await res.json();
     renderCurrentView();
-    renderRefusValidation(); // pour mettre à jour le compteur même si on est pas sur la vue
+    renderRefusValidation();
   } catch(e) {
     showToast(`Erreur Supabase : ${e.message}`, 'error');
     document.getElementById('list-active').innerHTML =
@@ -349,13 +374,13 @@ async function loadMessages(orderId) {
 
 async function sendMessage() {
   if (!currentOrder) return;
-  const input   = document.getElementById('chatInput');
+  const input = document.getElementById('chatInput');
   const content = input.value.trim();
   if (!content) return;
 
   const btn = document.getElementById('chatSendBtn');
   btn.disabled = true;
-  input.value  = '';
+  input.value = '';
   autoResize(input);
 
   try {
@@ -366,8 +391,8 @@ async function sendMessage() {
         headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' },
         body: JSON.stringify({
           id_commande: currentOrder.id,
-          username:    currentUser.username || 'Équipe',
-          message:    content,
+          username: currentUser.username || 'Équipe',
+          message: content,
         })
       }
     );
@@ -385,16 +410,14 @@ async function refreshChat(scrollBottom = false) {
   if (!currentOrder) return;
   const messages = await loadMessages(currentOrder.id);
 
-  // Badge : détecter nouveaux messages venant du client
   if (activeModalTab === 'details') {
     const clientMsgs = messages.filter(m => m.username !== (currentUser.username));
-    const newOnes    = clientMsgs.filter(m => !lastMsgIds.has(m.id));
+    const newOnes = clientMsgs.filter(m => !lastMsgIds.has(m.id));
     if (newOnes.length > 0) {
       document.getElementById('chatTabBadge').classList.add('show');
     }
   }
   messages.forEach(m => lastMsgIds.add(m.id));
-
   renderMessages(messages, scrollBottom);
 }
 
@@ -406,24 +429,16 @@ function renderMessages(messages, scrollBottom = false) {
   }
 
   const currentUsername = (currentUser && currentUser.username) ? currentUser.username.toLowerCase() : '';
-
+  
   container.innerHTML = messages.map(m => {
     const msgUsername = (m.username || '').toLowerCase();
-    
-    // Un message est considéré comme venant de l'employé si :
-    // - c'est le username de l'employé connecté
-    // - OU le username contient des mots typiques du staff (tu peux en ajouter)
-    const isEmployee = 
-      msgUsername === currentUsername ||
-      msgUsername === 'mldev' ||
-      msgUsername.includes('employé') ||
-      msgUsername.includes('staff') ||
-      msgUsername.includes('burger');
+    const isEmployee = msgUsername === currentUsername ||
+                       msgUsername === 'mldev' ||
+                       msgUsername.includes('employé') ||
+                       msgUsername.includes('staff') ||
+                       msgUsername.includes('burger');
 
-    const time = m.created_at 
-      ? new Date(m.created_at).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' }) 
-      : '';
-
+    const time = m.created_at ? new Date(m.created_at).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' }) : '';
     const avatar = isEmployee ? '👨‍🍳' : '🙋';
     const sideClass = isEmployee ? 'from-employee' : 'from-client';
 
@@ -433,7 +448,7 @@ function renderMessages(messages, scrollBottom = false) {
         <div>
           <div class="msg-name">${escHtml(m.username || (isEmployee ? 'Équipe Burger Shot' : 'Client'))}</div>
           <div class="msg-bubble">
-            <div class="msg-text">${escHtml(m.message || m.messages)}</div>   <!-- important : m.message ou m.messages -->
+            <div class="msg-text">${escHtml(m.message || m.messages)}</div>
             <div class="msg-time">${time}</div>
           </div>
         </div>
@@ -466,9 +481,10 @@ function parseItems(items) {
 }
 
 function renderCurrentView() {
-  const active = allOrders.filter(o => !['reglee','refusee'].includes(o.status || ''));
+  const active = allOrders.filter(o => !['reglee','refusee','refus_en_attente'].includes(o.status || ''));
+
   document.getElementById('sideCountActive').textContent = active.length;
-  document.getElementById('sideCountAll').textContent    = allOrders.length;
+  document.getElementById('sideCountAll').textContent = allOrders.length;
 
   document.getElementById('list-active').innerHTML = active.length
     ? `<div class="orders-grid">${active.map(renderCard).join('')}</div>`
@@ -477,16 +493,13 @@ function renderCurrentView() {
   document.getElementById('list-all').innerHTML = allOrders.length
     ? `<div class="orders-grid">${allOrders.map(renderCard).join('')}</div>`
     : `<div class="empty-state">Aucune commande dans la base</div>`;
-    // Mise à jour de la vue validation refus
-  if (document.getElementById('view-refus-validation').style.display !== 'none') {
-    renderRefusValidation();
-  }
 }
 
 function renderCard(o) {
-  const items   = parseItems(o.items);
+  const items = parseItems(o.items);
   const preview = items.slice(0,3).map(i=>`${i.name} ×${i.qty}`).join(', ') || '—';
-  const status  = o.status || 'en_attente';
+  const status = o.status || 'en_attente';
+
   return `
     <div class="order-card" onclick="openModal(${o.id})">
       <div class="oc-top-bar">
@@ -512,16 +525,16 @@ async function openModal(orderId) {
   currentOrder = allOrders.find(o => o.id === orderId);
   if (!currentOrder) return;
 
-  // Reset
   lastMsgIds.clear();
   switchModalTab('details', document.getElementById('tabBtnDetails'));
   document.getElementById('chatTabBadge').classList.remove('show');
 
-  const items  = parseItems(currentOrder.items);
+  const items = parseItems(currentOrder.items);
   const status = currentOrder.status || 'en_attente';
 
   document.getElementById('modalOrderId').innerHTML = `Commande <span>#${currentOrder.id}</span>`;
-    document.getElementById('modalBody').innerHTML = `
+
+  document.getElementById('modalBody').innerHTML = `
     <div class="modal-section">
       <div class="ms-title">Client</div>
       <div class="ms-info">
@@ -530,29 +543,19 @@ async function openModal(orderId) {
         ${currentOrder.discord_username ? `🎮 ${currentOrder.discord_username}` : ''}
       </div>
     </div>
-
     <div class="modal-section">
       <div class="ms-title">Récupération</div>
       <div class="ms-info">${currentOrder.delivery_type==='livraison'?'🚴 Livraison à domicile':'🏪 Sur place'}</div>
       ${currentOrder.address ? `<div class="ms-info" style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.5)">📍 ${escHtml(currentOrder.address)}${currentOrder.zip_code?', '+currentOrder.zip_code:''}</div>` : ''}
     </div>
-
-    <!-- NOUVELLE SECTION : Qui a accepté / modifié -->
     <div class="modal-section">
       <div class="ms-title">Actions & Responsable</div>
       <div class="ms-info" style="line-height:1.7">
-        ${currentOrder.accepted_by ? 
-          `✅ <strong>Acceptée par ${escHtml(currentOrder.accepted_by)}</strong><br>` : 
-          `<span style="opacity:0.5">Pas encore acceptée</span><br>`}
-        
-        ${currentOrder.accepted_at ? 
-          `🕒 ${new Date(currentOrder.accepted_at).toLocaleString('fr-FR')}<br><br>` : ''}
-
-        ${currentOrder.updated_by && currentOrder.updated_by !== currentOrder.accepted_by ? 
-          `✏️ Dernière modification par <strong>${escHtml(currentOrder.updated_by)}</strong>` : ''}
+        ${currentOrder.accepted_by ? `✅ <strong>Acceptée par ${escHtml(currentOrder.accepted_by)}</strong><br>` : `<span style="opacity:0.5">Pas encore acceptée</span><br>`}
+        ${currentOrder.accepted_at ? `🕒 ${new Date(currentOrder.accepted_at).toLocaleString('fr-FR')}<br><br>` : ''}
+        ${currentOrder.updated_by && currentOrder.updated_by !== currentOrder.accepted_by ? `✏️ Dernière modification par <strong>${escHtml(currentOrder.updated_by)}</strong>` : ''}
       </div>
     </div>
-
     <div class="modal-section full">
       <div class="ms-title">Articles</div>
       <table class="items-table">
@@ -564,18 +567,18 @@ async function openModal(orderId) {
     </div>`;
 
   const actions = {
-    en_attente:   `<button class="btn btn-accept" onclick="doUpdate(${currentOrder.id},'acceptee')">✅ Accepter</button>
-                   <button class="btn btn-refuse" onclick="doRefuse(${currentOrder.id})">❌ Refuser</button>`,
-    acceptee:     `<button class="btn btn-prep"   onclick="doUpdate(${currentOrder.id},'preparation')">🍳 En préparation</button>`,
-    preparation:  `<button class="btn btn-done"   onclick="doUpdate(${currentOrder.id},'finalisation')">🔍 Finalisation</button>`,
-    finalisation: `<button class="btn btn-done"   onclick="doUpdate(${currentOrder.id},'termine')">✅ Terminée</button>`,
-    termine:      `<button class="btn btn-paid"   onclick="doUpdate(${currentOrder.id},'reglee')">💰 Marquer payée</button>`,
+    en_attente: `<button class="btn btn-accept" onclick="doUpdate(${currentOrder.id},'acceptee')">✅ Accepter</button>
+                 <button class="btn btn-refuse" onclick="doRefuse(${currentOrder.id})">❌ Refuser</button>`,
+    acceptee: `<button class="btn btn-prep" onclick="doUpdate(${currentOrder.id},'preparation')">🍳 En préparation</button>`,
+    preparation: `<button class="btn btn-done" onclick="doUpdate(${currentOrder.id},'finalisation')">🔍 Finalisation</button>`,
+    finalisation: `<button class="btn btn-done" onclick="doUpdate(${currentOrder.id},'termine')">✅ Terminée</button>`,
+    termine: `<button class="btn btn-paid" onclick="doUpdate(${currentOrder.id},'reglee')">💰 Marquer payée</button>`,
   };
-  document.getElementById('modalActions').innerHTML = actions[status]
-    || `<span style="font-family:'Barlow Condensed',sans-serif;color:rgba(255,255,255,.3);font-size:13px;letter-spacing:1px">Aucune action disponible</span>`;
+
+  document.getElementById('modalActions').innerHTML = actions[status] || 
+    `<span style="font-family:'Barlow Condensed',sans-serif;color:rgba(255,255,255,.3);font-size:13px;letter-spacing:1px">Aucune action disponible</span>`;
 
   await refreshChat(true);
-
   clearInterval(chatPollInterval);
   chatPollInterval = setInterval(() => refreshChat(false), 5000);
 
@@ -610,23 +613,18 @@ function switchModalTab(tab, btn) {
 // ====================== ACTIONS ======================
 async function doUpdate(id, newStatus) {
   try {
-    const payload = { 
+    const payload = {
       status: newStatus,
       updated_by: currentUser.username || 'Équipe',
       updated_at: new Date().toISOString()
     };
-
-    // Si c'est l'acceptation de la commande, on enregistre qui l'a acceptée
     if (newStatus === 'acceptee') {
       payload.accepted_by = currentUser.username || 'Équipe';
       payload.accepted_at = new Date().toISOString();
     }
-
     await sbPatch(id, payload);
-
     const actionName = STATUS_LABELS[newStatus] || newStatus;
-    showToast(`✅ Statut → ${actionName} par ${currentUser.username || 'Équipe'}`);
-
+    showToast(`✅ Statut → ${actionName}`);
     closeModal();
     await loadAll();
   } catch(e) {
@@ -639,13 +637,12 @@ async function doRefuse(id) {
   if (!reason?.trim()) return;
 
   try {
-    await sbPatch(id, { 
+    await sbPatch(id, {
       status: 'refus_en_attente',
       refus_motif: reason,
       refus_demande_par: currentUser.username || 'Employé',
       refus_demande_at: new Date().toISOString()
     });
-
     showToast('✅ Demande de refus envoyée en validation');
     closeModal();
     await loadAll();
@@ -653,12 +650,14 @@ async function doRefuse(id) {
     showToast(`Erreur : ${e.message}`, 'error');
   }
 }
+
+// ====================== VALIDATION DES REFUS ======================
 function renderRefusValidation() {
   const refusEnAttente = allOrders.filter(o => o.status === 'refus_en_attente');
-
   document.getElementById('sideCountRefus').textContent = refusEnAttente.length;
 
   const container = document.getElementById('list-refus-validation');
+  if (!container) return;
 
   if (refusEnAttente.length === 0) {
     container.innerHTML = `<div class="empty-state">🎉 Aucune demande de refus en attente de validation</div>`;
@@ -695,18 +694,36 @@ function renderRefusValidation() {
   container.innerHTML = html;
 }
 
-// ====================== UI ======================
-function showView(v) {
-  document.getElementById('view-active').style.display = v === 'active' ? 'block' : 'none';
-  document.getElementById('view-all').style.display = v === 'all' ? 'block' : 'none';
-  document.getElementById('view-refus-validation').style.display = v === 'refus-validation' ? 'block' : 'none';
-
-  document.getElementById('sideActive').classList.toggle('active', v === 'active');
-  document.getElementById('sideAll').classList.toggle('active', v === 'all');
-  document.getElementById('sideRefusValidation').classList.toggle('active', v === 'refus-validation');
+function openRefusValidationModal(orderId) {
+  alert("Modal de validation des refus pas encore implémentée.\n\nCommande #" + orderId + " sélectionnée.\n\nJe te la ferai dans le prochain message si tu veux.");
+  // Ici on ajoutera plus tard la vraie modal avec boutons Valider Refus / Rejeter la demande
 }
 
-function logout() { sessionStorage.removeItem('bs_user'); window.location.href = 'auth.html'; }
+// ====================== UI ======================
+function showView(v) {
+  // Gestion sécurisée des vues
+  const viewActive = document.getElementById('view-active');
+  const viewAll = document.getElementById('view-all');
+  const viewRefus = document.getElementById('view-refus-validation');
+
+  if (viewActive) viewActive.style.display = (v === 'active') ? 'block' : 'none';
+  if (viewAll) viewAll.style.display = (v === 'all') ? 'block' : 'none';
+  if (viewRefus) viewRefus.style.display = (v === 'refus-validation') ? 'block' : 'none';
+
+  // Gestion sidebar
+  const sideActive = document.getElementById('sideActive');
+  const sideAll = document.getElementById('sideAll');
+  const sideRefus = document.getElementById('sideRefusValidation');
+
+  if (sideActive) sideActive.classList.toggle('active', v === 'active');
+  if (sideAll) sideAll.classList.toggle('active', v === 'all');
+  if (sideRefus) sideRefus.classList.toggle('active', v === 'refus-validation');
+}
+
+function logout() { 
+  sessionStorage.removeItem('bs_user'); 
+  window.location.href = 'auth.html'; 
+}
 
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast');
@@ -716,15 +733,15 @@ function showToast(msg, type = 'success') {
 }
 
 function spawnEmbers() {
-  const bg     = document.getElementById('fireBg');
+  const bg = document.getElementById('fireBg');
   const colors = ['#FF4500','#FF6200','#FF8C00','#FFB347'];
   setInterval(() => {
     const e = document.createElement('div');
     e.className = 'ember';
-    e.style.left              = Math.random() * 100 + 'vw';
-    const s                   = Math.random() * 5 + 2;
-    e.style.width             = e.style.height = s + 'px';
-    e.style.background        = colors[Math.floor(Math.random() * colors.length)];
+    e.style.left = Math.random() * 100 + 'vw';
+    const s = Math.random() * 5 + 2;
+    e.style.width = e.style.height = s + 'px';
+    e.style.background = colors[Math.floor(Math.random() * colors.length)];
     e.style.animationDuration = (Math.random() * 5 + 3) + 's';
     bg.appendChild(e);
     setTimeout(() => e.remove(), 8000);
