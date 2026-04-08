@@ -479,11 +479,74 @@ async function loadAliments() {
         <td>${a.name}</td>
         <td>${Number(a.price).toLocaleString('fr-FR')} €</td>
         <td>${a.category}</td>
-        <td><button class="delete-btn" onclick="deleteAliment(${a.id})">Supprimer</button></td>
+        <td>
+          <button class="delete-btn" onclick="deleteAliment(${a.id})" style="margin-right:6px;">Supprimer</button>
+          <button onclick="editAliment(${a.id}, '${(a.name || '').replace(/'/g, "\\'")}', ${a.price}, '${(a.description || '').replace(/'/g, "\\'")}', '${a.category}')"
+                  style="background:#F5A623; color:#000; padding:6px 12px; font-size:13px; border:none; border-radius:4px; cursor:pointer;">
+            Modifier
+          </button>
+        </td>
       </tr>
     `).join('');
   } catch (e) {
     console.error(e);
+  }
+}
+
+// ====================== MODIFIER UN ALIMENT ======================
+async function editAliment(id, currentName, currentPrice, currentDescription, currentCategory) {
+  initSupabase();
+
+  const newName = prompt("Nom de l'aliment :", currentName);
+  if (newName === null) return;
+
+  const newPrice = prompt("Prix (en €) :", currentPrice);
+  if (newPrice === null) return;
+
+  const newDescription = prompt("Description :", currentDescription);
+  if (newDescription === null) return;
+
+  const categories = ["Burgers", "Brochettes", "Menus", "Accompagnements", "Boissons"];
+  const newCategory = prompt(
+    "Catégorie :\n→ " + categories.join("\n→ ") + "\n\nActuelle : " + currentCategory,
+    currentCategory
+  );
+  if (newCategory === null) return;
+
+  if (!categories.includes(newCategory)) {
+    alert("Catégorie invalide !\nUtilise uniquement : " + categories.join(", "));
+    return;
+  }
+
+  if (!newName.trim() || isNaN(Number(newPrice))) {
+    alert("Nom ou prix invalide !");
+    return;
+  }
+
+  if (!confirm(`Modifier l'aliment "${newName}" à ${newPrice}€ (${newCategory}) ?`)) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from('aliments')
+      .update({
+        name: newName.trim(),
+        price: parseInt(newPrice),
+        description: newDescription.trim(),
+        category: newCategory
+      })
+      .eq('id', id);
+
+    if (error) {
+      console.error(error);
+      alert("Erreur Supabase : " + error.message);
+      return;
+    }
+
+    alert("✅ Aliment modifié avec succès !");
+    loadAliments();
+  } catch (err) {
+    console.error(err);
+    alert("Erreur de connexion à Supabase");
   }
 }
 
